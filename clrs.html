@@ -1,0 +1,2588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CLRS — An Interactive Study Guide</title>
+
+<!-- Typography -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+
+<!-- MathJax -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      tags: 'none'
+    },
+    svg: { fontCache: 'global' },
+    startup: {
+      typeset: true
+    }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+/* ========== DESIGN SYSTEM ========== */
+:root {
+  --paper: #f5f1e8;
+  --paper-alt: #ede7d7;
+  --paper-deep: #e4dcc6;
+  --ink: #1a1712;
+  --ink-soft: #3a342a;
+  --ink-muted: #6b6355;
+  --rule: #cbc1a8;
+  --oxblood: #7a1f2b;
+  --oxblood-soft: #b5555e;
+  --navy: #1e3a5f;
+  --navy-soft: #4a6a8a;
+  --moss: #4a5d3a;
+  --ochre: #a67c2b;
+  --highlight: #f0e4b8;
+
+  --serif-display: 'Cormorant Garamond', 'Times New Roman', serif;
+  --serif-body: 'Spectral', 'Georgia', serif;
+  --mono: 'JetBrains Mono', 'Courier New', monospace;
+
+  --sb-width: 280px;
+  --content-max: 780px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--serif-body);
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--ink);
+  background: var(--paper);
+  background-image:
+    radial-gradient(ellipse at top, rgba(166,124,43,0.04) 0%, transparent 60%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2' seed='5'/><feColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.09 0 0 0 0 0.07 0 0 0 0.03 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ========== LAYOUT ========== */
+.shell {
+  display: grid;
+  grid-template-columns: var(--sb-width) 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--paper-alt);
+  border-right: 1px solid var(--rule);
+  padding: 2rem 1.5rem 3rem;
+}
+
+.sidebar-title {
+  font-family: var(--serif-display);
+  font-weight: 500;
+  font-size: 1.4rem;
+  line-height: 1.15;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+  margin-bottom: 0.25rem;
+}
+
+.sidebar-sub {
+  font-family: var(--serif-display);
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--ink-muted);
+  margin-bottom: 2rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.nav-chapter {
+  font-family: var(--serif-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--oxblood);
+  font-weight: 600;
+  margin: 1.4rem 0 0.5rem;
+}
+
+.nav-chapter:first-of-type { margin-top: 0; }
+
+.nav-link {
+  display: block;
+  font-family: var(--serif-body);
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+  text-decoration: none;
+  padding: 0.25rem 0 0.25rem 0.6rem;
+  border-left: 2px solid transparent;
+  transition: all 0.18s;
+  line-height: 1.35;
+}
+
+.nav-link:hover {
+  color: var(--oxblood);
+  border-left-color: var(--oxblood-soft);
+  background: rgba(122,31,43,0.04);
+}
+
+.nav-link.active {
+  color: var(--oxblood);
+  border-left-color: var(--oxblood);
+  font-weight: 500;
+}
+
+.nav-num {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+  margin-right: 0.4rem;
+}
+
+/* ========== MAIN CONTENT ========== */
+main {
+  padding: 4rem 4rem 8rem;
+  max-width: calc(var(--content-max) + 8rem);
+}
+
+.title-block {
+  margin-bottom: 4rem;
+  padding-bottom: 2rem;
+  border-bottom: 2px solid var(--ink);
+  position: relative;
+}
+
+.title-block::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 40%;
+  height: 1px;
+  background: var(--ink);
+}
+
+.eyebrow {
+  font-family: var(--serif-display);
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--oxblood);
+  letter-spacing: 0.04em;
+  margin-bottom: 0.5rem;
+}
+
+h1.main-title {
+  font-family: var(--serif-display);
+  font-weight: 500;
+  font-size: clamp(2.5rem, 5vw, 3.8rem);
+  line-height: 1;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin-bottom: 0.6rem;
+}
+
+.main-title em {
+  font-weight: 400;
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+.subtitle {
+  font-family: var(--serif-body);
+  font-style: italic;
+  color: var(--ink-muted);
+  font-size: 1.05rem;
+  max-width: 60ch;
+}
+
+/* Chapter headers */
+.chapter-header {
+  margin: 5rem 0 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--ink);
+}
+
+.chapter-num {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  color: var(--oxblood);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+h2.chapter-title {
+  font-family: var(--serif-display);
+  font-weight: 500;
+  font-size: 2.6rem;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+h2.chapter-title em {
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+/* Section headers */
+h3.section-title {
+  font-family: var(--serif-display);
+  font-weight: 500;
+  font-size: 1.85rem;
+  line-height: 1.15;
+  color: var(--ink);
+  margin: 3rem 0 1rem;
+  padding-top: 1rem;
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+h3.section-title .sec-num {
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--oxblood);
+  letter-spacing: 0.05em;
+}
+
+h4.subsection {
+  font-family: var(--serif-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 1.35rem;
+  color: var(--ink);
+  margin: 2rem 0 0.8rem;
+  padding-left: 0.8rem;
+  border-left: 3px solid var(--oxblood);
+}
+
+h5.minor {
+  font-family: var(--serif-body);
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--oxblood);
+  margin: 1.5rem 0 0.5rem;
+}
+
+/* Body text */
+p {
+  margin-bottom: 1rem;
+  max-width: var(--content-max);
+}
+
+p + p { text-indent: 1.5em; }
+p.noindent + p, h3 + p, h4 + p, h5 + p, .box + p,
+ul + p, ol + p, .algorithm + p, .proof + p, .quiz + p, .visualizer + p,
+.definition + p, .theorem + p, .example + p { text-indent: 0; }
+
+strong { font-weight: 600; color: var(--ink); }
+em { font-style: italic; }
+
+code {
+  font-family: var(--mono);
+  font-size: 0.88em;
+  background: var(--paper-deep);
+  padding: 0.1em 0.35em;
+  border-radius: 2px;
+  color: var(--ink);
+}
+
+a { color: var(--oxblood); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+
+/* Lists */
+ul, ol { margin: 0.8rem 0 1.2rem 2rem; max-width: var(--content-max); }
+li { margin-bottom: 0.4rem; }
+li::marker { color: var(--oxblood); }
+
+/* ========== BOXES (Definition, Theorem, Proof, Example) ========== */
+.box {
+  max-width: var(--content-max);
+  margin: 1.5rem 0;
+  padding: 1.4rem 1.6rem;
+  border-left: 3px solid;
+  background: var(--paper-alt);
+  position: relative;
+}
+
+.box .box-label {
+  font-family: var(--serif-display);
+  font-variant: small-caps;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  font-size: 0.95rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.box.definition { border-color: var(--navy); background: rgba(30,58,95,0.05); }
+.box.definition .box-label { color: var(--navy); }
+
+.box.theorem { border-color: var(--oxblood); background: rgba(122,31,43,0.05); }
+.box.theorem .box-label { color: var(--oxblood); }
+
+.box.lemma { border-color: var(--ochre); background: rgba(166,124,43,0.07); }
+.box.lemma .box-label { color: var(--ochre); }
+
+.box.example { border-color: var(--moss); background: rgba(74,93,58,0.06); }
+.box.example .box-label { color: var(--moss); }
+
+.box.note { border-color: var(--ink-muted); background: var(--paper-alt); }
+.box.note .box-label { color: var(--ink-muted); }
+
+/* Proof */
+.proof {
+  max-width: var(--content-max);
+  margin: 1.2rem 0 1.5rem;
+  padding: 0.2rem 0 0.2rem 1.2rem;
+  border-left: 2px solid var(--rule);
+  font-size: 0.97rem;
+}
+
+.proof::before {
+  content: 'Proof.';
+  font-family: var(--serif-display);
+  font-style: italic;
+  font-weight: 600;
+  color: var(--ink);
+  margin-right: 0.4em;
+}
+
+.proof-end {
+  display: inline-block;
+  margin-left: 0.4em;
+  color: var(--ink);
+}
+
+/* ========== ALGORITHM PSEUDOCODE ========== */
+.algorithm {
+  max-width: var(--content-max);
+  margin: 1.5rem 0;
+  background: #fbfaf4;
+  border: 1px solid var(--rule);
+  border-top: 3px solid var(--ink);
+}
+
+.algorithm-header {
+  padding: 0.8rem 1.2rem;
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--serif-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  background: var(--paper-alt);
+}
+
+.algorithm-header em { font-weight: 500; color: var(--ink-muted); }
+
+.algorithm pre {
+  font-family: var(--mono);
+  font-size: 0.88rem;
+  line-height: 1.7;
+  padding: 1rem 1.2rem;
+  color: var(--ink);
+  overflow-x: auto;
+  counter-reset: line;
+}
+
+.algorithm pre .line {
+  display: block;
+  position: relative;
+  padding-left: 2.5em;
+}
+
+.algorithm pre .line::before {
+  counter-increment: line;
+  content: counter(line);
+  position: absolute;
+  left: 0;
+  color: var(--ink-muted);
+  font-size: 0.78em;
+  font-family: var(--mono);
+  width: 2em;
+  text-align: right;
+  padding-right: 0.5em;
+  user-select: none;
+}
+
+.algorithm .kw { color: var(--oxblood); font-weight: 600; }
+.algorithm .cm { color: var(--ink-muted); font-style: italic; }
+
+/* ========== QUIZ ========== */
+.quiz {
+  max-width: var(--content-max);
+  margin: 2rem 0;
+  padding: 1.4rem 1.6rem 1.6rem;
+  background: var(--paper-alt);
+  border: 1px solid var(--rule);
+  border-top: 3px double var(--oxblood);
+}
+
+.quiz-title {
+  font-family: var(--serif-display);
+  font-variant: small-caps;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  color: var(--oxblood);
+  margin-bottom: 0.8rem;
+  font-size: 0.95rem;
+}
+
+.quiz-q {
+  font-family: var(--serif-body);
+  font-size: 1.02rem;
+  margin-bottom: 1rem;
+}
+
+.quiz-options { list-style: none; margin: 0; padding: 0; }
+
+.quiz-option {
+  display: block;
+  padding: 0.65rem 0.9rem;
+  margin-bottom: 0.45rem;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: var(--serif-body);
+  font-size: 0.97rem;
+  position: relative;
+  padding-left: 2.4rem;
+}
+
+.quiz-option::before {
+  content: attr(data-letter);
+  position: absolute;
+  left: 0.8rem;
+  top: 0.65rem;
+  font-family: var(--mono);
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+}
+
+.quiz-option:hover:not(.revealed) {
+  background: #fff;
+  border-color: var(--ink-muted);
+  transform: translateX(2px);
+}
+
+.quiz-option.correct {
+  background: rgba(74,93,58,0.15);
+  border-color: var(--moss);
+  color: var(--moss);
+}
+
+.quiz-option.correct::before { color: var(--moss); }
+
+.quiz-option.incorrect {
+  background: rgba(122,31,43,0.1);
+  border-color: var(--oxblood);
+  color: var(--oxblood);
+  text-decoration: line-through;
+  text-decoration-color: var(--oxblood-soft);
+}
+
+.quiz-option.incorrect::before { color: var(--oxblood); }
+
+.quiz-explain {
+  margin-top: 1rem;
+  padding: 0.9rem 1rem;
+  background: var(--paper);
+  border-left: 3px solid var(--navy);
+  font-size: 0.94rem;
+  color: var(--ink-soft);
+  display: none;
+}
+
+.quiz-explain.show { display: block; }
+
+.quiz-explain::before {
+  content: 'Explanation. ';
+  font-weight: 600;
+  font-style: italic;
+  color: var(--navy);
+}
+
+/* ========== REVEAL (for solutions) ========== */
+.reveal {
+  max-width: var(--content-max);
+  margin: 1.2rem 0;
+  border: 1px solid var(--rule);
+  background: var(--paper-alt);
+}
+
+.reveal summary {
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+  font-family: var(--serif-display);
+  font-style: italic;
+  font-weight: 500;
+  color: var(--oxblood);
+  list-style: none;
+  user-select: none;
+  position: relative;
+  padding-right: 2.5rem;
+}
+
+.reveal summary::after {
+  content: '▸';
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: transform 0.2s;
+  color: var(--oxblood);
+  font-size: 0.9em;
+}
+
+.reveal[open] summary::after { transform: translateY(-50%) rotate(90deg); }
+
+.reveal summary:hover { background: rgba(122,31,43,0.05); }
+
+.reveal-body {
+  padding: 0.2rem 1rem 1.2rem;
+  border-top: 1px dashed var(--rule);
+}
+
+/* ========== VISUALIZER ========== */
+.visualizer {
+  max-width: var(--content-max);
+  margin: 2rem 0;
+  background: #fbfaf4;
+  border: 1px solid var(--rule);
+  border-top: 3px solid var(--navy);
+  padding: 1.4rem 1.4rem 1.6rem;
+}
+
+.viz-title {
+  font-family: var(--serif-display);
+  font-variant: small-caps;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 0.2rem;
+  font-size: 0.95rem;
+}
+
+.viz-sub {
+  font-family: var(--serif-body);
+  font-style: italic;
+  font-size: 0.88rem;
+  color: var(--ink-muted);
+  margin-bottom: 1rem;
+}
+
+.viz-controls {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+  align-items: center;
+}
+
+.btn {
+  font-family: var(--serif-body);
+  font-size: 0.92rem;
+  padding: 0.45rem 1rem;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-weight: 500;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.btn.primary {
+  background: var(--oxblood);
+  color: var(--paper);
+  border-color: var(--oxblood);
+}
+
+.btn.primary:hover:not(:disabled) {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+.btn-small {
+  padding: 0.3rem 0.7rem;
+  font-size: 0.84rem;
+}
+
+/* Array visualization */
+.array-viz {
+  display: flex;
+  gap: 4px;
+  padding: 1rem 0;
+  justify-content: center;
+  flex-wrap: wrap;
+  min-height: 100px;
+  align-items: flex-end;
+}
+
+.cell {
+  width: 42px;
+  min-width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: 0.95rem;
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  position: relative;
+  transition: all 0.3s;
+}
+
+.cell.sorted { background: rgba(74,93,58,0.18); border-color: var(--moss); color: var(--moss); }
+.cell.current { background: var(--oxblood); color: var(--paper); border-color: var(--oxblood); transform: translateY(-6px); box-shadow: 0 4px 10px rgba(122,31,43,0.3); }
+.cell.compare { background: var(--ochre); color: var(--paper); border-color: var(--ochre); }
+.cell.key { background: var(--navy); color: var(--paper); border-color: var(--navy); }
+
+.cell-index {
+  position: absolute;
+  bottom: -1.3rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--ink-muted);
+  font-weight: 400;
+}
+
+.viz-status {
+  font-family: var(--serif-body);
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  min-height: 3em;
+  padding: 0.6rem 0.9rem;
+  background: var(--paper-alt);
+  border-left: 2px solid var(--ink-muted);
+  margin-top: 1.5rem;
+}
+
+.viz-counter {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+  margin-left: auto;
+}
+
+.viz-counter strong { color: var(--ink); font-weight: 600; }
+
+.viz-input {
+  font-family: var(--mono);
+  font-size: 0.88rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  color: var(--ink);
+  width: 220px;
+}
+
+.viz-input:focus { outline: 2px solid var(--navy); outline-offset: -1px; }
+
+label.viz-label {
+  font-family: var(--serif-body);
+  font-size: 0.88rem;
+  color: var(--ink-muted);
+  font-style: italic;
+}
+
+/* Merge sort tree */
+.tree-viz {
+  padding: 1rem 0;
+  overflow-x: auto;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+}
+
+.tree-level {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-bottom: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.tree-node {
+  padding: 0.35rem 0.6rem;
+  background: var(--paper);
+  border: 1px solid var(--ink-muted);
+  border-radius: 2px;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  transition: all 0.3s;
+}
+
+.tree-node.active { background: var(--oxblood); color: var(--paper); border-color: var(--oxblood); }
+.tree-node.done { background: rgba(74,93,58,0.15); border-color: var(--moss); color: var(--moss); }
+
+/* Master theorem */
+.master-calc {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.8rem;
+  margin: 1rem 0;
+}
+
+.master-calc label {
+  display: block;
+  font-family: var(--serif-body);
+  font-style: italic;
+  font-size: 0.88rem;
+  color: var(--ink-muted);
+  margin-bottom: 0.25rem;
+}
+
+.master-calc input {
+  width: 100%;
+  font-family: var(--mono);
+  font-size: 1rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+}
+
+.master-result {
+  margin-top: 1rem;
+  padding: 1rem 1.2rem;
+  background: var(--paper-alt);
+  border-left: 3px solid var(--moss);
+  font-family: var(--serif-body);
+  min-height: 4em;
+}
+
+.master-result.error { border-color: var(--oxblood); background: rgba(122,31,43,0.05); }
+
+/* Recursion tree canvas */
+.recursion-tree {
+  padding: 1rem 0;
+  overflow-x: auto;
+}
+
+.recursion-tree svg {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+/* ========== SCROLL / RESPONSIVE ========== */
+@media (max-width: 900px) {
+  .shell { grid-template-columns: 1fr; }
+  .sidebar {
+    position: relative;
+    height: auto;
+    width: 100%;
+    border-right: none;
+    border-bottom: 2px solid var(--ink);
+    padding: 1.25rem 1rem;
+  }
+  main { padding: 2rem 1.25rem 5rem; }
+  h1.main-title { font-size: 2.2rem; }
+  h2.chapter-title { font-size: 1.9rem; }
+  h3.section-title { font-size: 1.45rem; }
+  .cell { width: 34px; min-width: 34px; height: 34px; font-size: 0.85rem; }
+  .box, .proof, .algorithm, .quiz, .visualizer, .reveal, p, ul, ol { max-width: 100%; }
+}
+
+/* ========== DROP CAP ========== */
+.drop-cap::first-letter {
+  font-family: var(--serif-display);
+  font-weight: 500;
+  float: left;
+  font-size: 4em;
+  line-height: 0.85;
+  padding: 0.08em 0.08em 0 0;
+  color: var(--oxblood);
+}
+
+/* Footnote-style aside */
+.aside {
+  font-size: 0.92rem;
+  color: var(--ink-muted);
+  font-style: italic;
+  max-width: var(--content-max);
+  padding-left: 1rem;
+  border-left: 2px dotted var(--rule);
+  margin: 1rem 0;
+}
+
+/* Table */
+.tbl {
+  max-width: var(--content-max);
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+  width: 100%;
+}
+
+.tbl th, .tbl td {
+  padding: 0.6rem 0.9rem;
+  text-align: left;
+  border-bottom: 1px solid var(--rule);
+}
+
+.tbl th {
+  font-family: var(--serif-display);
+  font-weight: 600;
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+  border-bottom: 2px solid var(--ink);
+  color: var(--ink);
+}
+
+.tbl tr:last-child td { border-bottom: 2px solid var(--ink); }
+
+.tbl .mono { font-family: var(--mono); font-size: 0.88em; }
+
+/* Progress */
+.progress-row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  font-family: var(--serif-body);
+  font-style: italic;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 2px;
+  background: var(--rule);
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--oxblood);
+  width: 0%;
+  transition: width 0.3s;
+}
+
+/* Ornament */
+.ornament {
+  text-align: center;
+  font-family: var(--serif-display);
+  font-size: 1.5rem;
+  color: var(--rule);
+  margin: 3rem 0;
+  letter-spacing: 0.5em;
+  padding-left: 0.5em;
+}
+
+/* Footer */
+footer {
+  margin-top: 6rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--rule);
+  font-family: var(--serif-display);
+  font-style: italic;
+  color: var(--ink-muted);
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+/* Selection */
+::selection { background: var(--highlight); color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- ============ SIDEBAR ============ -->
+<aside class="sidebar" aria-label="Table of contents">
+  <div class="sidebar-title">CLRS</div>
+  <div class="sidebar-sub">An Interactive Study Guide</div>
+
+  <div class="nav-chapter">Ch. 2 &mdash; Getting Started</div>
+  <a class="nav-link" href="#s-2-1"><span class="nav-num">2.1</span>Insertion Sort</a>
+  <a class="nav-link" href="#s-2-2"><span class="nav-num">2.2</span>Analyzing Algorithms</a>
+  <a class="nav-link" href="#s-2-3"><span class="nav-num">2.3</span>Designing Algorithms</a>
+
+  <div class="nav-chapter">Ch. 3 &mdash; Growth of Functions</div>
+  <a class="nav-link" href="#s-3-1"><span class="nav-num">3.1</span>Asymptotic Notation</a>
+  <a class="nav-link" href="#s-3-2"><span class="nav-num">3.2</span>Standard Notations</a>
+
+  <div class="nav-chapter">Ch. 4 &mdash; Divide &amp; Conquer</div>
+  <a class="nav-link" href="#s-4-3"><span class="nav-num">4.3</span>Substitution Method</a>
+  <a class="nav-link" href="#s-4-4"><span class="nav-num">4.4</span>Recursion Trees</a>
+  <a class="nav-link" href="#s-4-5"><span class="nav-num">4.5</span>The Master Method</a>
+
+  <div class="progress-row" style="margin-top: 2.5rem;">
+    <span>Progress</span>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <span id="progressPct" style="font-family: var(--mono); font-size: 0.78rem;">0%</span>
+  </div>
+</aside>
+
+<!-- ============ MAIN ============ -->
+<main>
+
+<div class="title-block">
+  <div class="eyebrow">Introduction to Algorithms &middot; Third &amp; Fourth Editions</div>
+  <h1 class="main-title">CLRS, <em>Studied Rigorously</em></h1>
+  <p class="subtitle">A self-contained, interactive companion covering foundations through the master method &mdash; with formal definitions, worked proofs, live algorithm visualizations, and checked exercises.</p>
+</div>
+
+<p class="drop-cap noindent">This guide is designed for a single purpose: to help you learn the material <em>as a mathematician would</em>. Definitions come first. Theorems follow. Every claim that matters is proved, and the most important proofs appear in full. Running alongside the formal text are interactive elements &mdash; a step-through of <strong>INSERTION-SORT</strong>, a live merge-sort recursion, a recursion-tree builder, and a master-theorem dispatcher &mdash; intended not as decoration, but as a second channel for intuition. Work through the quizzes; attempt the exercises before revealing solutions. The ornament &#x2767; marks the end of a section.</p>
+
+<p>A brief notational remark. Arrays are indexed from $1$ throughout (as CLRS does), so an array $A$ of length $n$ has entries $A[1], A[2], \ldots, A[n]$. The notation $A[i\mathinner{.\,.}j]$ denotes the subarray from index $i$ to $j$ inclusive.</p>
+
+<div class="ornament">&#x2767;</div>
+
+<!-- ============================================================ -->
+<!-- CHAPTER 2 -->
+<!-- ============================================================ -->
+<div class="chapter-header">
+  <div class="chapter-num">Chapter 2</div>
+  <h2 class="chapter-title">Getting <em>Started</em></h2>
+</div>
+
+<p>We begin with the most concrete object in the book: a small, specific algorithm, and the tools to say exactly what "efficient" means for it. The two algorithms in this chapter &mdash; <strong>insertion sort</strong> and <strong>merge sort</strong> &mdash; serve as the bedrock upon which all subsequent analysis rests. Master these and you have the vocabulary to attack everything that follows.</p>
+
+<!-- ============ 2.1 ============ -->
+<section id="s-2-1">
+<h3 class="section-title"><span class="sec-num">2.1</span>Insertion Sort</h3>
+
+<p class="noindent"><strong>Insertion sort</strong> is the algorithm most people would invent if handed a pile of index cards to sort. You pick up one card at a time, and slide each new card into its correct position among the cards you have already sorted. Formally:</p>
+
+<div class="box definition">
+  <span class="box-label">The Sorting Problem</span>
+  <strong>Input.</strong> A sequence of $n$ numbers $\langle a_1, a_2, \ldots, a_n \rangle$.<br />
+  <strong>Output.</strong> A permutation $\langle a'_1, a'_2, \ldots, a'_n \rangle$ of the input such that $a'_1 \leq a'_2 \leq \cdots \leq a'_n$.
+</div>
+
+<h4 class="subsection">The Algorithm</h4>
+
+<p class="noindent">We present insertion sort in the CLRS pseudocode style. The variable $j$ marks the "current" card being inserted; indices $1$ through $j-1$ are already in sorted order; $i$ scans backward through that sorted prefix looking for the correct insertion point.</p>
+
+<div class="algorithm">
+  <div class="algorithm-header">Insertion-Sort<em>(A)</em></div>
+  <pre><span class="line"><span class="kw">for</span> j = 2 <span class="kw">to</span> A.length</span><span class="line">    key = A[j]</span><span class="line">    <span class="cm">// Insert A[j] into the sorted sequence A[1..j-1].</span></span><span class="line">    i = j - 1</span><span class="line">    <span class="kw">while</span> i &gt; 0 <span class="kw">and</span> A[i] &gt; key</span><span class="line">        A[i + 1] = A[i]</span><span class="line">        i = i - 1</span><span class="line">    A[i + 1] = key</span></pre>
+</div>
+
+<h4 class="subsection">Interactive Trace</h4>
+
+<p class="noindent">Step through the algorithm on a concrete input. The <span style="color: var(--navy); font-weight: 600;">blue</span> cell holds the current <code>key</code>; <span style="color: var(--ochre); font-weight: 600;">amber</span> cells are being compared; <span style="color: var(--moss); font-weight: 600;">green</span> cells are in their final sorted positions <em>relative to the prefix seen so far</em>.</p>
+
+<div class="visualizer" id="insertionViz">
+  <div class="viz-title">Insertion Sort &mdash; Step Visualizer</div>
+  <div class="viz-sub">Follow each iteration of the outer and inner loops.</div>
+
+  <div class="viz-controls">
+    <label class="viz-label" for="insInput">Input:</label>
+    <input class="viz-input" id="insInput" value="5, 2, 4, 6, 1, 3" />
+    <button class="btn btn-small" id="insLoad">Load</button>
+    <button class="btn btn-small" id="insRandom">Randomize</button>
+  </div>
+
+  <div class="array-viz" id="insArray"></div>
+
+  <div class="viz-controls" style="margin-top: 2rem;">
+    <button class="btn btn-small" id="insPrev">&larr; Prev</button>
+    <button class="btn primary btn-small" id="insNext">Next Step &rarr;</button>
+    <button class="btn btn-small" id="insAuto">Auto-play</button>
+    <button class="btn btn-small" id="insReset">Reset</button>
+    <span class="viz-counter">Step <strong id="insStep">0</strong> / <strong id="insMax">0</strong> &middot; Comparisons: <strong id="insComps">0</strong></span>
+  </div>
+
+  <div class="viz-status" id="insStatus">Click "Next Step" to begin.</div>
+</div>
+
+<!-- =========== Best / Worst Case =========== -->
+<h4 class="subsection">Best and Worst Case Analysis</h4>
+
+<p class="noindent">Let $t_j$ denote the number of times the <strong>while</strong>-loop test on line 5 is executed for a given value of $j$. We count the cost of each line as a constant $c_k$ multiplied by the number of times that line executes:</p>
+
+<table class="tbl">
+  <thead>
+    <tr><th>Line</th><th>Cost</th><th>Times</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="mono">1 &nbsp; for j = 2 to n</td><td class="mono">$c_1$</td><td class="mono">$n$</td></tr>
+    <tr><td class="mono">2 &nbsp; key = A[j]</td><td class="mono">$c_2$</td><td class="mono">$n-1$</td></tr>
+    <tr><td class="mono">4 &nbsp; i = j - 1</td><td class="mono">$c_4$</td><td class="mono">$n-1$</td></tr>
+    <tr><td class="mono">5 &nbsp; while ...</td><td class="mono">$c_5$</td><td class="mono">$\sum_{j=2}^{n} t_j$</td></tr>
+    <tr><td class="mono">6 &nbsp; A[i+1] = A[i]</td><td class="mono">$c_6$</td><td class="mono">$\sum_{j=2}^{n}(t_j - 1)$</td></tr>
+    <tr><td class="mono">7 &nbsp; i = i - 1</td><td class="mono">$c_7$</td><td class="mono">$\sum_{j=2}^{n}(t_j - 1)$</td></tr>
+    <tr><td class="mono">8 &nbsp; A[i+1] = key</td><td class="mono">$c_8$</td><td class="mono">$n-1$</td></tr>
+  </tbody>
+</table>
+
+<p>The total running time $T(n)$ is the sum of these products. We analyse two extremes.</p>
+
+<div class="box example">
+  <span class="box-label">Best Case &mdash; input already sorted</span>
+  <p class="noindent">If $A$ is already in ascending order, then for each $j$ the test <code>A[i] &gt; key</code> on line 5 is false on the first evaluation. Hence $t_j = 1$ for all $j = 2, \ldots, n$.</p>
+  <p>$$T(n) = c_1 n + (c_2 + c_4 + c_5 + c_8)(n-1) = an + b$$</p>
+  <p class="noindent">for constants $a, b$. This is a <em>linear</em> function of $n$, so the best-case running time is $\Theta(n)$.</p>
+</div>
+
+<div class="box example">
+  <span class="box-label">Worst Case &mdash; input in reverse sorted order</span>
+  <p class="noindent">If $A$ is in strictly decreasing order, each key $A[j]$ must be compared with every element $A[1], \ldots, A[j-1]$; the inner loop runs until $i = 0$. Hence $t_j = j$, giving</p>
+  <p>$$\sum_{j=2}^{n} t_j = \sum_{j=2}^{n} j = \frac{n(n+1)}{2} - 1, \qquad \sum_{j=2}^{n}(t_j - 1) = \frac{n(n-1)}{2}.$$</p>
+  <p class="noindent">Substituting and collecting constants gives</p>
+  <p>$$T(n) = \left(\tfrac{c_5}{2} + \tfrac{c_6}{2} + \tfrac{c_7}{2}\right)n^2 + \left(c_1 + c_2 + c_4 + \tfrac{c_5}{2} - \tfrac{c_6}{2} - \tfrac{c_7}{2} + c_8\right)n - (c_2 + c_4 + c_5 + c_8).$$</p>
+  <p class="noindent">This is a <em>quadratic</em> function of $n$, so the worst-case running time is $\Theta(n^2)$.</p>
+</div>
+
+<div class="aside">The average-case running time is also $\Theta(n^2)$: on average half the sorted prefix must be scanned before the correct insertion point is found, giving $t_j \approx j/2$, and the leading term is still quadratic.</div>
+
+<!-- =========== Loop Invariant =========== -->
+<h4 class="subsection">Loop Invariant &mdash; Proof of Correctness</h4>
+
+<p class="noindent">A <strong>loop invariant</strong> is an assertion about the state of a computation that holds at designated points during the execution of a loop. We use it to prove correctness the same way mathematical induction proves statements about the natural numbers: we must establish three properties.</p>
+
+<div class="box definition">
+  <span class="box-label">Loop Invariant Proof Method</span>
+  <strong>Initialization.</strong> The invariant is true prior to the first iteration of the loop.<br />
+  <strong>Maintenance.</strong> If the invariant is true before an iteration, it remains true before the next iteration.<br />
+  <strong>Termination.</strong> When the loop terminates, the invariant (combined with the reason the loop terminated) yields a useful property that helps show the algorithm is correct.
+</div>
+
+<div class="box theorem">
+  <span class="box-label">Theorem 2.1 (Correctness of Insertion-Sort)</span>
+  <em>Invariant:</em> At the start of each iteration of the <strong>for</strong>-loop on line 1 (with loop index $j$), the subarray $A[1\mathinner{.\,.}j-1]$ consists of the elements originally in $A[1\mathinner{.\,.}j-1]$, but in sorted order.
+</div>
+
+<div class="proof">
+  <p class="noindent">We verify the three conditions.</p>
+
+  <p><strong>Initialization.</strong> Before the first iteration, $j = 2$, so $A[1\mathinner{.\,.}j-1] = A[1\mathinner{.\,.}1]$, which is a single-element subarray. It is trivially sorted and trivially a permutation of itself. The invariant holds. <em>(That the base case is $j=2$ and not $j=1$ is a common confusion &mdash; the invariant is stated at the <strong>start</strong> of an iteration, and the first iteration starts with $j=2$.)</em></p>
+
+  <p><strong>Maintenance.</strong> Assume the invariant holds at the start of iteration $j$: that is, $A[1\mathinner{.\,.}j-1]$ is a sorted permutation of the original $A[1\mathinner{.\,.}j-1]$. We must show it holds at the start of iteration $j+1$, i.e. that $A[1\mathinner{.\,.}j]$ is a sorted permutation of the original $A[1\mathinner{.\,.}j]$.</p>
+
+  <p>The body of the iteration saves $\textit{key} = A[j]$ and then repeatedly shifts elements of $A[1\mathinner{.\,.}j-1]$ one position to the right &mdash; replacing $A[i+1]$ with $A[i]$ &mdash; for as long as $A[i] > \textit{key}$ and $i > 0$. (A formal proof at this level requires its own inner invariant for the <strong>while</strong>-loop; informally: after each inner iteration, $A[i+2\mathinner{.\,.}j]$ is a rightward shift of the original $A[i+1\mathinner{.\,.}j-1]$, and every element in that range exceeds $\textit{key}$.) The loop terminates when either $i = 0$ or $A[i] \leq \textit{key}$; in either case, the assignment $A[i+1] = \textit{key}$ places $\textit{key}$ immediately to the right of an element that does not exceed it (or at position $1$). Thus $A[1\mathinner{.\,.}j]$ is sorted and is a permutation of the original $A[1\mathinner{.\,.}j]$.</p>
+
+  <p><strong>Termination.</strong> The loop terminates when $j$ exceeds $n$, i.e. when $j = n+1$. Substituting into the invariant, the subarray $A[1\mathinner{.\,.}n]$ consists of the elements originally in $A[1\mathinner{.\,.}n]$, in sorted order. But $A[1\mathinner{.\,.}n]$ is the entire array, so the algorithm has correctly sorted $A$.<span class="proof-end">&#x25A0;</span></p>
+</div>
+
+<!-- =========== QUIZ 2.1 =========== -->
+<div class="quiz" data-quiz>
+  <div class="quiz-title">Check Your Understanding &mdash; Insertion Sort</div>
+
+  <div class="quiz-q"><strong>Q1.</strong> On an input of $n$ elements already sorted in <em>descending</em> order, how many times does the <strong>while</strong>-loop test on line 5 execute in total across the whole algorithm?</div>
+  <ul class="quiz-options" data-answer="C">
+    <li class="quiz-option" data-letter="A">$n - 1$</li>
+    <li class="quiz-option" data-letter="B">$\lceil n/2 \rceil$</li>
+    <li class="quiz-option" data-letter="C">$n(n+1)/2 - 1$</li>
+    <li class="quiz-option" data-letter="D">$n \log_2 n$</li>
+  </ul>
+  <div class="quiz-explain">Descending input is the worst case. For each $j$ from $2$ to $n$, the inner loop runs $j$ times (it scans the entire sorted prefix plus one final test). So the total is $\sum_{j=2}^{n} j = \frac{n(n+1)}{2} - 1$.</div>
+
+  <div class="quiz-q" style="margin-top: 1.5rem;"><strong>Q2.</strong> Why is the loop invariant stated at the <em>start</em> of each iteration rather than at the end?</div>
+  <ul class="quiz-options" data-answer="B">
+    <li class="quiz-option" data-letter="A">It is a matter of convention; the end-state version is equivalent.</li>
+    <li class="quiz-option" data-letter="B">Stating it at the start makes termination immediately useful: when the loop exits, we can substitute the terminating value of the loop variable directly into the invariant.</li>
+    <li class="quiz-option" data-letter="C">Because the invariant does not hold at the end of the body.</li>
+    <li class="quiz-option" data-letter="D">Because the first iteration has not yet executed.</li>
+  </ul>
+  <div class="quiz-explain">The "start-of-iteration" convention makes the termination step clean. When the <strong>for</strong>-loop exits with $j = n+1$, the invariant tells us $A[1\mathinner{.\,.}n]$ is sorted &mdash; the full result we need. Choice B captures this.</div>
+
+  <div class="quiz-q" style="margin-top: 1.5rem;"><strong>Q3.</strong> Insertion-Sort is an <em>in-place</em> algorithm. Which statement best describes what that means?</div>
+  <ul class="quiz-options" data-answer="D">
+    <li class="quiz-option" data-letter="A">It does not use any variables besides the array.</li>
+    <li class="quiz-option" data-letter="B">It uses $O(\log n)$ extra memory.</li>
+    <li class="quiz-option" data-letter="C">It is optimally efficient.</li>
+    <li class="quiz-option" data-letter="D">At most a constant number of elements of the input array are stored outside the array at any time.</li>
+  </ul>
+  <div class="quiz-explain">"In-place" means auxiliary storage is $O(1)$ &mdash; bounded by a constant independent of $n$. Insertion sort uses only the single variable <code>key</code> (plus loop indices) beyond the array itself.</div>
+</div>
+
+<!-- =========== Exercises =========== -->
+<h5 class="minor">Selected Exercises</h5>
+
+<details class="reveal">
+  <summary>Exercise 2.1-3 &mdash; Linear Search, with loop invariant</summary>
+  <div class="reveal-body">
+    <p><strong>Problem.</strong> Consider the <em>searching problem</em>: given a sequence $A = \langle a_1, \ldots, a_n \rangle$ and a value $v$, return the index $i$ such that $v = A[i]$, or <strong>NIL</strong> if $v$ does not appear. Write pseudocode for linear search and prove it correct using a loop invariant.</p>
+
+    <div class="algorithm" style="margin: 1rem 0;">
+      <div class="algorithm-header">Linear-Search<em>(A, v)</em></div>
+      <pre><span class="line"><span class="kw">for</span> i = 1 <span class="kw">to</span> A.length</span><span class="line">    <span class="kw">if</span> A[i] == v</span><span class="line">        <span class="kw">return</span> i</span><span class="line"><span class="kw">return</span> NIL</span></pre>
+    </div>
+
+    <p><strong>Invariant.</strong> At the start of each iteration of the <strong>for</strong>-loop, the value $v$ does not appear in the subarray $A[1\mathinner{.\,.}i-1]$.</p>
+
+    <p><em>Initialization.</em> Before iteration $i=1$, the subarray $A[1\mathinner{.\,.}0]$ is empty, so $v$ vacuously does not appear in it.</p>
+    <p><em>Maintenance.</em> If we reach the start of iteration $i+1$, we did not return in iteration $i$, so $A[i] \neq v$. Combined with the invariant, $v$ does not appear in $A[1\mathinner{.\,.}i]$.</p>
+    <p><em>Termination.</em> The loop exits either by returning an index $i$ (in which case $A[i] = v$, correct) or by completing all iterations. In the latter case $i = n+1$ and the invariant says $v \notin A[1\mathinner{.\,.}n]$, so returning <strong>NIL</strong> is correct.<span class="proof-end">&#x25A0;</span></p>
+  </div>
+</details>
+
+<details class="reveal">
+  <summary>Exercise 2.1-4 &mdash; Binary Addition</summary>
+  <div class="reveal-body">
+    <p><strong>Problem.</strong> Given two $n$-bit integers $A$ and $B$ stored in arrays of length $n$, design an algorithm that produces their $(n+1)$-bit binary sum $C$.</p>
+
+    <div class="algorithm" style="margin: 1rem 0;">
+      <div class="algorithm-header">Binary-Add<em>(A, B)</em></div>
+      <pre><span class="line">carry = 0</span><span class="line"><span class="kw">for</span> i = 1 <span class="kw">to</span> n</span><span class="line">    C[i] = (A[i] + B[i] + carry) <span class="kw">mod</span> 2</span><span class="line">    carry = (A[i] + B[i] + carry) / 2   <span class="cm">// integer division</span></span><span class="line">C[n+1] = carry</span></pre>
+    </div>
+    <p>The running time is $\Theta(n)$ &mdash; each bit is touched a constant number of times. A loop invariant (left to you) would state that after iteration $i$, the low $i$ bits of $C$ together with <code>carry</code> correctly represent $A[1\mathinner{.\,.}i] + B[1\mathinner{.\,.}i]$.</p>
+  </div>
+</details>
+
+<div class="ornament">&#x2767;</div>
+</section>
+
+<!-- ============ 2.2 ============ -->
+<section id="s-2-2">
+<h3 class="section-title"><span class="sec-num">2.2</span>Analyzing Algorithms</h3>
+
+<p class="noindent">To <strong>analyze</strong> an algorithm is to predict the resources it will require. Usually we care about <em>time</em>, but memory, bandwidth, or energy may be equally relevant. Before any analysis is possible we must commit to a model of computation; CLRS fixes the <strong>Random-Access Machine (RAM)</strong>.</p>
+
+<div class="box definition">
+  <span class="box-label">The RAM Model</span>
+  <p class="noindent">Instructions execute one after another, with no concurrency. Each instruction takes a constant amount of time. The primitive instructions include arithmetic (add, subtract, multiply, divide, remainder, floor, ceiling), data movement (load, store, copy), and control (conditional and unconditional branch, subroutine call and return). Data types are integer and floating-point, with a word size that grows only modestly &mdash; specifically, with $c \log n$ bits for some constant $c \geq 1$ on inputs of size $n$.</p>
+</div>
+
+<h4 class="subsection">Input Size and Running Time</h4>
+
+<p class="noindent">Two quantities need precise definition.</p>
+
+<p><strong>Input size.</strong> The natural measure depends on the problem. For sorting, it is the number of items $n$. For integer multiplication, it is the total number of bits in the input. For a graph algorithm, it is often a pair $(|V|, |E|)$.</p>
+
+<p><strong>Running time.</strong> On a given input, the running time is the number of primitive operations (or "steps") executed. We follow the convention that each line of pseudocode takes constant time, though the constants may differ from line to line. This makes our analysis machine-independent up to a constant factor &mdash; exactly the granularity $\Theta$-notation (developed in Chapter 3) is designed for.</p>
+
+<h4 class="subsection">Worst Case, Best Case, Average Case</h4>
+
+<p class="noindent">For a fixed algorithm, the running time depends on the input. We distinguish:</p>
+
+<ul>
+  <li><strong>Worst-case running time</strong> $T(n)$: the maximum running time over all inputs of size $n$. <em>This is the default.</em> It gives an upper bound for any input, it occurs often in practice, and the "average case" is frequently as bad as the worst.</li>
+  <li><strong>Best-case running time</strong>: the minimum over inputs of size $n$. Typically too optimistic to be useful on its own.</li>
+  <li><strong>Average-case running time</strong>: the expectation over inputs of size $n$, under some distribution &mdash; commonly the uniform distribution. Requires probabilistic analysis and a justified distribution.</li>
+</ul>
+
+<h4 class="subsection">Order of Growth</h4>
+
+<p class="noindent">Even the exact expression for $T(n)$ depends on machine-specific constants. For comparing algorithms, only the <em>rate of growth</em> matters as $n \to \infty$. For insertion sort we summarize:</p>
+
+<div class="box note">
+  <span class="box-label">Summary &mdash; Insertion Sort</span>
+  <p>$$T_{\text{best}}(n) = \Theta(n), \qquad T_{\text{worst}}(n) = \Theta(n^2), \qquad T_{\text{avg}}(n) = \Theta(n^2).$$</p>
+</div>
+
+<div class="quiz" data-quiz>
+  <div class="quiz-title">Check Your Understanding &mdash; Analyzing Algorithms</div>
+
+  <div class="quiz-q"><strong>Q1.</strong> In the RAM model, which of the following is <em>not</em> assumed to be a constant-time operation?</div>
+  <ul class="quiz-options" data-answer="D">
+    <li class="quiz-option" data-letter="A">Adding two word-sized integers.</li>
+    <li class="quiz-option" data-letter="B">Comparing two floating-point numbers.</li>
+    <li class="quiz-option" data-letter="C">Loading a word from memory at a given address.</li>
+    <li class="quiz-option" data-letter="D">Computing the factorial of a word-sized integer.</li>
+  </ul>
+  <div class="quiz-explain">The RAM primitives include arithmetic, data movement, and control &mdash; each constant time. Factorial is a derived operation requiring up to $n$ multiplications, so it is not a RAM primitive.</div>
+
+  <div class="quiz-q" style="margin-top: 1.5rem;"><strong>Q2.</strong> An algorithm has a best-case running time of $\Theta(n)$ and a worst-case running time of $\Theta(n^2)$. Which of the following must be true?</div>
+  <ul class="quiz-options" data-answer="C">
+    <li class="quiz-option" data-letter="A">The average-case running time is $\Theta(n^{3/2})$.</li>
+    <li class="quiz-option" data-letter="B">The average-case running time is $\Theta(n)$.</li>
+    <li class="quiz-option" data-letter="C">The running time on any input of size $n$ is $\Omega(n)$ and $O(n^2)$.</li>
+    <li class="quiz-option" data-letter="D">The running time equals exactly $n^2$ on some input.</li>
+  </ul>
+  <div class="quiz-explain">Worst-case is an upper envelope; best-case is a lower envelope. Together they bracket <em>every</em> input. The average depends on the distribution and is not determined by these two quantities alone.</div>
+</div>
+
+<div class="ornament">&#x2767;</div>
+</section>
+
+<!-- ============ 2.3 ============ -->
+<section id="s-2-3">
+<h3 class="section-title"><span class="sec-num">2.3</span>Designing Algorithms</h3>
+
+<p class="noindent">Insertion sort uses an <strong>incremental</strong> design: we build up the sorted prefix one element at a time. In this section we introduce a different paradigm that will reappear throughout the book.</p>
+
+<h4 class="subsection">2.3.1 The Divide-and-Conquer Approach</h4>
+
+<div class="box definition">
+  <span class="box-label">Divide-and-Conquer</span>
+  <strong>Divide</strong> the problem into a number of subproblems that are smaller instances of the same problem.<br />
+  <strong>Conquer</strong> the subproblems by solving them recursively. If the subproblem size is small enough (the <em>base case</em>), solve it directly.<br />
+  <strong>Combine</strong> the solutions to the subproblems into the solution for the original problem.
+</div>
+
+<h4 class="subsection">Merge Sort</h4>
+
+<p class="noindent"><strong>Merge sort</strong> applies this paradigm to sorting. To sort $A[p\mathinner{.\,.}r]$:</p>
+
+<ol>
+  <li><em>Divide:</em> split the $n$-element subarray into two subarrays of $n/2$ elements each, namely $A[p\mathinner{.\,.}q]$ and $A[q+1\mathinner{.\,.}r]$ where $q = \lfloor (p+r)/2 \rfloor$.</li>
+  <li><em>Conquer:</em> sort each half recursively using merge sort.</li>
+  <li><em>Combine:</em> merge the two sorted halves into a single sorted array.</li>
+</ol>
+
+<p>The recursion bottoms out when a subarray has just one element (which is trivially sorted). The key subroutine is <strong>MERGE</strong>, which assumes $A[p\mathinner{.\,.}q]$ and $A[q+1\mathinner{.\,.}r]$ are each already sorted.</p>
+
+<div class="algorithm">
+  <div class="algorithm-header">Merge<em>(A, p, q, r)</em></div>
+  <pre><span class="line">n_1 = q - p + 1</span><span class="line">n_2 = r - q</span><span class="line"><span class="kw">let</span> L[1..n_1 + 1] <span class="kw">and</span> R[1..n_2 + 1] <span class="kw">be</span> <span class="kw">new</span> arrays</span><span class="line"><span class="kw">for</span> i = 1 <span class="kw">to</span> n_1</span><span class="line">    L[i] = A[p + i - 1]</span><span class="line"><span class="kw">for</span> j = 1 <span class="kw">to</span> n_2</span><span class="line">    R[j] = A[q + j]</span><span class="line">L[n_1 + 1] = &infin;</span><span class="line">R[n_2 + 1] = &infin;</span><span class="line">i = 1</span><span class="line">j = 1</span><span class="line"><span class="kw">for</span> k = p <span class="kw">to</span> r</span><span class="line">    <span class="kw">if</span> L[i] &lt;= R[j]</span><span class="line">        A[k] = L[i]</span><span class="line">        i = i + 1</span><span class="line">    <span class="kw">else</span> A[k] = R[j]</span><span class="line">        j = j + 1</span></pre>
+</div>
+
+<p>The use of $\infty$ as a <em>sentinel</em> eliminates a tedious boundary check: neither $L$ nor $R$ can be exhausted before position $r$ because each contains a value ($\infty$) that is never less than the other.</p>
+
+<div class="algorithm">
+  <div class="algorithm-header">Merge-Sort<em>(A, p, r)</em></div>
+  <pre><span class="line"><span class="kw">if</span> p &lt; r</span><span class="line">    q = &lfloor;(p + r) / 2&rfloor;</span><span class="line">    Merge-Sort(A, p, q)</span><span class="line">    Merge-Sort(A, q + 1, r)</span><span class="line">    Merge(A, p, q, r)</span></pre>
+</div>
+
+<h4 class="subsection">Interactive Merge-Sort Trace</h4>
+
+<p class="noindent">Watch the recursion unfold. The tree shows each subproblem; highlighted nodes are being processed; the array below shows the current state of $A$ after each <strong>MERGE</strong> completes.</p>
+
+<div class="visualizer" id="mergeViz">
+  <div class="viz-title">Merge Sort &mdash; Recursion &amp; Merge Visualizer</div>
+  <div class="viz-sub">Each level of the tree corresponds to one level of recursion.</div>
+
+  <div class="viz-controls">
+    <label class="viz-label" for="mergeInput">Input:</label>
+    <input class="viz-input" id="mergeInput" value="38, 27, 43, 3, 9, 82, 10" />
+    <button class="btn btn-small" id="mergeLoad">Load</button>
+    <button class="btn btn-small" id="mergeRandom">Randomize</button>
+  </div>
+
+  <div class="tree-viz" id="mergeTree"></div>
+
+  <div class="array-viz" id="mergeArray" style="margin-top: 1.2rem;"></div>
+
+  <div class="viz-controls" style="margin-top: 1.5rem;">
+    <button class="btn btn-small" id="mergePrev">&larr; Prev</button>
+    <button class="btn primary btn-small" id="mergeNext">Next Step &rarr;</button>
+    <button class="btn btn-small" id="mergeReset">Reset</button>
+    <span class="viz-counter">Step <strong id="mergeStep">0</strong> / <strong id="mergeMax">0</strong></span>
+  </div>
+
+  <div class="viz-status" id="mergeStatus">Click "Next Step" to begin.</div>
+</div>
+
+<h4 class="subsection">Correctness of MERGE</h4>
+
+<div class="box theorem">
+  <span class="box-label">Theorem 2.2 (Correctness of Merge)</span>
+  <em>Invariant:</em> At the start of each iteration of the <strong>for</strong>-loop on line 12, the subarray $A[p\mathinner{.\,.}k-1]$ contains the $k - p$ smallest elements of $L[1\mathinner{.\,.}n_1+1]$ and $R[1\mathinner{.\,.}n_2+1]$, in sorted order. Moreover, $L[i]$ and $R[j]$ are the smallest elements of their arrays that have not yet been copied back into $A$.
+</div>
+
+<div class="proof">
+  <p class="noindent"><em>Initialization.</em> Before the first iteration, $k = p$, so $A[p\mathinner{.\,.}k-1] = A[p\mathinner{.\,.}p-1]$ is empty; it contains the $0$ smallest elements trivially. Since $i = j = 1$, $L[i]$ and $R[j]$ are the first (smallest) elements of their respective sorted arrays.</p>
+
+  <p><em>Maintenance.</em> Suppose $L[i] \leq R[j]$; then $L[i]$ is the smallest element not yet copied back. The body copies $L[i]$ to $A[k]$ and increments both $i$ and $k$; the invariant holds for the new values. The case $L[i] > R[j]$ is symmetric.</p>
+
+  <p><em>Termination.</em> The loop terminates when $k = r+1$. The invariant then says $A[p\mathinner{.\,.}r]$ contains the $r - p + 1 = n_1 + n_2$ smallest elements of $L$ and $R$ in sorted order. The only elements not among these are the two sentinels $\infty$. Hence $A[p\mathinner{.\,.}r]$ is exactly the sorted union of the original $L[1\mathinner{.\,.}n_1]$ and $R[1\mathinner{.\,.}n_2]$.<span class="proof-end">&#x25A0;</span></p>
+</div>
+
+<h4 class="subsection">2.3.2 Analyzing Divide-and-Conquer Algorithms</h4>
+
+<p class="noindent">The running time of a divide-and-conquer algorithm is naturally described by a <strong>recurrence</strong>. Let $T(n)$ be the running time on a problem of size $n$. If the problem is small enough (size $\leq c$ for some constant $c$), the direct solution takes constant time $\Theta(1)$. Otherwise:</p>
+
+<ul>
+  <li>The <em>divide</em> step takes $D(n)$ time.</li>
+  <li>We solve $a$ subproblems, each of size $n/b$, in total time $a \cdot T(n/b)$.</li>
+  <li>The <em>combine</em> step takes $C(n)$ time.</li>
+</ul>
+
+<p>This gives the general recurrence</p>
+
+<p>$$T(n) = \begin{cases} \Theta(1) & \text{if } n \leq c, \\ aT(n/b) + D(n) + C(n) & \text{otherwise.} \end{cases}$$</p>
+
+<h4 class="subsection">The Merge-Sort Recurrence</h4>
+
+<p class="noindent">For merge sort on $n$ elements with $n > 1$:</p>
+
+<ul>
+  <li><em>Divide:</em> compute the midpoint $q$. This is $D(n) = \Theta(1)$.</li>
+  <li><em>Conquer:</em> recursively sort two subproblems of size $n/2$, totalling $2T(n/2)$.</li>
+  <li><em>Combine:</em> the <strong>MERGE</strong> procedure runs in $\Theta(n)$ on an $n$-element subarray (it is a single <strong>for</strong>-loop from $p$ to $r$ with constant-time body).</li>
+</ul>
+
+<p>Therefore</p>
+
+<p>$$T(n) = \begin{cases} \Theta(1) & \text{if } n = 1, \\ 2T(n/2) + \Theta(n) & \text{if } n > 1. \end{cases}$$</p>
+
+<div class="box theorem">
+  <span class="box-label">Theorem 2.3 (Merge-Sort Running Time)</span>
+  The recurrence above has solution $T(n) = \Theta(n \log n)$.
+</div>
+
+<p>A rigorous derivation appears in &sect;4.4 via the recursion-tree method and in &sect;4.5 as Case 2 of the master theorem. The intuition, however, is easy to state now: the recursion tree for merge sort has depth $\log_2 n$, and each level performs $\Theta(n)$ work in total (the top level does $n$ work, the next level does $n/2 + n/2 = n$ work, and so on). Total work: $\Theta(n) \cdot \Theta(\log n) = \Theta(n \log n)$.</p>
+
+<div class="quiz" data-quiz>
+  <div class="quiz-title">Check Your Understanding &mdash; Merge Sort</div>
+
+  <div class="quiz-q"><strong>Q1.</strong> Why does MERGE use sentinels $L[n_1+1] = R[n_2+1] = \infty$?</div>
+  <ul class="quiz-options" data-answer="B">
+    <li class="quiz-option" data-letter="A">To pad the arrays to a power of 2.</li>
+    <li class="quiz-option" data-letter="B">To guarantee the inner test <code>L[i] &lt;= R[j]</code> is always well-defined and the correct element is chosen, avoiding explicit boundary checks.</li>
+    <li class="quiz-option" data-letter="C">To mark the end of input for I/O purposes.</li>
+    <li class="quiz-option" data-letter="D">They are a debugging aid and can be removed without changing behavior.</li>
+  </ul>
+  <div class="quiz-explain">An exhausted side would otherwise require a boundary check (is $i > n_1$? is $j > n_2$?) in the hot loop. Setting both tails to $\infty$ means whichever side is exhausted "loses" every remaining comparison, so the other side drains cleanly into $A$.</div>
+
+  <div class="quiz-q" style="margin-top: 1.5rem;"><strong>Q2.</strong> For which input size $n_0$ does merge sort begin to beat insertion sort (asymptotically)? Assume insertion sort runs in $8n^2$ steps and merge sort in $64n \lg n$ steps.</div>
+  <ul class="quiz-options" data-answer="C">
+    <li class="quiz-option" data-letter="A">$n_0 = 8$</li>
+    <li class="quiz-option" data-letter="B">$n_0 = 16$</li>
+    <li class="quiz-option" data-letter="C">$n_0 \approx 44$ &mdash; the smallest $n$ with $n > 8 \lg n$.</li>
+    <li class="quiz-option" data-letter="D">$n_0 = 1024$</li>
+  </ul>
+  <div class="quiz-explain">We need $8n^2 > 64 n \lg n$, i.e. $n > 8 \lg n$. This first holds around $n = 44$. For smaller $n$, the larger constants of merge sort dominate &mdash; which is why many real-world implementations (Timsort, introsort) switch to insertion sort on small subarrays.</div>
+
+  <div class="quiz-q" style="margin-top: 1.5rem;"><strong>Q3.</strong> In the general divide-and-conquer recurrence $T(n) = aT(n/b) + D(n) + C(n)$, which parameter most directly controls the <em>depth</em> of the recursion tree?</div>
+  <ul class="quiz-options" data-answer="B">
+    <li class="quiz-option" data-letter="A">$a$</li>
+    <li class="quiz-option" data-letter="B">$b$</li>
+    <li class="quiz-option" data-letter="C">$D(n) + C(n)$</li>
+    <li class="quiz-option" data-letter="D">The base case size $c$</li>
+  </ul>
+  <div class="quiz-explain">Each level shrinks the problem by a factor of $b$. Starting at size $n$ and halting at size $1$ (or $c$), the depth is roughly $\log_b n$. The branching factor $a$ controls the <em>width</em> of the tree, not its depth.</div>
+</div>
+
+<h5 class="minor">Selected Exercise</h5>
+
+<details class="reveal">
+  <summary>Exercise 2.3-5 &mdash; Binary search and its recurrence</summary>
+  <div class="reveal-body">
+    <p><strong>Problem.</strong> Referring back to the searching problem, observe that if $A$ is sorted we can check the midpoint against $v$ and eliminate half of the array. This is <em>binary search</em>. Write iterative and recursive pseudocode and argue that the worst-case running time is $\Theta(\log n)$.</p>
+
+    <div class="algorithm" style="margin: 1rem 0;">
+      <div class="algorithm-header">Binary-Search<em>(A, v)</em> &mdash; iterative</div>
+      <pre><span class="line">low = 1; high = A.length</span><span class="line"><span class="kw">while</span> low &lt;= high</span><span class="line">    mid = &lfloor;(low + high) / 2&rfloor;</span><span class="line">    <span class="kw">if</span> A[mid] == v <span class="kw">return</span> mid</span><span class="line">    <span class="kw">elseif</span> A[mid] &lt; v  low = mid + 1</span><span class="line">    <span class="kw">else</span>               high = mid - 1</span><span class="line"><span class="kw">return</span> NIL</span></pre>
+    </div>
+
+    <p>Each iteration either returns or halves the search range (from size $n$ to $\lfloor n/2 \rfloor$ or smaller). The number of halvings required to shrink $n$ to $0$ is $\lfloor \lg n \rfloor + 1$, and each iteration does constant work. Hence worst case $\Theta(\log n)$. The recurrence is $T(n) = T(n/2) + \Theta(1)$, which we will solve formally by the master theorem.</p>
+  </div>
+</details>
+
+<div class="ornament">&#x2767;</div>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPTER 3 -->
+<!-- ============================================================ -->
+<div class="chapter-header">
+  <div class="chapter-num">Chapter 3</div>
+  <h2 class="chapter-title">Growth of <em>Functions</em></h2>
+</div>
+
+<p>Chapter 2 justified the convention that lines of pseudocode run in constant time &mdash; but only <em>up to a constant</em>. To compare algorithms meaningfully we need a vocabulary that ignores constant factors and low-order terms. That vocabulary is <strong>asymptotic notation</strong>.</p>
+
+<!-- ============ 3.1 ============ -->
+<section id="s-3-1">
+<h3 class="section-title"><span class="sec-num">3.1</span>Asymptotic Notation</h3>
+
+<p class="noindent">The symbols $O$, $\Theta$, $\Omega$, $o$, and $\omega$ describe the <em>asymptotic running time</em> of an algorithm &mdash; its behavior as $n \to \infty$. Each describes a <em>set of functions</em>; equations like "$T(n) = O(n^2)$" are abuses of notation that should be read as "$T(n)$ is an element of the set $O(n^2)$".</p>
+
+<h4 class="subsection">$\Theta$-Notation &mdash; Asymptotic Tight Bound</h4>
+
+<div class="box definition">
+  <span class="box-label">Definition 3.1 ($\Theta$)</span>
+  <p class="noindent">For a given function $g(n)$, we denote by $\Theta(g(n))$ the set of functions
+  $$\Theta(g(n)) = \{\, f(n) : \exists\, c_1, c_2 > 0,\ n_0 > 0\ \text{such that}\ 0 \leq c_1 g(n) \leq f(n) \leq c_2 g(n)\ \text{for all } n \geq n_0 \,\}.$$</p>
+  <p>Informally: $f(n)$ is squeezed between $c_1 g(n)$ and $c_2 g(n)$ for all sufficiently large $n$. Note the requirement $f(n) \geq 0$ &mdash; all functions we use with asymptotic notation are <strong>asymptotically nonnegative</strong>.</p>
+</div>
+
+<div class="box example">
+  <span class="box-label">Example 3.1 &mdash; $\tfrac{1}{2}n^2 - 3n = \Theta(n^2)$</span>
+  <p class="noindent">We must find constants $c_1, c_2, n_0 > 0$ such that
+  $$c_1 n^2 \leq \tfrac{1}{2} n^2 - 3n \leq c_2 n^2 \quad \text{for all } n \geq n_0.$$</p>
+
+  <p>Dividing by $n^2$ (valid for $n > 0$): $c_1 \leq \tfrac{1}{2} - \tfrac{3}{n} \leq c_2$. The right inequality holds for all $n \geq 1$ with $c_2 = \tfrac{1}{2}$. The left inequality holds for all $n \geq 7$ with $c_1 = \tfrac{1}{14}$ (since then $\tfrac{1}{2} - \tfrac{3}{7} = \tfrac{1}{14}$). Choosing $n_0 = 7$, $c_1 = \tfrac{1}{14}$, $c_2 = \tfrac{1}{2}$ completes the proof.<span class="proof-end">&#x25A0;</span></p>
+</div>
+
+<h4 class="subsection">$O$-Notation &mdash; Asymptotic Upper Bound</h4>
+
+<div class="box definition">
+  <span class="box-label">Definition 3.2 ($O$)</span>
+  $$O(g(n)) = \{\, f(n) : \exists\, c > 0,\ n_0 > 0\ \text{such that}\ 0 \leq f(n) \leq c g(n)\ \text{for all } n \geq n_0 \,\}.$$
+  <p>Big-$O$ gives an <em>upper bound</em> only, not necessarily tight. Note $\Theta(g(n)) \subseteq O(g(n))$.</p>
+</div>
+
+<p>The idiomatic use: "the running time of insertion sort is $O(n^2)$" &mdash; meaning <em>no input</em> causes more than a constant times $n^2$ steps. Because $O$ bounds the worst case from above, it is the workhorse of the field.</p>
+
+<h4 class="subsection">$\Omega$-Notation &mdash; Asymptotic Lower Bound</h4>
+
+<div class="box definition">
+  <span class="box-label">Definition 3.3 ($\Omega$)</span>
+  $$\Omega(g(n)) = \{\, f(n) : \exists\, c > 0,\ n_0 > 0\ \text{such that}\ 0 \leq c g(n) \leq f(n)\ \text{for all } n \geq n_0 \,\}.$$
+</div>
+
+<div class="box theorem">
+  <span class="box-label">Theorem 3.1 &mdash; The $\Theta$ / $O$ / $\Omega$ Connection</span>
+  For any two functions $f(n)$ and $g(n)$:
+  $$f(n) = \Theta(g(n)) \iff f(n) = O(g(n))\ \text{and}\ f(n) = \Omega(g(n)).$$
+</div>
+
+<div class="proof">
+  <p class="noindent">($\Rightarrow$) If $f = \Theta(g)$, there exist $c_1, c_2, n_0$ with $c_1 g \leq f \leq c_2 g$ for $n \geq n_0$. The upper inequality with constant $c = c_2$ gives $f = O(g)$; the lower with $c = c_1$ gives $f = \Omega(g)$.</p>
+
+  <p>($\Leftarrow$) If $f = O(g)$ with constant $c_2$ and $n_0' $, and $f = \Omega(g)$ with constant $c_1$ and $n_0''$, then for all $n \geq \max(n_0', n_0'')$ we have $c_1 g \leq f \leq c_2 g$, establishing $f = \Theta(g)$.<span class="proof-end">&#x25A0;</span></p>
+</div>
+
+<h4 class="subsection">$o$ and $\omega$ &mdash; Non-tight Bounds</h4>
+
+<div class="box definition">
+  <span class="box-label">Definition 3.4 ($o$ and $\omega$)</span>
+  <p class="noindent">$f(n) = o(g(n))$ if for <em>every</em> positive constant $c$, there exists $n_0 > 0$ with $0 \leq f(n) < c g(n)$ for all $n \geq n_0$. Equivalently: $\displaystyle\lim_{n \to \infty} \frac{f(n)}{g(n)} = 0$.</p>
+  <p class="noindent" style="margin-top:0.6rem;">$f(n) = \omega(g(n))$ if for every positive constant $c$, there exists $n_0$ with $0 \leq c g(n) < f(n)$ for all $n \geq n_0$. Equivalently: $\displaystyle\lim_{n \to \infty} \frac{f(n)}{g(n)} = \infty$.</p>
+</div>
+
+<p>A useful analogy: $O$ is "$\leq$", $\Omega$ is "$\geq$", $\Theta$ is "$=$", $o$ is "$<$", and $\omega$ is "$>$". Examples: $2n = o(n^2)$, $n^2/2 \neq o(n^2)$; $n^2 = \omega(n)$, $n^2 \neq \omega(n^2)$.</p>
+
+<h4 class="subsection">Properties &mdash; Transitivity, Reflexivity, Symmetry</h4>
+
+<div class="box theorem">
+  <span class="box-label">Properties of Asymptotic Notation</span>
+  <p class="noindent"><strong>Transitivity.</strong> For any notation in $\{O, \Theta, \Omega, o, \omega\}$:
+  $$f = \Theta(g)\ \text{and}\ g = \Theta(h) \Rightarrow f = \Theta(h),$$
+  and analogously for the others.</p>
+  <p><strong>Reflexivity.</strong> $f = \Theta(f)$, $f = O(f)$, $f = \Omega(f)$. (Not $o$ or $\omega$!)</p>
+  <p><strong>Symmetry.</strong> $f = \Theta(g) \iff g = \Theta(f)$.</p>
+  <p><strong>Transpose symmetry.</strong> $f = O(g) \iff g = \Omega(f)$; &nbsp; $f = o(g) \iff g = \omega(f)$.</p>
+</div>
+
+<div class="aside">Unlike with real numbers, there is no trichotomy for functions: not every pair satisfies one of $f = O(g)$, $f = \Theta(g)$, or $f = \Omega(g)$. A counterexample: $f(n) = n$ and $g(n) = n^{1+\sin n}$. The exponent oscillates, so neither function eventually dominates the other.</div>
+
+<h4 class="subsection">Proof Techniques &mdash; Worked Problems</h4>
+
+<div class="box example">
+  <span class="box-label">Worked Problem 3.1 &mdash; Prove $6n^3 \neq \Theta(n^2)$</span>
+  <p class="noindent">Suppose for contradiction that $6n^3 = \Theta(n^2)$. Then there exist $c_2, n_0 > 0$ such that $6n^3 \leq c_2 n^2$ for all $n \geq n_0$, i.e. $6n \leq c_2$ for all $n \geq n_0$. But $6n \to \infty$, so this is false. Contradiction.<span class="proof-end">&#x25A0;</span></p>
+</div>
+
+<div class="box example">
+  <span class="box-label">Worked Problem 3.2 &mdash; Prove $\max(f(n), g(n)) = \Theta(f(n) + g(n))$ for asymptotically nonneg. $f, g$</span>
+  <p class="noindent">We need constants $c_1, c_2, n_0$ such that $c_1(f+g) \leq \max(f,g) \leq c_2(f+g)$ for $n \geq n_0$.</p>
+  <p><em>Upper bound.</em> Clearly $\max(f,g) \leq f + g$, so $c_2 = 1$ works.</p>
+  <p><em>Lower bound.</em> We have $f + g \leq 2 \max(f, g)$, hence $\max(f,g) \geq \tfrac{1}{2}(f + g)$. So $c_1 = \tfrac{1}{2}$ works.</p>
+  <p>Both bounds hold as soon as both $f, g \geq 0$, which is true for all $n \geq n_0$ by hypothesis.<span class="proof-end">&#x25A0;</span></p>
+</div>
+
+<div class="quiz" data-quiz>
+  <div class="quiz-title">Check Your Understanding &mdash; Asymptotic Notation</div>
+
+  <div class="quiz-q"><strong>Q1.</strong> Which of the following is <em>false</em>?</div>
+  <ul class="quiz-options" data-answer="D">
+    <li class="quiz-option" data-letter="A">$n = O(n^2)$</li>
+    <li class="quiz-option" data-letter="B">$n = o(n^2)$</li>
+    <li class="quiz-option" data-letter="C">$2n^2 + n = \Theta(n^2)$</li>
+    <li class="quiz-option" data-letter="D">$n^2 = O(n)$</li>
+  </ul>
+  <div class="quiz-explain">Only D is false: $n^2$ grows strictly faster than any constant multiple of $n$, so it cannot be $O(n)$. The others are all correct applications of the definitions.</div>
+
+  <div class="quiz-q" style="margin-top: 1.5rem;"><strong>Q2.</strong> True or false: $f(n) = o(g(n))$ implies $f(n) = O(g(n))$.</div>
+  <ul class="quiz-options" data-answer="A">
+    <li class="quiz-option" data-letter="A">True. "Strictly less" implies "less than or equal to".</li>
+    <li class="quiz-option" data-letter="B">False. $o$ and $O$ are incomparable.</li>
+    <li class="quiz-option" data-letter="C">True, but only for asymptotically nonnegative functions.</li>
+    <li class="quiz-option" data-letter="D">False. $o$ requires a strict inequality that $O$ does not provide.</li>
+  </ul>
+  <div class="quiz-explain">If the limit $f/g \to 0$, then in particular $f/g \leq 1$ eventually (or any other constant), giving $f \leq c g$ for some $c$ &mdash; exactly the $O$ definition. So $o(g) \subseteq O(g)$.</div>
+
+  <div class="quiz-q" style="margin-top: 1.5rem;"><strong>Q3.</strong> To show $f(n) \neq O(g(n))$, what must you exhibit?</div>
+  <ul class="quiz-options" data-answer="C">
+    <li class="quiz-option" data-letter="A">Some $n$ with $f(n) > g(n)$.</li>
+    <li class="quiz-option" data-letter="B">A sequence of $n$ with $f(n) > g(n)$.</li>
+    <li class="quiz-option" data-letter="C">A proof that for every choice of $c > 0$ and $n_0$, some $n \geq n_0$ violates $f(n) \leq c g(n)$.</li>
+    <li class="quiz-option" data-letter="D">A proof that $\lim f/g = \infty$.</li>
+  </ul>
+  <div class="quiz-explain">Negating the $O$ definition: for all $c, n_0$ there exists $n \geq n_0$ with $f(n) > c g(n)$. Choice D is sufficient but strictly stronger (it proves $\omega$, hence not $O$); choice C is the precise negation.</div>
+</div>
+
+<div class="ornament">&#x2767;</div>
+</section>
+
+<!-- ============ 3.2 ============ -->
+<section id="s-3-2">
+<h3 class="section-title"><span class="sec-num">3.2</span>Standard Notations and Common Functions</h3>
+
+<p class="noindent">Before leaving growth of functions, we record a catalogue of standard objects &mdash; monotonicity, floors and ceilings, modular arithmetic, polynomials, exponentials, logarithms, factorials, and iterated logarithms &mdash; together with the comparisons between them that recur constantly in analysis.</p>
+
+<h4 class="subsection">Monotonicity</h4>
+
+<p class="noindent">A function $f$ is <strong>monotonically increasing</strong> if $m \leq n \Rightarrow f(m) \leq f(n)$; <strong>strictly increasing</strong> if the conclusion is $f(m) < f(n)$; and analogously for <em>decreasing</em>.</p>
+
+<h4 class="subsection">Floors and Ceilings</h4>
+
+<p class="noindent">$\lfloor x \rfloor$ is the largest integer $\leq x$, $\lceil x \rceil$ the smallest integer $\geq x$. For all real $x$: $x - 1 < \lfloor x \rfloor \leq x \leq \lceil x \rceil < x + 1$. Both are monotonically increasing. A fact we will use repeatedly: for any integer $n$ and positive integers $a$ and $b$,</p>
+
+<p>$$\left\lceil \frac{\lceil n/a \rceil}{b} \right\rceil = \left\lceil \frac{n}{ab} \right\rceil, \qquad \left\lfloor \frac{\lfloor n/a \rfloor}{b} \right\rfloor = \left\lfloor \frac{n}{ab} \right\rfloor.$$</p>
+
+<h4 class="subsection">Polynomials, Exponentials, Logarithms</h4>
+
+<p class="noindent">A <strong>polynomial</strong> in $n$ of degree $d$ is a function $p(n) = \sum_{i=0}^{d} a_i n^i$ with $a_d \neq 0$. If $a_d > 0$, then $p(n) = \Theta(n^d)$. We say $f(n)$ is <em>polynomially bounded</em> if $f(n) = O(n^k)$ for some constant $k$.</p>
+
+<p>The following inequality captures the key comparison between exponentials and polynomials:</p>
+
+<div class="box theorem">
+  <span class="box-label">Theorem 3.2 &mdash; Exponentials dominate polynomials</span>
+  For any real constants $a > 1$ and $b$,
+  $$\lim_{n \to \infty} \frac{n^b}{a^n} = 0,$$
+  hence $n^b = o(a^n)$. Equivalently: any polynomial grows <em>asymptotically slower</em> than any exponential with base $> 1$.
+</div>
+
+<p>A symmetric statement holds for logarithms versus polynomials:</p>
+
+<div class="box theorem">
+  <span class="box-label">Theorem 3.3 &mdash; Polynomials dominate logarithms</span>
+  For any constants $a > 0$ and $b > 0$,
+  $$\lim_{n \to \infty} \frac{\lg^b n}{n^a} = 0,$$
+  so $\lg^b n = o(n^a)$. (Here $\lg^b n$ means $(\lg n)^b$.)
+</div>
+
+<p>Taken together, these are the backbone of the algorithm designer's intuition:</p>
+
+<p style="text-align: center; margin: 1.5rem 0; font-family: var(--serif-display); font-size: 1.2rem; font-style: italic;">constants $\prec$ logs $\prec$ polynomials $\prec$ exponentials $\prec$ factorials.</p>
+
+<h4 class="subsection">Growth Rate Reference Table</h4>
+
+<table class="tbl">
+  <thead>
+    <tr><th>Notation</th><th>Name</th><th>Example</th><th>Comment</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="mono">$\Theta(1)$</td><td>constant</td><td>array indexing</td><td>independent of $n$</td></tr>
+    <tr><td class="mono">$\Theta(\log n)$</td><td>logarithmic</td><td>binary search</td><td>base is irrelevant (constant factor)</td></tr>
+    <tr><td class="mono">$\Theta(n)$</td><td>linear</td><td>linear search</td><td>touch each input once</td></tr>
+    <tr><td class="mono">$\Theta(n \log n)$</td><td>linearithmic</td><td>merge sort</td><td>optimal comparison sort</td></tr>
+    <tr><td class="mono">$\Theta(n^2)$</td><td>quadratic</td><td>insertion sort (worst)</td><td>nested loops over input</td></tr>
+    <tr><td class="mono">$\Theta(n^3)$</td><td>cubic</td><td>na&iuml;ve matrix multiply</td><td>triple-nested loops</td></tr>
+    <tr><td class="mono">$\Theta(2^n)$</td><td>exponential</td><td>subset enumeration</td><td>intractable for large $n$</td></tr>
+    <tr><td class="mono">$\Theta(n!)$</td><td>factorial</td><td>brute-force TSP</td><td>grows faster than any exponential</td></tr>
+  </tbody>
+</table>
+
+<h4 class="subsection">Logarithm Identities</h4>
+
+<p class="noindent">The following identities are used without comment throughout CLRS. For $a, b, c > 0$ and $n$ real:</p>
+
+<p style="margin-left: 1rem;">
+$a = b^{\log_b a}$ &nbsp;&bull;&nbsp; $\log_c(ab) = \log_c a + \log_c b$ &nbsp;&bull;&nbsp; $\log_b a^n = n \log_b a$<br>
+$\log_b a = \dfrac{\log_c a}{\log_c b}$ &nbsp;&bull;&nbsp; $\log_b(1/a) = -\log_b a$ &nbsp;&bull;&nbsp; $\log_b a = \dfrac{1}{\log_a b}$<br>
+$a^{\log_b c} = c^{\log_b a}$
+</p>
+
+<h4 class="subsection">Factorials &mdash; Stirling's Approximation</h4>
+
+<div class="box theorem">
+  <span class="box-label">Stirling's Approximation</span>
+  $$n! = \sqrt{2\pi n} \left(\frac{n}{e}\right)^n \left(1 + \Theta\!\left(\frac{1}{n}\right)\right).$$
+  As a consequence: $n! = o(n^n)$, $n! = \omega(2^n)$, and $\lg(n!) = \Theta(n \lg n)$.
+</div>
+
+<h4 class="subsection">Functional Iteration and $\log^*$</h4>
+
+<p class="noindent">The notation $f^{(i)}(n)$ means $f$ applied $i$ times to $n$: $f^{(0)}(n) = n$, $f^{(i)}(n) = f(f^{(i-1)}(n))$ for $i \geq 1$. The <strong>iterated logarithm</strong> is</p>
+
+<p>$$\lg^*(n) = \min\{\, i \geq 0 : \lg^{(i)}(n) \leq 1 \,\}.$$</p>
+
+<p>That is, $\lg^* n$ counts how many times we must apply $\lg$ to $n$ before the result drops to at most $1$. This function grows unimaginably slowly:</p>
+
+<table class="tbl">
+  <thead><tr><th>$n$</th><th>$\lg^* n$</th></tr></thead>
+  <tbody>
+    <tr><td class="mono">$n \leq 1$</td><td class="mono">$0$</td></tr>
+    <tr><td class="mono">$n = 2$</td><td class="mono">$1$</td></tr>
+    <tr><td class="mono">$n \in \{3, 4\}$</td><td class="mono">$2$</td></tr>
+    <tr><td class="mono">$n \in [5, 16]$</td><td class="mono">$3$</td></tr>
+    <tr><td class="mono">$n \in [17, 65536]$</td><td class="mono">$4$</td></tr>
+    <tr><td class="mono">$n \in [65537, 2^{65536}]$</td><td class="mono">$5$</td></tr>
+  </tbody>
+</table>
+
+<p>For any conceivable physical input, $\lg^* n \leq 5$. This is why algorithms with running times such as $O(m \cdot \alpha(m, n))$ (where $\alpha$ is the inverse Ackermann function &mdash; even slower than $\lg^*$) are said to run in "effectively linear" time.</p>
+
+<div class="quiz" data-quiz>
+  <div class="quiz-title">Check Your Understanding &mdash; Common Functions</div>
+
+  <div class="quiz-q"><strong>Q1.</strong> Order from slowest- to fastest-growing: $\lg(n!)$, $\quad n^2$, $\quad n \lg n$, $\quad 2^n$.</div>
+  <ul class="quiz-options" data-answer="B">
+    <li class="quiz-option" data-letter="A">$n \lg n \prec n^2 \prec \lg(n!) \prec 2^n$</li>
+    <li class="quiz-option" data-letter="B">$n \lg n \asymp \lg(n!) \prec n^2 \prec 2^n$</li>
+    <li class="quiz-option" data-letter="C">$\lg(n!) \prec n \lg n \prec n^2 \prec 2^n$</li>
+    <li class="quiz-option" data-letter="D">$n^2 \prec n \lg n \prec \lg(n!) \prec 2^n$</li>
+  </ul>
+  <div class="quiz-explain">By Stirling, $\lg(n!) = \Theta(n \lg n)$ &mdash; the two are asymptotically equivalent ($\asymp$). Then $n \lg n$ is strictly between $n$ and $n^2$, which is strictly below $2^n$.</div>
+
+  <div class="quiz-q" style="margin-top: 1.5rem;"><strong>Q2.</strong> For which of the following is $f(n) = \Theta(g(n))$?</div>
+  <ul class="quiz-options" data-answer="C">
+    <li class="quiz-option" data-letter="A">$f(n) = n \lg n$, $g(n) = n \sqrt{n}$</li>
+    <li class="quiz-option" data-letter="B">$f(n) = 2^n$, $g(n) = 3^n$</li>
+    <li class="quiz-option" data-letter="C">$f(n) = \log_2 n$, $g(n) = \log_{10} n$</li>
+    <li class="quiz-option" data-letter="D">$f(n) = n!$, $g(n) = n^n$</li>
+  </ul>
+  <div class="quiz-explain">Logarithms of different bases differ only by a constant factor ($\log_2 n = \log_2 10 \cdot \log_{10} n$), so they are $\Theta$-equivalent. A: $\lg n = o(\sqrt{n})$. B: $2^n = o(3^n)$. D: $n! = o(n^n)$.</div>
+</div>
+
+<div class="ornament">&#x2767;</div>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPTER 4 -->
+<!-- ============================================================ -->
+<div class="chapter-header">
+  <div class="chapter-num">Chapter 4</div>
+  <h2 class="chapter-title">Divide &amp; <em>Conquer</em></h2>
+</div>
+
+<p>When an algorithm is recursive, its running time is naturally expressed as a <strong>recurrence</strong> &mdash; an equation defining $T(n)$ in terms of $T$ at smaller values. This chapter develops three techniques for <em>solving</em> such recurrences: the <strong>substitution method</strong> (guess and prove by induction), the <strong>recursion-tree method</strong> (sum work level-by-level to generate a guess), and the <strong>master method</strong> (apply a theorem). In practice one often uses the recursion tree to guess, then the substitution method to prove, or &mdash; when applicable &mdash; skips directly to the master theorem.</p>
+
+<!-- ============ 4.3 ============ -->
+<section id="s-4-3">
+<h3 class="section-title"><span class="sec-num">4.3</span>The Substitution Method</h3>
+
+<p class="noindent">The <strong>substitution method</strong> has two steps:</p>
+
+<ol>
+  <li><strong>Guess</strong> the form of the solution.</li>
+  <li>Use <strong>mathematical induction</strong> to find the constants and show that the solution works.</li>
+</ol>
+
+<p>The name comes from <em>substituting</em> the guessed solution for the function when the inductive hypothesis is applied to smaller values.</p>
+
+<h4 class="subsection">Worked Example &mdash; Solving $T(n) = 2T(\lfloor n/2 \rfloor) + n$</h4>
+
+<p class="noindent">We will show that $T(n) = O(n \lg n)$. (Observe that this is the merge-sort recurrence up to notation.)</p>
+
+<div class="box theorem">
+  <span class="box-label">Claim</span>
+  If $T(1) = \Theta(1)$ and $T(n) = 2T(\lfloor n/2 \rfloor) + n$ for $n > 1$, then $T(n) = O(n \lg n)$.
+</div>
+
+<div class="proof">
+  <p class="noindent"><strong>Guess.</strong> $T(n) \leq c n \lg n$ for some constant $c > 0$ and all $n \geq n_0$.</p>
+
+  <p><strong>Inductive step.</strong> Assume the bound holds for all values $m < n$ (with $m \geq n_0$). We show it holds for $n$. By the recurrence,
+  $$T(n) = 2T(\lfloor n/2 \rfloor) + n.$$
+  Applying the inductive hypothesis to $\lfloor n/2 \rfloor$:
+  $$T(n) \leq 2 \cdot c \lfloor n/2 \rfloor \lg(\lfloor n/2 \rfloor) + n \leq 2 \cdot c \cdot (n/2) \cdot \lg(n/2) + n = c n \lg(n/2) + n.$$
+  Since $\lg(n/2) = \lg n - 1$,
+  $$T(n) \leq c n \lg n - c n + n = c n \lg n - (c - 1) n.$$
+  For the desired bound $T(n) \leq c n \lg n$, we need $(c - 1) n \geq 0$, i.e. $c \geq 1$.</p>
+
+  <p><strong>Base case.</strong> We need $n_0$ for which the induction can start. Taking $n_0 = 2$ and any $c \geq T(2)/(2 \lg 2) = T(2)/2$ ensures $T(2) \leq c \cdot 2 \lg 2 = 2c$. (We cannot use $n = 1$ as a base case because $\lg 1 = 0$ and the bound $c \cdot 1 \cdot \lg 1 = 0$ would require $T(1) = 0$. This is why substitution proofs typically take the smallest two values as base cases.) Taking $c = \max(1, T(2)/2)$ completes the argument.<span class="proof-end">&#x25A0;</span></p>
+</div>
+
+<h4 class="subsection">The Art of Making a Good Guess</h4>
+
+<p class="noindent">There is no recipe &mdash; experience and the recursion-tree method (&sect;4.4) are the two chief sources of guesses. When one recurrence resembles another whose solution is known, the known solution is a natural first guess. For example:</p>
+
+<ul>
+  <li>$T(n) = 2T(\lfloor n/2 \rfloor + 17) + n$ looks like merge sort &mdash; guess $O(n \lg n)$; the $+17$ perturbation is asymptotically irrelevant.</li>
+  <li>If loose bounds are known ($T = \Omega(n)$ and $T = O(n^2)$), work inward: first refine the lower bound to $\Omega(n \lg n)$, then the upper to $O(n \lg n)$.</li>
+</ul>
+
+<h4 class="subsection">Subtleties &mdash; The Need for Stronger Induction Hypotheses</h4>
+
+<p class="noindent">Sometimes the obvious guess cannot be proved even though it is correct. Consider</p>
+
+<p>$$T(n) = T(\lfloor n/2 \rfloor) + T(\lceil n/2 \rceil) + 1.$$</p>
+
+<p>We might guess $T(n) = O(n)$, and attempt to prove $T(n) \leq c n$. Then
+$$T(n) \leq c \lfloor n/2 \rfloor + c \lceil n/2 \rceil + 1 = c n + 1,$$
+which is <em>not</em> $\leq c n$. The induction fails &mdash; but the guess is right! The fix is to strengthen the hypothesis by subtracting a lower-order term: guess $T(n) \leq c n - d$ for constants $c, d > 0$. Then</p>
+
+<p>$$T(n) \leq (c \lfloor n/2 \rfloor - d) + (c \lceil n/2 \rceil - d) + 1 = c n - 2d + 1 \leq c n - d$$</p>
+
+<p>as long as $d \geq 1$. The stronger hypothesis is easier to prove because it leaves more "slack" to absorb the additive $+1$.</p>
+
+<h4 class="subsection">Pitfalls</h4>
+
+<p class="noindent"><strong>Never</strong> conclude $T(n) = O(n)$ from an argument of the form</p>
+
+<p style="margin-left: 2rem;">$T(n) \leq 2(c \lfloor n/2 \rfloor) + n = c n + n = O(n)$.</p>
+
+<p>This is wrong. The inductive step must produce <em>exactly</em> the form of the hypothesis $T(m) \leq c m$ &mdash; with the same constant $c$ &mdash; not merely some $O(n)$ expression. Constants must be pinned down explicitly.</p>
+
+<div class="quiz" data-quiz>
+  <div class="quiz-title">Check Your Understanding &mdash; Substitution Method</div>
+
+  <div class="quiz-q"><strong>Q1.</strong> You attempt to show $T(n) = T(n-1) + n = O(n)$ by guessing $T(n) \leq c n$. The induction gives $T(n) \leq c(n-1) + n = c n + (n - c)$. What has gone wrong?</div>
+  <ul class="quiz-options" data-answer="B">
+    <li class="quiz-option" data-letter="A">Nothing &mdash; the bound holds for $c$ large enough.</li>
+    <li class="quiz-option" data-letter="B">The bound $T(n) \leq c n$ requires $n - c \leq 0$, i.e. $n \leq c$, which fails for infinitely many $n$. The guess is wrong; $T(n) = \Theta(n^2)$.</li>
+    <li class="quiz-option" data-letter="C">The base case is missing.</li>
+    <li class="quiz-option" data-letter="D">The inductive hypothesis should have been applied at $n/2$, not $n-1$.</li>
+  </ul>
+  <div class="quiz-explain">Unrolling: $T(n) = T(n-1) + n = T(n-2) + (n-1) + n = \cdots = \sum_{k=1}^{n} k = \Theta(n^2)$. The linear guess $O(n)$ is simply too small.</div>
+
+  <div class="quiz-q" style="margin-top: 1.5rem;"><strong>Q2.</strong> For which recurrence would subtracting a lower-order term from the hypothesis ($T(n) \leq cn - d$) be a productive technique?</div>
+  <ul class="quiz-options" data-answer="A">
+    <li class="quiz-option" data-letter="A">$T(n) = T(\lfloor n/2 \rfloor) + T(\lceil n/2 \rceil) + 1$ &mdash; to prove $O(n)$.</li>
+    <li class="quiz-option" data-letter="B">$T(n) = 2 T(n/2) + n^2$ &mdash; to prove $O(n \lg n)$.</li>
+    <li class="quiz-option" data-letter="C">$T(n) = 4 T(n/2) + n$ &mdash; to prove $O(n^2)$.</li>
+    <li class="quiz-option" data-letter="D">$T(n) = T(n-1) + \lg n$ &mdash; to prove $O(n \lg n)$.</li>
+  </ul>
+  <div class="quiz-explain">The technique is valuable when the inductive step leaves behind a small additive term (like $+1$) that blocks the direct bound. Choice A is the canonical example from the main text.</div>
+</div>
+
+<div class="ornament">&#x2767;</div>
+</section>
+
+<!-- ============ 4.4 ============ -->
+<section id="s-4-4">
+<h3 class="section-title"><span class="sec-num">4.4</span>The Recursion-Tree Method</h3>
+
+<p class="noindent">In a <strong>recursion tree</strong>, each node represents the cost of a single subproblem in the set of recursive function invocations. We sum the costs <em>within each level</em> to obtain a per-level total, then sum those over all levels. The recursion tree is especially good at generating a guess that we can then verify by the substitution method.</p>
+
+<h4 class="subsection">Case Study &mdash; Merge Sort, Revisited</h4>
+
+<p class="noindent">Recall $T(n) = 2T(n/2) + cn$ for $n > 1$ (with $c$ some constant), $T(1) = c$. Assume for exposition that $n$ is a power of $2$.</p>
+
+<div class="box example">
+  <span class="box-label">Recursion Tree for Merge Sort</span>
+  <p class="noindent"><strong>Level 0</strong> (the root) does $cn$ work and has $1$ node.</p>
+  <p><strong>Level 1</strong> has $2$ nodes, each doing $c(n/2)$ work &mdash; total: $cn$.</p>
+  <p><strong>Level 2</strong> has $4$ nodes, each doing $c(n/4)$ work &mdash; total: $cn$.</p>
+  <p><strong>Level $i$</strong> has $2^i$ nodes, each doing $c(n/2^i)$ work &mdash; total: $cn$.</p>
+  <p>The recursion bottoms out at subproblem size $1$, which happens at level $\lg n$.</p>
+  <p>There are thus $\lg n + 1$ levels, each contributing $cn$ work:
+  $$T(n) = cn (\lg n + 1) = cn \lg n + cn = \Theta(n \lg n).$$</p>
+</div>
+
+<h4 class="subsection">Interactive Recursion Tree &mdash; Merge Sort</h4>
+
+<div class="visualizer" id="mergeTreeViz">
+  <div class="viz-title">Merge Sort Recursion Tree &mdash; Level-by-Level</div>
+  <div class="viz-sub">Set $n$ and watch the tree grow. Per-level work and cumulative work are shown.</div>
+
+  <div class="viz-controls">
+    <label class="viz-label" for="mtn">$n$:</label>
+    <input class="viz-input" id="mtn" value="16" style="width: 100px;" />
+    <button class="btn btn-small" id="mtBuild">Build Tree</button>
+  </div>
+
+  <div class="recursion-tree" id="mtTree"></div>
+  <div class="viz-status" id="mtStatus">Choose $n$ (a power of 2 works best) and click "Build Tree".</div>
+</div>
+
+<h4 class="subsection">A Harder Example &mdash; $T(n) = 3T(n/4) + cn^2$</h4>
+
+<p class="noindent">Let's use the recursion tree to guess a solution, then verify by substitution.</p>
+
+<div class="box example">
+  <span class="box-label">Level-by-level Cost</span>
+  <p class="noindent">The root has cost $cn^2$ and $3$ children of size $n/4$; those children have $9$ grandchildren of size $n/16$; and so on. At level $i$ there are $3^i$ nodes, each with cost $c(n/4^i)^2 = c n^2 / 16^i$. The per-level cost is
+  $$3^i \cdot \frac{c n^2}{16^i} = \left(\frac{3}{16}\right)^i c n^2.$$</p>
+
+  <p>The tree has depth $\log_4 n$ (since subproblem size $n/4^i = 1$ when $i = \log_4 n$). Summing the per-level costs:
+  $$T(n) = \sum_{i=0}^{\log_4 n - 1} \left(\frac{3}{16}\right)^i c n^2 + \Theta(n^{\log_4 3}).$$
+  The final additive term is the total cost of the leaves: there are $3^{\log_4 n} = n^{\log_4 3}$ leaves, each costing $\Theta(1)$.</p>
+
+  <p>Since $3/16 < 1$, the geometric sum is bounded above by $\sum_{i=0}^{\infty} (3/16)^i c n^2 = \frac{c n^2}{1 - 3/16} = \frac{16}{13} c n^2$. Thus $T(n) = O(n^2)$. The leaf contribution $n^{\log_4 3} \approx n^{0.79}$ is dominated by $n^2$.</p>
+</div>
+
+<p>We verify by substitution: guess $T(n) \leq d n^2$. The recurrence gives
+$T(n) \leq 3 d (n/4)^2 + c n^2 = \tfrac{3}{16} d n^2 + c n^2 = (\tfrac{3}{16} d + c) n^2.$
+We want this $\leq d n^2$, i.e. $\tfrac{3}{16} d + c \leq d$, i.e. $d \geq \tfrac{16}{13} c$. So choose $d = \tfrac{16}{13} c$ and the bound holds. Conclusion: $T(n) = O(n^2)$ &mdash; and a matching lower bound from the root term gives $T(n) = \Theta(n^2)$.</p>
+
+<h4 class="subsection">Unbalanced Splits &mdash; $T(n) = T(n/3) + T(2n/3) + cn$</h4>
+
+<p class="noindent">Here subproblem sizes shrink at different rates. The longest root-to-leaf path goes through the $2/3$-children at each step; it reaches size $1$ when $(2/3)^k n = 1$, i.e. $k = \log_{3/2} n$. The shortest path goes through the $1/3$-children and has length $\log_3 n$. For a <em>full</em> tree (before any leaf is reached), each level sums to $cn$: a subproblem of size $m$ contributes $cm$, and the subproblems at each level partition the original $n$. So for at least the first $\log_3 n$ levels the per-level total is exactly $cn$. The upper bound is $T(n) = O(cn \log_{3/2} n) = O(n \lg n)$; a matching lower bound from counting the "full" part gives $T(n) = \Omega(n \lg n)$, so $T(n) = \Theta(n \lg n)$.</p>
+
+<div class="quiz" data-quiz>
+  <div class="quiz-title">Check Your Understanding &mdash; Recursion Trees</div>
+
+  <div class="quiz-q"><strong>Q1.</strong> In the recursion tree for $T(n) = 4T(n/2) + n$, what is the total work at level $i$ (for $0 \leq i \leq \lg n$)?</div>
+  <ul class="quiz-options" data-answer="C">
+    <li class="quiz-option" data-letter="A">$n$ &mdash; the per-level work is constant.</li>
+    <li class="quiz-option" data-letter="B">$2^i n$</li>
+    <li class="quiz-option" data-letter="C">$2^i n$ &mdash; grows geometrically; leaves dominate.</li>
+    <li class="quiz-option" data-letter="D">$n/2^i$ &mdash; shrinks geometrically; root dominates.</li>
+  </ul>
+  <div class="quiz-explain">At level $i$ there are $4^i$ nodes each of size $n/2^i$; the combine cost is $n/2^i$ per node, so per-level work is $4^i \cdot n/2^i = 2^i n$. The per-level totals form a geometric progression with ratio $2$; the leaves dominate and $T(n) = \Theta(n^{\lg 4}) = \Theta(n^2)$.</div>
+
+  <div class="quiz-q" style="margin-top: 1.5rem;"><strong>Q2.</strong> For $T(n) = 2T(n/2) + n$ (merge sort), at the bottom of the tree (leaves), how many leaves are there, and what is the total leaf cost?</div>
+  <ul class="quiz-options" data-answer="B">
+    <li class="quiz-option" data-letter="A">$\lg n$ leaves, total cost $\Theta(\lg n)$.</li>
+    <li class="quiz-option" data-letter="B">$n$ leaves, total cost $\Theta(n)$.</li>
+    <li class="quiz-option" data-letter="C">$n/2$ leaves, total cost $\Theta(n/2)$.</li>
+    <li class="quiz-option" data-letter="D">$n^2$ leaves, total cost $\Theta(n^2)$.</li>
+  </ul>
+  <div class="quiz-explain">Each leaf is a subproblem of size $1$ doing $\Theta(1)$ work. The tree has depth $\lg n$ and branching factor $2$, so there are $2^{\lg n} = n$ leaves. Total leaf cost: $\Theta(n)$.</div>
+
+  <div class="quiz-q" style="margin-top: 1.5rem;"><strong>Q3.</strong> A recursion tree is most useful as a tool for:</div>
+  <ul class="quiz-options" data-answer="C">
+    <li class="quiz-option" data-letter="A">Proving a recurrence solution rigorously.</li>
+    <li class="quiz-option" data-letter="B">Visualizing the stack frame.</li>
+    <li class="quiz-option" data-letter="C">Generating a good guess for the asymptotic solution, which is then verified rigorously (often by substitution or the master method).</li>
+    <li class="quiz-option" data-letter="D">Replacing the master method in all cases.</li>
+  </ul>
+  <div class="quiz-explain">A tree diagram with ellipses is not a proof &mdash; floors and ceilings are ignored, constants are hidden. CLRS therefore recommends using the tree to <em>generate a guess</em>, then proving it by substitution.</div>
+</div>
+
+<div class="ornament">&#x2767;</div>
+</section>
+
+<!-- ============ 4.5 ============ -->
+<section id="s-4-5">
+<h3 class="section-title"><span class="sec-num">4.5</span>The Master Method</h3>
+
+<p class="noindent">The <strong>master method</strong> is a <em>cookbook</em> for recurrences of the form
+$$T(n) = a T(n/b) + f(n), \qquad a \geq 1, \quad b > 1, \quad f(n) \text{ asymptotically positive}.$$
+Here the problem of size $n$ is divided into $a$ subproblems of size $n/b$, and $f(n)$ is the cost of the divide and combine steps. (We interpret $n/b$ as either $\lfloor n/b \rfloor$ or $\lceil n/b \rceil$ throughout &mdash; the asymptotic answer is the same.)</p>
+
+<div class="box theorem">
+  <span class="box-label">Theorem 4.1 &mdash; The Master Theorem (CLRS)</span>
+  Let $a \geq 1$ and $b > 1$ be constants, let $f(n)$ be an asymptotically positive function, and let $T(n)$ be defined by
+  $$T(n) = a T(n/b) + f(n).$$
+  Define the <em>watershed function</em> $n^{\log_b a}$. Then $T(n)$ has the following asymptotic bounds:
+  <ol style="margin-top: 0.8rem;">
+    <li><strong>Case 1.</strong> If $f(n) = O(n^{\log_b a - \varepsilon})$ for some constant $\varepsilon > 0$, then $T(n) = \Theta(n^{\log_b a})$.</li>
+    <li><strong>Case 2.</strong> If $f(n) = \Theta(n^{\log_b a})$, then $T(n) = \Theta(n^{\log_b a} \lg n)$.</li>
+    <li><strong>Case 3.</strong> If $f(n) = \Omega(n^{\log_b a + \varepsilon})$ for some constant $\varepsilon > 0$, <em>and</em> if $a f(n/b) \leq c f(n)$ for some constant $c < 1$ and all sufficiently large $n$ (the <em>regularity condition</em>), then $T(n) = \Theta(f(n))$.</li>
+  </ol>
+</div>
+
+<h4 class="subsection">Interpretation</h4>
+
+<p class="noindent">The watershed $n^{\log_b a}$ is the cost contributed by the <em>leaves</em> of the recursion tree: there are $a^{\log_b n} = n^{\log_b a}$ of them, each of $\Theta(1)$ cost.</p>
+
+<ul>
+  <li><strong>Case 1.</strong> $f$ is <em>polynomially smaller</em> than the watershed &mdash; leaves dominate, $T(n) = \Theta(n^{\log_b a})$.</li>
+  <li><strong>Case 2.</strong> $f$ <em>matches</em> the watershed up to constants &mdash; all levels are equal, add an extra $\lg n$ factor, $T(n) = \Theta(n^{\log_b a} \lg n)$.</li>
+  <li><strong>Case 3.</strong> $f$ is <em>polynomially larger</em> than the watershed and regular &mdash; the root dominates, $T(n) = \Theta(f(n))$.</li>
+</ul>
+
+<div class="aside">The word "polynomially" is essential. $f(n) = n^{\log_b a} / \lg n$ is asymptotically smaller than $n^{\log_b a}$, but <em>not polynomially so</em>. In this gap, none of the three cases applies. Similarly $f(n) = n^{\log_b a} \lg n$ sits in a gap above Case 2.</div>
+
+<h4 class="subsection">Interactive Master Theorem Calculator</h4>
+
+<p class="noindent">Enter $a$, $b$, and $f(n)$ (as $n^k$ or $n^k \lg n$) to have the cases mechanically applied.</p>
+
+<div class="visualizer" id="masterViz">
+  <div class="viz-title">Master Theorem Dispatcher</div>
+  <div class="viz-sub">Accepts $f(n)$ of the form $n^k$ or $n^k \lg n$. Identifies the case and gives the asymptotic bound.</div>
+
+  <div class="master-calc">
+    <div>
+      <label for="ma">$a$ (subproblems)</label>
+      <input id="ma" type="number" value="2" step="any" />
+    </div>
+    <div>
+      <label for="mb">$b$ (size factor, $>1$)</label>
+      <input id="mb" type="number" value="2" step="any" />
+    </div>
+    <div>
+      <label for="mk">exponent $k$ in $f(n)$</label>
+      <input id="mk" type="number" value="1" step="any" />
+    </div>
+    <div>
+      <label for="mlog">log factor?</label>
+      <select id="mlog" style="width:100%; font-family: var(--mono); font-size: 1rem; padding: 0.4rem 0.6rem; border: 1px solid var(--rule); background: var(--paper);">
+        <option value="0">none ($f = n^k$)</option>
+        <option value="1">$\times\lg n$ ($f = n^k \lg n$)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="viz-controls" style="margin-top: 0.6rem;">
+    <button class="btn primary btn-small" id="mrun">Apply Master Theorem</button>
+    <button class="btn btn-small" id="mpreset1">Merge sort (a=2, b=2, f=n)</button>
+    <button class="btn btn-small" id="mpreset2">Binary search (a=1, b=2, f=1)</button>
+    <button class="btn btn-small" id="mpreset3">Strassen (a=7, b=2, f=n²)</button>
+  </div>
+
+  <div class="master-result" id="mresult">Enter parameters and click "Apply Master Theorem".</div>
+</div>
+
+<h4 class="subsection">Canonical Applications</h4>
+
+<div class="box example">
+  <span class="box-label">Merge Sort &mdash; $T(n) = 2 T(n/2) + \Theta(n)$</span>
+  <p class="noindent">$a = 2, b = 2$, so $\log_b a = 1$, watershed $n$. $f(n) = n = \Theta(n) = \Theta(n^{\log_b a})$. This is <strong>Case 2</strong>, giving $T(n) = \Theta(n \lg n)$. <span class="proof-end">&#x2713;</span></p>
+</div>
+
+<div class="box example">
+  <span class="box-label">Binary Search &mdash; $T(n) = T(n/2) + \Theta(1)$</span>
+  <p class="noindent">$a = 1, b = 2$, so $\log_b a = 0$, watershed $n^0 = 1$. $f(n) = \Theta(1) = \Theta(n^0)$. <strong>Case 2</strong>: $T(n) = \Theta(\lg n)$. <span class="proof-end">&#x2713;</span></p>
+</div>
+
+<div class="box example">
+  <span class="box-label">Strassen's Matrix Multiplication &mdash; $T(n) = 7 T(n/2) + \Theta(n^2)$</span>
+  <p class="noindent">$a = 7, b = 2$, $\log_b a = \lg 7 \approx 2.807$. $f(n) = n^2 = O(n^{\lg 7 - \varepsilon})$ for, say, $\varepsilon = 0.8$. <strong>Case 1</strong>: $T(n) = \Theta(n^{\lg 7})$. This is the celebrated $O(n^{2.81})$ matrix-multiplication bound.</p>
+</div>
+
+<div class="box example">
+  <span class="box-label">A Case-3 Example &mdash; $T(n) = 3 T(n/4) + n \lg n$</span>
+  <p class="noindent">$\log_b a = \log_4 3 \approx 0.793$, watershed $n^{0.793}$. $f(n) = n \lg n = \Omega(n^{0.793 + \varepsilon})$ for, say, $\varepsilon = 0.1$. We verify regularity: $a f(n/b) = 3 \cdot (n/4)\lg(n/4) = (3/4) n \lg n - (3/4) n \lg 4 \leq (3/4) n \lg n = (3/4) f(n)$ for large $n$, with $c = 3/4 < 1$. <strong>Case 3</strong>: $T(n) = \Theta(n \lg n)$.</p>
+</div>
+
+<div class="box example">
+  <span class="box-label">A Gap Example &mdash; $T(n) = 2 T(n/2) + n \lg n$</span>
+  <p class="noindent">$\log_b a = 1$, watershed $n$. $f(n) = n \lg n$. Is $n \lg n = \Omega(n^{1+\varepsilon})$ for some $\varepsilon > 0$? No: $\lg n = o(n^\varepsilon)$ for every $\varepsilon > 0$. So we are in the gap between Cases 2 and 3, and <em>the master theorem does not apply</em>. A different technique &mdash; recursion tree or substitution &mdash; gives $T(n) = \Theta(n \lg^2 n)$.</p>
+</div>
+
+<h4 class="subsection">Summary Table &mdash; When to Use Which Method</h4>
+
+<table class="tbl">
+  <thead><tr><th>Technique</th><th>Best for</th><th>Proves?</th></tr></thead>
+  <tbody>
+    <tr><td>Substitution</td><td>Verifying a specific guess</td><td>Yes, with induction</td></tr>
+    <tr><td>Recursion tree</td><td>Generating a guess</td><td>Not rigorously; use substitution to prove</td></tr>
+    <tr><td>Master method</td><td>Recurrences of form $aT(n/b) + f(n)$ where $f$ has a clean form</td><td>Yes (when a case applies)</td></tr>
+  </tbody>
+</table>
+
+<div class="quiz" data-quiz>
+  <div class="quiz-title">Check Your Understanding &mdash; Master Theorem</div>
+
+  <div class="quiz-q"><strong>Q1.</strong> Apply the master method: $T(n) = 9 T(n/3) + n$.</div>
+  <ul class="quiz-options" data-answer="A">
+    <li class="quiz-option" data-letter="A">$T(n) = \Theta(n^2)$ &mdash; Case 1.</li>
+    <li class="quiz-option" data-letter="B">$T(n) = \Theta(n^2 \lg n)$ &mdash; Case 2.</li>
+    <li class="quiz-option" data-letter="C">$T(n) = \Theta(n)$ &mdash; Case 3.</li>
+    <li class="quiz-option" data-letter="D">The master theorem does not apply.</li>
+  </ul>
+  <div class="quiz-explain">$\log_b a = \log_3 9 = 2$, watershed $n^2$. $f(n) = n = O(n^{2 - \varepsilon})$ for any $\varepsilon \leq 1$. Case 1: $T(n) = \Theta(n^{\log_b a}) = \Theta(n^2)$.</div>
+
+  <div class="quiz-q" style="margin-top: 1.5rem;"><strong>Q2.</strong> Apply the master method: $T(n) = T(2n/3) + 1$.</div>
+  <ul class="quiz-options" data-answer="B">
+    <li class="quiz-option" data-letter="A">$T(n) = \Theta(1)$ &mdash; Case 1.</li>
+    <li class="quiz-option" data-letter="B">$T(n) = \Theta(\lg n)$ &mdash; Case 2.</li>
+    <li class="quiz-option" data-letter="C">$T(n) = \Theta(n)$ &mdash; Case 3.</li>
+    <li class="quiz-option" data-letter="D">The master theorem does not apply.</li>
+  </ul>
+  <div class="quiz-explain">$a = 1, b = 3/2$, so $\log_b a = \log_{3/2} 1 = 0$, watershed $n^0 = 1$. $f(n) = 1 = \Theta(1) = \Theta(n^0)$. Case 2: $T(n) = \Theta(n^0 \lg n) = \Theta(\lg n)$.</div>
+
+  <div class="quiz-q" style="margin-top: 1.5rem;"><strong>Q3.</strong> Apply the master method: $T(n) = 2 T(n/2) + n / \lg n$.</div>
+  <ul class="quiz-options" data-answer="D">
+    <li class="quiz-option" data-letter="A">$T(n) = \Theta(n)$ &mdash; Case 1.</li>
+    <li class="quiz-option" data-letter="B">$T(n) = \Theta(n \lg n)$ &mdash; Case 2.</li>
+    <li class="quiz-option" data-letter="C">$T(n) = \Theta(n / \lg n)$ &mdash; Case 3.</li>
+    <li class="quiz-option" data-letter="D">The master theorem does not apply.</li>
+  </ul>
+  <div class="quiz-explain">$\log_b a = 1$, watershed $n$. $f(n) = n / \lg n$ is smaller than $n$ but not polynomially smaller: $f(n)/n^{1-\varepsilon} = n^\varepsilon / \lg n \to \infty$ for every $\varepsilon > 0$. So Case 1 fails. It is also not $\Theta(n)$ (Case 2 fails). So we are in the Case-1/Case-2 gap; master theorem does not apply. (The actual solution, obtainable by other means, is $T(n) = \Theta(n \lg \lg n)$.)</div>
+
+  <div class="quiz-q" style="margin-top: 1.5rem;"><strong>Q4.</strong> What is the purpose of the regularity condition $a f(n/b) \leq c f(n)$ in Case 3?</div>
+  <ul class="quiz-options" data-answer="B">
+    <li class="quiz-option" data-letter="A">It is redundant; the polynomial separation from the watershed already implies it.</li>
+    <li class="quiz-option" data-letter="B">It ensures that per-level work <em>decreases geometrically</em> as we descend the recursion tree, so the root's $f(n)$ work dominates the total.</li>
+    <li class="quiz-option" data-letter="C">It replaces the base case of the recurrence.</li>
+    <li class="quiz-option" data-letter="D">It is an equivalent form of the polynomial-separation hypothesis.</li>
+  </ul>
+  <div class="quiz-explain">The condition guarantees level costs shrink by a constant factor per level ($a f(n/b) \leq c f(n)$), forming a geometric sum dominated by the $f(n)$ root term. Without regularity, $f$ could misbehave on subtle inputs despite the polynomial separation. For all <em>polynomially bounded</em> $f$ that satisfy Case 3's growth, regularity holds automatically &mdash; but it must be stated for the theorem to be clean.</div>
+</div>
+
+<h5 class="minor">Selected Exercises</h5>
+
+<details class="reveal">
+  <summary>Exercise 4.5-1 &mdash; Apply the master method</summary>
+  <div class="reveal-body">
+    <p><strong>(a) $T(n) = 2T(n/4) + 1$.</strong> $\log_4 2 = 1/2$, watershed $\sqrt{n}$. $f(n) = 1 = O(n^{1/2 - \varepsilon})$ for $\varepsilon = 1/2$. <em>Case 1:</em> $T(n) = \Theta(\sqrt{n})$.</p>
+    <p><strong>(b) $T(n) = 2T(n/4) + \sqrt{n}$.</strong> Watershed $\sqrt{n}$; $f = \sqrt{n} = \Theta(\sqrt{n})$. <em>Case 2:</em> $T(n) = \Theta(\sqrt{n} \lg n)$.</p>
+    <p><strong>(c) $T(n) = 2T(n/4) + n$.</strong> Watershed $\sqrt{n}$; $f = n = \Omega(n^{1/2 + 1/2})$. Regularity: $2 \cdot (n/4) = n/2 = (1/2) f(n)$, with $c = 1/2 < 1$. <em>Case 3:</em> $T(n) = \Theta(n)$.</p>
+    <p><strong>(d) $T(n) = 2T(n/4) + n^2$.</strong> Watershed $\sqrt{n}$; $f = n^2 = \Omega(n^{1/2 + 3/2})$. Regularity: $2(n/4)^2 = n^2/8 = (1/8) f(n)$. <em>Case 3:</em> $T(n) = \Theta(n^2)$.</p>
+  </div>
+</details>
+
+<details class="reveal">
+  <summary>Exercise 4.5-2 &mdash; Beat Strassen</summary>
+  <div class="reveal-body">
+    <p><strong>Problem.</strong> Your algorithm multiplies two $3 \times 3$ matrices using $k$ scalar multiplications (and $O(n^2)$ work on submatrices). For which values of $k$ is your algorithm asymptotically faster than Strassen's?</p>
+    <p>The recurrence becomes $T(n) = k T(n/3) + \Theta(n^2)$. Strassen is $\Theta(n^{\lg 7}) \approx \Theta(n^{2.807})$. By the master theorem, if $\log_3 k > 2$ (i.e. $k > 9$), Case 1 gives $T(n) = \Theta(n^{\log_3 k})$, and we beat Strassen iff $\log_3 k < \lg 7$, i.e. $k < 3^{\lg 7} \approx 21.85$. So the interesting range is $k \in \{10, 11, \ldots, 21\}$. (Standard matrix multiplication uses $k = 27$; Pan's $3\times3$ algorithm achieves $k = 21$, which gives $O(n^{2.78})$ &mdash; faster than Strassen.)</p>
+  </div>
+</details>
+
+<div class="ornament">&#x2767;</div>
+</section>
+
+<footer>
+  <p>&mdash; <em>An Interactive Companion to Cormen, Leiserson, Rivest &amp; Stein, Introduction to Algorithms</em> &mdash;</p>
+</footer>
+
+</main>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ======================================================================
+     1. SCROLLSPY + PROGRESS BAR
+     ====================================================================== */
+  const navLinks = Array.from(document.querySelectorAll('.nav-link'));
+  const sections = navLinks
+    .map(a => document.querySelector(a.getAttribute('href')))
+    .filter(Boolean);
+  const progressFill = document.getElementById('progressFill');
+  const progressPct  = document.getElementById('progressPct');
+
+  function onScroll() {
+    // progress bar — fraction of document scrolled
+    const h = document.documentElement;
+    const denom = (h.scrollHeight - h.clientHeight) || 1;
+    const pct = Math.min(100, Math.max(0, (h.scrollTop / denom) * 100));
+    if (progressFill) progressFill.style.width = pct.toFixed(1) + '%';
+    if (progressPct)  progressPct.textContent = Math.round(pct) + '%';
+
+    // scrollspy — pick the section whose top is closest above the 1/3 mark
+    const mark = window.innerHeight * 0.33;
+    let activeIdx = 0;
+    for (let i = 0; i < sections.length; i++) {
+      const top = sections[i].getBoundingClientRect().top;
+      if (top - mark <= 0) activeIdx = i;
+    }
+    navLinks.forEach((a, i) => a.classList.toggle('active', i === activeIdx));
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  onScroll();
+
+  /* ======================================================================
+     2. QUIZ INTERACTIVITY
+     ====================================================================== */
+  document.querySelectorAll('.quiz-options').forEach(ul => {
+    const answer = (ul.getAttribute('data-answer') || '').trim().toUpperCase();
+    const options = ul.querySelectorAll('.quiz-option');
+    // Find the explanation that belongs to THIS question (next .quiz-explain sibling)
+    let explain = ul.nextElementSibling;
+    while (explain && !explain.classList.contains('quiz-explain')) {
+      explain = explain.nextElementSibling;
+    }
+    options.forEach(opt => {
+      opt.addEventListener('click', () => {
+        if (ul.classList.contains('locked')) return;
+        ul.classList.add('locked');
+        const chosen = (opt.getAttribute('data-letter') || '').toUpperCase();
+        options.forEach(o => {
+          o.classList.add('revealed');
+          const letter = (o.getAttribute('data-letter') || '').toUpperCase();
+          if (letter === answer) o.classList.add('correct');
+          else if (letter === chosen) o.classList.add('incorrect');
+        });
+        if (explain) explain.classList.add('show');
+      });
+    });
+  });
+
+  /* ======================================================================
+     3. UTILITY — parse an array from a comma/space-separated input
+     ====================================================================== */
+  function parseArray(str, fallback) {
+    const parts = String(str).split(/[,\s]+/).map(s => s.trim()).filter(Boolean);
+    const nums = parts.map(Number).filter(x => Number.isFinite(x));
+    return nums.length ? nums : (fallback || [5, 2, 4, 6, 1, 3]);
+  }
+  function randomArray(n, lo, hi) {
+    lo = lo || 1; hi = hi || 99;
+    const out = [];
+    for (let i = 0; i < n; i++) out.push(lo + Math.floor(Math.random() * (hi - lo + 1)));
+    return out;
+  }
+
+  /* ======================================================================
+     4. INSERTION SORT VISUALIZER
+     ====================================================================== */
+  (function initInsertion() {
+    const host = document.getElementById('insertionViz');
+    if (!host) return;
+    const inp     = document.getElementById('insInput');
+    const btnLoad = document.getElementById('insLoad');
+    const btnRnd  = document.getElementById('insRandom');
+    const btnPrev = document.getElementById('insPrev');
+    const btnNext = document.getElementById('insNext');
+    const btnAuto = document.getElementById('insAuto');
+    const btnRst  = document.getElementById('insReset');
+    const arrBox  = document.getElementById('insArray');
+    const stepEl  = document.getElementById('insStep');
+    const maxEl   = document.getElementById('insMax');
+    const compsEl = document.getElementById('insComps');
+    const statusEl= document.getElementById('insStatus');
+
+    let steps = [];
+    let idx = 0;
+    let auto = null;
+
+    // Generate step trace. Each step = { arr, sortedUpTo, j, i, key, comps, msg }
+    function buildSteps(inputArr) {
+      const A = inputArr.slice();
+      const n = A.length;
+      const trace = [];
+      let comps = 0;
+      trace.push({
+        arr: A.slice(), sortedUpTo: 0, j: null, i: null, key: null, comps,
+        msg: `Initial array of length $n = ${n}$. The prefix $A[1\\mathinner{.\\,.}1]$ (just $A[1]$) is trivially sorted.`
+      });
+      for (let j = 1; j < n; j++) { // CLRS uses 1-based; here A[j] is the (j+1)-th element
+        const key = A[j];
+        trace.push({
+          arr: A.slice(), sortedUpTo: j, j, i: null, key, keyIdx: j, comps,
+          msg: `<b>Outer iteration $j = ${j+1}$.</b> Take $\\mathit{key} = A[${j+1}] = ${key}$. The prefix $A[1\\mathinner{.\\,.}${j}]$ is sorted. We will insert $\\mathit{key}$ into its correct position.`
+        });
+        let i = j - 1;
+        while (i >= 0 && A[i] > key) {
+          comps++;
+          trace.push({
+            arr: A.slice(), sortedUpTo: j, j, i, key, keyIdx: j, comps, compareIdx: i,
+            msg: `Compare $A[${i+1}] = ${A[i]}$ with $\\mathit{key} = ${key}$. Since $${A[i]} > ${key}$, shift $A[${i+1}]$ right by one.`
+          });
+          A[i+1] = A[i];
+          trace.push({
+            arr: A.slice(), sortedUpTo: j, j, i, key, keyIdx: i+1, comps,
+            msg: `After shift: $A[${i+2}] \\gets A[${i+1}]$. The slot at position ${i+1} is now available.`
+          });
+          i--;
+        }
+        if (i >= 0) {
+          comps++;
+          trace.push({
+            arr: A.slice(), sortedUpTo: j, j, i, key, keyIdx: i+1, comps, compareIdx: i,
+            msg: `Compare $A[${i+1}] = ${A[i]}$ with $\\mathit{key} = ${key}$. Since $${A[i]} \\le ${key}$, the loop stops.`
+          });
+        } else {
+          trace.push({
+            arr: A.slice(), sortedUpTo: j, j, i, key, keyIdx: 0, comps,
+            msg: `$i$ has reached $0$: $\\mathit{key}$ is the new minimum of the prefix.`
+          });
+        }
+        A[i+1] = key;
+        trace.push({
+          arr: A.slice(), sortedUpTo: j+1, j, i: null, key: null, comps,
+          msg: `Place $\\mathit{key} = ${key}$ at position ${i+2}. The prefix $A[1\\mathinner{.\\,.}${j+1}]$ is now sorted.`
+        });
+      }
+      trace.push({
+        arr: A.slice(), sortedUpTo: n, j: null, i: null, key: null, comps, done: true,
+        msg: `<b>Termination.</b> The <b>for</b>-loop ends with $j = ${n+1}$. By the loop invariant, $A[1\\mathinner{.\\,.}${n}]$ is sorted. Total comparisons: <b>${comps}</b>.`
+      });
+      return trace;
+    }
+
+    function render() {
+      const s = steps[idx];
+      if (!s) return;
+      arrBox.innerHTML = '';
+      s.arr.forEach((v, k) => {
+        const c = document.createElement('div');
+        c.className = 'cell';
+        if (k < s.sortedUpTo && k !== s.keyIdx) c.classList.add('sorted');
+        if (s.compareIdx === k) c.classList.add('compare');
+        if (s.keyIdx === k && s.key !== null) c.classList.add('key');
+        c.textContent = v;
+        const idxLbl = document.createElement('span');
+        idxLbl.className = 'cell-index';
+        idxLbl.textContent = String(k + 1);
+        c.appendChild(idxLbl);
+        arrBox.appendChild(c);
+      });
+      stepEl.textContent  = idx;
+      maxEl.textContent   = steps.length - 1;
+      compsEl.textContent = s.comps;
+      statusEl.innerHTML  = s.msg;
+      if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([statusEl]).catch(()=>{});
+    }
+
+    function load(arr) {
+      stopAuto();
+      steps = buildSteps(arr);
+      idx = 0;
+      render();
+    }
+    function next() { if (idx < steps.length - 1) { idx++; render(); } else stopAuto(); }
+    function prev() { if (idx > 0) { idx--; render(); } }
+    function reset() { stopAuto(); idx = 0; render(); }
+    function stopAuto() { if (auto) { clearInterval(auto); auto = null; btnAuto.textContent = 'Auto-play'; } }
+    function toggleAuto() {
+      if (auto) { stopAuto(); return; }
+      btnAuto.textContent = 'Pause';
+      auto = setInterval(() => {
+        if (idx >= steps.length - 1) stopAuto();
+        else next();
+      }, 900);
+    }
+
+    btnLoad.addEventListener('click', () => load(parseArray(inp.value)));
+    btnRnd .addEventListener('click', () => {
+      const n = 6 + Math.floor(Math.random() * 3);
+      const a = randomArray(n);
+      inp.value = a.join(', ');
+      load(a);
+    });
+    btnPrev.addEventListener('click', prev);
+    btnNext.addEventListener('click', next);
+    btnAuto.addEventListener('click', toggleAuto);
+    btnRst .addEventListener('click', reset);
+
+    load(parseArray(inp.value));
+  })();
+
+  /* ======================================================================
+     5. MERGE SORT VISUALIZER
+     ====================================================================== */
+  (function initMerge() {
+    const host = document.getElementById('mergeViz');
+    if (!host) return;
+    const inp     = document.getElementById('mergeInput');
+    const btnLoad = document.getElementById('mergeLoad');
+    const btnRnd  = document.getElementById('mergeRandom');
+    const btnPrev = document.getElementById('mergePrev');
+    const btnNext = document.getElementById('mergeNext');
+    const btnRst  = document.getElementById('mergeReset');
+    const treeBox = document.getElementById('mergeTree');
+    const arrBox  = document.getElementById('mergeArray');
+    const stepEl  = document.getElementById('mergeStep');
+    const maxEl   = document.getElementById('mergeMax');
+    const statusEl= document.getElementById('mergeStatus');
+
+    let steps = [];
+    let idx = 0;
+
+    // Build steps by simulating top-down merge sort, emitting a trace.
+    function buildSteps(A0) {
+      const A = A0.slice();
+      const n = A.length;
+      const trace = [];
+
+      // Collect subranges split by level for visualisation
+      const levels = []; // levels[d] = array of [lo,hi] pairs
+      function collectSplits(p, r, d) {
+        if (!levels[d]) levels[d] = [];
+        levels[d].push([p, r]);
+        if (p >= r) return;
+        const q = Math.floor((p + r) / 2);
+        collectSplits(p, q, d + 1);
+        collectSplits(q + 1, r, d + 1);
+      }
+      collectSplits(0, n - 1, 0);
+
+      function snap(highlight, done, msg) {
+        trace.push({
+          arr: A.slice(),
+          highlight: highlight ? highlight.slice() : null,  // [lo,hi]
+          done: done ? done.slice() : [],                   // array of [lo,hi]
+          msg
+        });
+      }
+
+      const doneRanges = [];
+      snap([0, n - 1], [], `<b>Initial call.</b> $\\textsc{Merge-Sort}(A, 1, ${n})$. The recursion will split this range repeatedly until each piece has length 1.`);
+
+      function merge(p, q, r) {
+        const L = A.slice(p, q + 1);
+        const R = A.slice(q + 1, r + 1);
+        let i = 0, j = 0, k = p;
+        while (i < L.length && j < R.length) {
+          if (L[i] <= R[j]) { A[k++] = L[i++]; }
+          else              { A[k++] = R[j++]; }
+        }
+        while (i < L.length) A[k++] = L[i++];
+        while (j < R.length) A[k++] = R[j++];
+      }
+
+      function sort(p, r) {
+        if (p >= r) {
+          doneRanges.push([p, r]);
+          snap([p, r], doneRanges, `Base case $\\textsc{Merge-Sort}(A, ${p+1}, ${r+1})$: a single element is trivially sorted.`);
+          return;
+        }
+        const q = Math.floor((p + r) / 2);
+        snap([p, r], doneRanges, `<b>Divide.</b> $\\textsc{Merge-Sort}(A, ${p+1}, ${r+1})$: split into $A[${p+1}\\mathinner{.\\,.}${q+1}]$ and $A[${q+2}\\mathinner{.\\,.}${r+1}]$.`);
+        sort(p, q);
+        sort(q + 1, r);
+        snap([p, r], doneRanges, `<b>Combine.</b> Call $\\textsc{Merge}(A, ${p+1}, ${q+1}, ${r+1})$: two sorted halves of total length ${r-p+1}.`);
+        merge(p, q, r);
+        // Remove the two children and add the merged range
+        const toKeep = doneRanges.filter(([a,b]) => !(a >= p && b <= r));
+        doneRanges.length = 0;
+        toKeep.forEach(x => doneRanges.push(x));
+        doneRanges.push([p, r]);
+        snap([p, r], doneRanges, `$A[${p+1}\\mathinner{.\\,.}${r+1}]$ is now sorted. Result: $[${A.slice(p, r+1).join(', ')}]$.`);
+      }
+      sort(0, n - 1);
+      // final
+      trace[trace.length - 1].finished = true;
+      return { trace, levels };
+    }
+
+    function renderTree(levels, highlight, done) {
+      treeBox.innerHTML = '';
+      levels.forEach(level => {
+        const row = document.createElement('div');
+        row.className = 'tree-level';
+        level.forEach(([lo, hi]) => {
+          const node = document.createElement('div');
+          node.className = 'tree-node';
+          if (highlight && lo === highlight[0] && hi === highlight[1]) node.classList.add('active');
+          if (done && done.some(([a,b]) => a === lo && b === hi)) node.classList.add('done');
+          node.textContent = `[${lo+1}..${hi+1}]`;
+          row.appendChild(node);
+        });
+        treeBox.appendChild(row);
+      });
+    }
+
+    let computed = null;
+    function render() {
+      const s = steps[idx];
+      if (!s || !computed) return;
+      renderTree(computed.levels, s.highlight, s.done);
+      arrBox.innerHTML = '';
+      s.arr.forEach((v, k) => {
+        const c = document.createElement('div');
+        c.className = 'cell';
+        if (s.highlight && k >= s.highlight[0] && k <= s.highlight[1]) c.classList.add('current');
+        if (s.done && s.done.some(([a,b]) => k >= a && k <= b)) {
+          if (!(s.highlight && k >= s.highlight[0] && k <= s.highlight[1])) c.classList.add('sorted');
+        }
+        c.textContent = v;
+        const lbl = document.createElement('span');
+        lbl.className = 'cell-index';
+        lbl.textContent = String(k + 1);
+        c.appendChild(lbl);
+        arrBox.appendChild(c);
+      });
+      stepEl.textContent = idx;
+      maxEl.textContent  = steps.length - 1;
+      statusEl.innerHTML = s.msg;
+      if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([statusEl]).catch(()=>{});
+    }
+
+    function load(arr) {
+      computed = buildSteps(arr);
+      steps = computed.trace;
+      idx = 0;
+      render();
+    }
+
+    btnLoad.addEventListener('click', () => load(parseArray(inp.value)));
+    btnRnd .addEventListener('click', () => {
+      const n = 6 + Math.floor(Math.random() * 3);
+      const a = randomArray(n);
+      inp.value = a.join(', ');
+      load(a);
+    });
+    btnPrev.addEventListener('click', () => { if (idx > 0) { idx--; render(); } });
+    btnNext.addEventListener('click', () => { if (idx < steps.length - 1) { idx++; render(); } });
+    btnRst .addEventListener('click', () => { idx = 0; render(); });
+
+    load(parseArray(inp.value));
+  })();
+
+  /* ======================================================================
+     6. MERGE-SORT RECURSION TREE BUILDER (§4.4)
+     ====================================================================== */
+  (function initRecursionTree() {
+    const host = document.getElementById('mtTree');
+    if (!host) return;
+    const nInp   = document.getElementById('mtn');
+    const btn    = document.getElementById('mtBuild');
+    const status = document.getElementById('mtStatus');
+
+    function build() {
+      const n = Math.max(1, Math.min(64, parseInt(nInp.value, 10) || 16));
+      const levels = Math.ceil(Math.log2(n)) + 1; // includes level 0
+      const rows = [];
+      for (let d = 0; d < levels; d++) {
+        const count = Math.min(n, Math.pow(2, d));
+        const size  = n / Math.pow(2, d);
+        rows.push({ d, count, size, work: count * size }); // work per level ≈ c·n
+      }
+      // Total leaf-level work is n·1 = n; sum over levels ≈ n·(lg n + 1) = Θ(n lg n)
+      let html = '<div style="font-family: var(--mono); font-size: 0.88rem;">';
+      html += '<table style="margin: 0 auto; border-collapse: collapse;">';
+      html += '<thead><tr>'
+           + '<th style="padding:0.4rem 0.8rem; border-bottom:1px solid var(--ink); text-align:left;">Level $d$</th>'
+           + '<th style="padding:0.4rem 0.8rem; border-bottom:1px solid var(--ink); text-align:center;"># subproblems</th>'
+           + '<th style="padding:0.4rem 0.8rem; border-bottom:1px solid var(--ink); text-align:center;">size</th>'
+           + '<th style="padding:0.4rem 0.8rem; border-bottom:1px solid var(--ink); text-align:right;">work per level</th>'
+           + '</tr></thead><tbody>';
+      rows.forEach(r => {
+        const sizeStr  = Number.isInteger(r.size) ? r.size : r.size.toFixed(2);
+        const workStr  = Number.isInteger(r.work) ? r.work : r.work.toFixed(2);
+        html += `<tr>
+          <td style="padding:0.35rem 0.8rem; border-bottom:1px dotted var(--rule);">${r.d}${r.d === levels-1 ? ' (leaves)' : ''}</td>
+          <td style="padding:0.35rem 0.8rem; border-bottom:1px dotted var(--rule); text-align:center;">$2^{${r.d}} = ${r.count}$</td>
+          <td style="padding:0.35rem 0.8rem; border-bottom:1px dotted var(--rule); text-align:center;">$n/2^{${r.d}} = ${sizeStr}$</td>
+          <td style="padding:0.35rem 0.8rem; border-bottom:1px dotted var(--rule); text-align:right;">$c \\cdot ${workStr} = cn$</td>
+        </tr>`;
+      });
+      html += '</tbody></table></div>';
+
+      // Also draw a simple visual tree up to depth 3 or so
+      let vis = '<div style="margin-top: 1.4rem; display:flex; flex-direction:column; gap: 0.5rem; align-items:center;">';
+      const maxShow = Math.min(levels, 5);
+      for (let d = 0; d < maxShow; d++) {
+        const count = Math.min(n, Math.pow(2, d));
+        const size  = n / Math.pow(2, d);
+        vis += '<div style="display:flex; gap:4px; justify-content:center; flex-wrap:wrap;">';
+        for (let k = 0; k < Math.min(count, 16); k++) {
+          const label = Number.isInteger(size) ? size : size.toFixed(2);
+          vis += `<span class="tree-node">${label}</span>`;
+        }
+        if (count > 16) vis += `<span class="tree-node" style="border-style:dashed;">…${count - 16} more</span>`;
+        vis += '</div>';
+      }
+      if (levels > maxShow) vis += '<div style="font-style:italic; color:var(--ink-muted); font-size:0.85rem;">⋮ (tree continues)</div>';
+      vis += '</div>';
+
+      host.innerHTML = vis + html;
+      const total = n * Math.ceil(Math.log2(Math.max(2, n)) + 1);
+      status.innerHTML = `Total work $\\;\\approx\\; cn \\cdot (\\lg ${n} + 1) = cn \\cdot ${Math.ceil(Math.log2(Math.max(2, n))) + 1} = \\Theta(n \\lg n)$.`;
+      if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([host, status]).catch(()=>{});
+    }
+
+    btn.addEventListener('click', build);
+    build();
+  })();
+
+  /* ======================================================================
+     7. MASTER METHOD CALCULATOR (§4.5)
+     ====================================================================== */
+  (function initMaster() {
+    const host = document.getElementById('masterViz');
+    if (!host) return;
+    const aInp = document.getElementById('ma');
+    const bInp = document.getElementById('mb');
+    const kInp = document.getElementById('mk');
+    const lInp = document.getElementById('mlog');
+    const btn  = document.getElementById('mrun');
+    const out  = document.getElementById('mresult');
+    const pre1 = document.getElementById('mpreset1');
+    const pre2 = document.getElementById('mpreset2');
+    const pre3 = document.getElementById('mpreset3');
+
+    function prettyExp(k) {
+      if (Math.abs(k) < 1e-9) return '';               // n^0 = constant; emitted as ""
+      if (Math.abs(k - 1) < 1e-9) return 'n';
+      if (Math.abs(k - Math.round(k)) < 1e-9) return `n^{${Math.round(k)}}`;
+      return `n^{${(+k.toFixed(3))}}`;
+    }
+    function prettyPoly(k) {
+      if (Math.abs(k) < 1e-9) return '1';
+      if (Math.abs(k - 1) < 1e-9) return 'n';
+      if (Math.abs(k - Math.round(k)) < 1e-9) return `n^{${Math.round(k)}}`;
+      return `n^{${(+k.toFixed(3))}}`;
+    }
+
+    function apply() {
+      const a = Number(aInp.value);
+      const b = Number(bInp.value);
+      const k = Number(kInp.value);
+      const logPow = lInp.value; // "none", "0", "1", "2"
+
+      if (!Number.isFinite(a) || a <= 0) { out.classList.add('error'); out.innerHTML = 'Require $a > 0$.'; return; }
+      if (!Number.isFinite(b) || b <= 1) { out.classList.add('error'); out.innerHTML = 'Require $b > 1$.'; return; }
+      if (!Number.isFinite(k) || k < 0)  { out.classList.add('error'); out.innerHTML = 'Require $k \\ge 0$.'; return; }
+      out.classList.remove('error');
+
+      const logba = Math.log(a) / Math.log(b);
+      const logStr = Number.isInteger(logba) ? String(logba) : `\\log_{${b}} ${a} \\approx ${logba.toFixed(3)}`;
+      const p = (logPow === 'none') ? null : Number(logPow);
+
+      let verdict = '';
+      let caseStr = '';
+      const EPS = 1e-6;
+
+      // Standard f(n) = n^k * (log n)^p (if p given) — the Master theorem extension.
+      // For the base form (no log), use standard cases 1/2/3. If a log factor is present:
+      //   - Case 2 extension: if k == log_b a, T(n) = Θ(n^k (lg n)^{p+1})
+      //   - Otherwise, gap or clean case still applies based on k vs log_b a.
+
+      if (k < logba - EPS) {
+        // Case 1: f(n) = O(n^{log_b a - ε}).  Answer dominated by leaves.
+        caseStr = 'Case 1';
+        const ans = prettyExp(logba);
+        verdict = `Since $n^{${(+k.toFixed(3))}} = O(n^{\\log_b a - \\varepsilon})$ for some $\\varepsilon > 0$, the leaves dominate.<br>
+                   $$T(n) = \\Theta(${ans || '1'}).$$`;
+        if (p !== null && p > 0) {
+          verdict += `<div style="margin-top:0.6rem; font-size:0.92rem; color:var(--ink-muted);">The polylog factor in $f$ is absorbed; Case 1 depends only on polynomial comparison.</div>`;
+        }
+      } else if (Math.abs(k - logba) < EPS) {
+        // Case 2 — possibly extended.
+        caseStr = 'Case 2';
+        if (p === null || p === 0) {
+          const base = prettyExp(logba);
+          verdict = `Since $f(n) = \\Theta(n^{\\log_b a}) = \\Theta(${base || '1'})$ (polynomially equal), we are in Case 2.<br>
+                     $$T(n) = \\Theta\\!\\bigl(${base || '1'} \\, \\lg n\\bigr).$$`;
+        } else if (p > -1) {
+          // Extended Master Theorem (CLRS exercise 4.6-2): f = Θ(n^{log_b a} (lg n)^p), p > -1
+          const base = prettyExp(logba);
+          verdict = `Extended Case 2: $f(n) = \\Theta(n^{\\log_b a}\\,(\\lg n)^{${p}})$ with $p = ${p} > -1$, so<br>
+                     $$T(n) = \\Theta\\!\\bigl(${base || '1'} \\, (\\lg n)^{${p+1}}\\bigr).$$`;
+        } else {
+          verdict = `Case 2 with $p \\le -1$ is outside the standard form; not handled here.`;
+        }
+      } else {
+        // Case 3: f asymptotically larger than n^{log_b a}.
+        // (Also requires the regularity condition a·f(n/b) ≤ c·f(n) for some c<1; for polynomial f this holds.)
+        caseStr = 'Case 3';
+        const fstr = (p === null || p === 0) ? prettyPoly(k)
+                   : (k === 0 ? `(\\lg n)^{${p}}` : `${prettyPoly(k)}\\,(\\lg n)^{${p}}`);
+        verdict = `Since $f(n) = \\Omega(n^{\\log_b a + \\varepsilon})$ for some $\\varepsilon > 0$ (and the regularity condition holds for polynomial $f$),<br>
+                   $$T(n) = \\Theta(f(n)) = \\Theta(${fstr}).$$`;
+      }
+
+      // Assemble output
+      const fDisplay = (p === null || p === 0) ? prettyPoly(k)
+                     : (k === 0 ? `(\\lg n)^{${p}}` : `${prettyPoly(k)}\\,(\\lg n)^{${p}}`);
+      out.innerHTML = `
+        <div style="font-family: var(--serif-body);">
+          <div><b>Recurrence.</b> $T(n) = ${a}\\,T(n/${b}) + ${fDisplay}$</div>
+          <div style="margin-top:0.4rem;"><b>Watershed.</b> $\\log_b a = ${logStr}$, and $f(n) = ${fDisplay}$.</div>
+          <div style="margin-top:0.4rem;"><b>Verdict — ${caseStr}.</b> ${verdict}</div>
+        </div>`;
+      if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([out]).catch(()=>{});
+    }
+
+    function setPreset(a, b, k, log) {
+      aInp.value = a; bInp.value = b; kInp.value = k; lInp.value = log;
+      apply();
+    }
+
+    btn.addEventListener('click', apply);
+    if (pre1) pre1.addEventListener('click', () => setPreset(2, 2, 1, 'none'));     // merge sort → Θ(n lg n)
+    if (pre2) pre2.addEventListener('click', () => setPreset(1, 2, 0, 'none'));     // binary search → Θ(lg n)
+    if (pre3) pre3.addEventListener('click', () => setPreset(7, 2, 2, 'none'));     // Strassen → Θ(n^{lg 7})
+
+    apply();
+  })();
+
+  /* ======================================================================
+     8. Smooth-scroll for sidebar anchor clicks (mobile-friendly)
+     ====================================================================== */
+  navLinks.forEach(a => {
+    a.addEventListener('click', ev => {
+      const id = a.getAttribute('href');
+      const tgt = document.querySelector(id);
+      if (!tgt) return;
+      ev.preventDefault();
+      tgt.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      history.replaceState(null, '', id);
+    });
+  });
+
+})();
+</script>
+</body>
+</html>
