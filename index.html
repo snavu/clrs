@@ -955,6 +955,114 @@ label.viz-label {
   max-width: 100%;
 }
 
+/* ========== SHARED VIZ HELPERS ========== */
+.viz-row { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+
+.viz-graph { margin: 1rem 0; overflow-x: auto; }
+.viz-graph svg { width: 100%; height: auto; display: block; margin: 0 auto; }
+
+.viz-legend {
+  display: flex; flex-wrap: wrap; gap: 0.5rem 1.1rem;
+  font-family: var(--serif-body); font-size: 0.8rem; color: var(--ink-muted);
+  margin-top: 0.7rem;
+}
+.viz-legend .lg { display: inline-flex; align-items: center; gap: 0.35rem; }
+.viz-legend .sw {
+  width: 13px; height: 13px; border-radius: 3px;
+  border: 1px solid var(--ink-muted); display: inline-block; flex: 0 0 auto;
+}
+
+/* ===== Floyd–Warshall live matrix ===== */
+.fw-wrap { display: flex; gap: 1.4rem 2rem; flex-wrap: wrap; align-items: flex-start; }
+table.fw-matrix { border-collapse: collapse; font-family: var(--mono); font-size: 0.9rem; }
+table.fw-matrix caption {
+  font-family: var(--serif-display); font-variant: small-caps; letter-spacing: 0.1em;
+  color: var(--navy); font-weight: 600; margin-bottom: 0.4rem; caption-side: top;
+}
+table.fw-matrix th, table.fw-matrix td {
+  border: 1px solid var(--rule); width: 2.8rem; height: 2.3rem;
+  text-align: center; transition: background 0.25s, color 0.25s, outline-color 0.25s;
+}
+table.fw-matrix th { background: var(--paper-alt); color: var(--ink-muted); font-weight: 600; }
+table.fw-matrix td.hl-line   { background: rgba(166,124,43,0.13); }
+table.fw-matrix td.hl-via    { background: rgba(30,58,95,0.16); color: var(--navy); }
+table.fw-matrix td.hl-target { outline: 2px solid var(--oxblood); outline-offset: -2px; }
+table.fw-matrix td.updated   { background: rgba(74,93,58,0.30); color: var(--moss); font-weight: 700; }
+
+/* ===== Activity-selection timeline ===== */
+.timeline { position: relative; margin: 1.2rem 0 1rem; }
+.act-row { position: relative; height: 28px; margin-bottom: 6px; }
+.act-bar {
+  position: absolute; height: 26px; border-radius: 3px; box-sizing: border-box;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 0.72rem; white-space: nowrap; overflow: hidden;
+  border: 1px solid var(--ink-muted); background: var(--paper-alt); color: var(--ink-soft);
+  transition: background 0.3s, border-color 0.3s, opacity 0.3s, color 0.3s;
+}
+.act-bar.selected { background: var(--moss);  border-color: var(--moss);  color: var(--paper); }
+.act-bar.current  { background: var(--ochre); border-color: var(--ochre); color: var(--ink); box-shadow: 0 2px 9px rgba(166,124,43,0.45); z-index: 2; }
+.act-bar.rejected { opacity: 0.3; text-decoration: line-through; }
+.tl-axis { position: relative; border-top: 1px solid var(--rule); height: 1.3rem; margin-top: 0.3rem; }
+.tl-tick { position: absolute; top: 2px; font-family: var(--mono); font-size: 0.66rem; color: var(--ink-muted); transform: translateX(-50%); }
+.tl-tick::before { content: ''; position: absolute; top: -4px; left: 50%; width: 1px; height: 4px; background: var(--rule); }
+
+/* ===== Knapsack ===== */
+.knap-wrap { display: flex; gap: 1.6rem; flex-wrap: wrap; margin: 1rem 0; }
+.knap-col { flex: 1 1 250px; }
+.knap-col h5 {
+  font-family: var(--serif-display); font-variant: small-caps; letter-spacing: 0.08em;
+  font-size: 0.95rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--ink);
+}
+.knap-bag {
+  border: 2px solid var(--ink); border-radius: 4px; height: 36px;
+  display: flex; overflow: hidden; background: var(--paper);
+}
+.knap-seg {
+  height: 100%; display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 0.7rem; color: var(--paper);
+  border-right: 1px solid var(--paper); transition: width 0.4s ease; min-width: 0;
+}
+.knap-empty {
+  flex: 1 1 auto;
+  background: repeating-linear-gradient(45deg, var(--paper-alt) 0, var(--paper-alt) 6px, var(--paper) 6px, var(--paper) 12px);
+}
+.knap-total { font-family: var(--mono); font-size: 0.86rem; margin-top: 0.5rem; color: var(--ink-soft); }
+.knap-total strong { color: var(--oxblood); }
+
+/* ===== Hash table (chaining) ===== */
+.hash-table { display: flex; flex-direction: column; gap: 3px; margin: 1rem 0; }
+.hash-slot { display: flex; align-items: center; gap: 7px; min-height: 36px; }
+.hash-slot-idx { font-family: var(--mono); font-size: 0.76rem; color: var(--ink-muted); width: 2rem; text-align: right; flex: 0 0 auto; }
+.hash-slot-box {
+  flex: 0 0 auto; width: 12px; align-self: stretch; min-height: 28px;
+  border: 1px solid var(--ink-muted); background: var(--paper-alt);
+}
+.hash-slot.target .hash-slot-box { background: var(--ochre); border-color: var(--ochre); }
+.hash-chain { display: flex; align-items: center; gap: 3px; flex-wrap: wrap; }
+.hash-node {
+  font-family: var(--mono); font-size: 0.8rem; padding: 0.28rem 0.5rem;
+  background: var(--paper); border: 1px solid var(--navy); border-radius: 3px; color: var(--ink);
+  transition: background 0.3s, border-color 0.3s, color 0.3s;
+}
+.hash-node.flash { background: var(--ochre); border-color: var(--ochre); color: var(--ink); }
+.hash-node.found { background: var(--moss);  border-color: var(--moss);  color: var(--paper); }
+.hash-arrow { color: var(--ink-muted); font-family: var(--mono); font-size: 0.8rem; }
+.hash-empty { font-family: var(--serif-body); font-style: italic; font-size: 0.8rem; color: var(--ink-muted); }
+
+/* ===== Open addressing probe grid ===== */
+.probe-grid { display: flex; flex-wrap: wrap; gap: 4px; margin: 1rem 0; }
+.probe-cell {
+  width: 46px; height: 50px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 2px;
+  border: 1px solid var(--ink-muted); font-family: var(--mono); font-size: 0.9rem;
+  background: var(--paper); color: var(--ink); transition: background 0.3s, border-color 0.3s, color 0.3s;
+}
+.probe-cell .pi { font-size: 0.6rem; color: var(--ink-muted); }
+.probe-cell.occupied { background: var(--paper-alt); }
+.probe-cell.probing  { background: var(--ochre); border-color: var(--ochre); color: var(--ink); }
+.probe-cell.placed   { background: var(--moss);  border-color: var(--moss);  color: var(--paper); }
+.probe-cell.placed .pi { color: var(--paper); }
+
 /* ========== SCROLL / RESPONSIVE ========== */
 @media (max-width: 900px) {
   .shell { grid-template-columns: 1fr; }
@@ -4147,6 +4255,41 @@ An element with key $k$ lives in slot $h(k)$. Since $|U| \gg m$, multiple keys m
 </div>
 </div>
 
+<div class="visualizer" id="hashChainViz">
+  <div class="viz-title">Interactive &middot; Hash Table with Chaining</div>
+  <div class="viz-sub">Each key falls into slot $h(k) = k \bmod m$. When two keys want the same slot, the slot's chain simply grows &mdash; no key is ever turned away.</div>
+
+  <div class="viz-row">
+    <label class="viz-label" for="hcKey">Key:</label>
+    <input class="viz-input" id="hcKey" style="width: 90px;" placeholder="e.g. 42" />
+    <button class="btn primary btn-small" id="hcInsert">Insert</button>
+    <button class="btn btn-small" id="hcRandom">Insert Random</button>
+    <button class="btn btn-small" id="hcSearch">Search</button>
+  </div>
+  <div class="viz-row" style="margin-top: 0.6rem;">
+    <label class="viz-label" for="hcSlots">Slots $m$:</label>
+    <input class="viz-input" id="hcSlots" style="width: 64px;" value="7" />
+    <button class="btn btn-small" id="hcApply">Set &amp; clear</button>
+    <button class="btn btn-small" id="hcReset">Reset</button>
+    <span class="viz-counter">$n$=<strong id="hcN">0</strong> &middot; load $\alpha$=<strong id="hcAlpha">0.00</strong> &middot; longest chain <strong id="hcMax">0</strong></span>
+  </div>
+
+  <div class="hash-table" id="hcTable"></div>
+
+  <div class="viz-legend">
+    <span class="lg"><span class="sw" style="background: var(--paper); border-color: var(--navy);"></span> stored key</span>
+    <span class="lg"><span class="sw" style="background: var(--ochre); border-color: var(--ochre);"></span> just touched</span>
+    <span class="lg"><span class="sw" style="background: var(--moss); border-color: var(--moss);"></span> search hit</span>
+  </div>
+
+  <div class="viz-status" id="hcStatus">Insert a few keys and watch where $h(k) = k \bmod m$ sends them. Try inserting keys that share a remainder mod 7 (e.g.\ 3, 10, 17) to force a collision.</div>
+</div>
+
+<div class="box intuition">
+  <div class="box-title">What the picture shows you</div>
+  Play with the slot count $m$. With $m$ large relative to the number of keys $n$, almost every chain has length $0$ or $1$ and a lookup touches one node &mdash; the $\Theta(1)$ dream. Shrink $m$ and the chains lengthen visibly; the displayed load factor $\alpha = n/m$ is exactly the <em>expected</em> chain length, and the "longest chain" readout is what an unlucky lookup actually pays. The whole theory below is just this picture, made precise.
+</div>
+
 <h4 class="subsection">Analysis Under Simple Uniform Hashing</h4>
 
 <div class="box definition">
@@ -4285,6 +4428,34 @@ An element with key $k$ lives in slot $h(k)$. Since $|U| \gg m$, multiple keys m
   </ul>
 </div>
 
+<div class="visualizer" id="probeViz">
+  <div class="viz-title">Interactive &middot; Open Addressing (Linear Probing)</div>
+  <div class="viz-sub">There are no chains &mdash; every key lives <em>in</em> the array. If slot $h'(k)$ is taken, walk forward $h(k,i) = (h'(k)+i)\bmod m$ until an empty slot appears.</div>
+
+  <div class="viz-row">
+    <label class="viz-label" for="opKey">Key:</label>
+    <input class="viz-input" id="opKey" style="width: 90px;" placeholder="e.g. 18" />
+    <button class="btn primary btn-small" id="opInsert">Insert</button>
+    <button class="btn btn-small" id="opRandom">Insert Random</button>
+    <button class="btn btn-small" id="opSearch">Search</button>
+    <button class="btn btn-small" id="opReset">Reset</button>
+  </div>
+
+  <div class="probe-grid" id="opGrid"></div>
+
+  <div class="viz-row">
+    <span class="viz-counter">$m$=<strong id="opM">11</strong> &middot; $n$=<strong id="opN">0</strong> &middot; load $\alpha$=<strong id="opAlpha">0.00</strong> &middot; probes last op: <strong id="opProbes">0</strong></span>
+  </div>
+
+  <div class="viz-legend">
+    <span class="lg"><span class="sw" style="background: var(--paper-alt);"></span> occupied</span>
+    <span class="lg"><span class="sw" style="background: var(--ochre); border-color: var(--ochre);"></span> probing now</span>
+    <span class="lg"><span class="sw" style="background: var(--moss); border-color: var(--moss);"></span> placed / found</span>
+  </div>
+
+  <div class="viz-status" id="opStatus">Insert keys and watch the probe sequence step forward on collision. As the table fills, notice how a single insert may probe several slots &mdash; that is the $1/(1-\alpha)$ cost made visible.</div>
+</div>
+
 <div class="box theorem">
   <div class="box-title">Theorem 11.6 (Expected probes, uniform hashing)</div>
   Under the idealization of <em>uniform hashing</em> &mdash; every probe sequence is equally likely to be any of the $m!$ permutations &mdash; with load factor $\alpha < 1$, the expected number of probes in an unsuccessful search is at most
@@ -4372,6 +4543,30 @@ An element with key $k$ lives in slot $h(k)$. Since $|U| \gg m$, multiple keys m
 </div>
 
 <p>The algorithm assumes activities are already sorted by $f_i$. If not, sort first: $O(n \lg n)$. The greedy sweep itself is $\Theta(n)$. So $\Theta(n \lg n)$ total, or $\Theta(n)$ if input is presorted.</p>
+
+<div class="visualizer" id="activityViz">
+  <div class="viz-title">Interactive &middot; Greedy Activity Selection</div>
+  <div class="viz-sub">Activities are drawn as time intervals, stacked in order of finish time. Step the greedy rule: take the next activity whose start is at or after the last selected finish.</div>
+
+  <div class="viz-row">
+    <button class="btn btn-small" id="acRandom">Randomize</button>
+    <button class="btn btn-small" id="acPrev">&larr; Prev</button>
+    <button class="btn primary btn-small" id="acNext">Next Step &rarr;</button>
+    <button class="btn btn-small" id="acAuto">Auto-play</button>
+    <button class="btn btn-small" id="acReset">Reset</button>
+    <span class="viz-counter">Step <strong id="acStep">0</strong> / <strong id="acMax">0</strong> &middot; chosen <strong id="acCount">0</strong></span>
+  </div>
+
+  <div class="timeline" id="acTimeline"></div>
+
+  <div class="viz-legend">
+    <span class="lg"><span class="sw" style="background: var(--ochre); border-color: var(--ochre);"></span> under consideration</span>
+    <span class="lg"><span class="sw" style="background: var(--moss); border-color: var(--moss);"></span> selected</span>
+    <span class="lg"><span class="sw" style="background: var(--paper-alt);"></span> rejected (overlaps)</span>
+  </div>
+
+  <div class="viz-status" id="acStatus">Click "Next Step" to take the earliest-finishing activity first, then sweep left to right.</div>
+</div>
 
 <h4 class="subsection">Why the Greedy Choice Is Safe</h4>
 
@@ -4499,6 +4694,39 @@ An element with key $k$ lives in slot $h(k)$. Since $|U| \gg m$, multiple keys m
 <div class="box note">
   <div class="box-title">Same data, different answer in fractional</div>
   Under the fractional rule on the same items: take all of item 1 (10 lb, 60), then all of item 2 (20 lb, 100), then $20/30$ of item 3 ($\frac{20}{30} \cdot 120 = 80$). Total $= 240 > 220$. The freedom to take a fraction lets greedy fill the hole.
+</div>
+
+<div class="visualizer" id="knapViz">
+  <div class="viz-title">Interactive &middot; Fractional vs.\ 0-1 Knapsack</div>
+  <div class="viz-sub">Same items, same capacity $W = 50$, same greedy rule (highest value-per-pound first). Step through and watch the 0-1 bag get stranded with an unfillable gap while the fractional bag tops itself off.</div>
+
+  <div class="viz-row">
+    <button class="btn btn-small" id="knapPrev">&larr; Prev</button>
+    <button class="btn primary btn-small" id="knapNext">Next Item &rarr;</button>
+    <button class="btn btn-small" id="knapReset">Reset</button>
+    <span class="viz-counter">Step <strong id="knapStep">0</strong> / <strong id="knapMax">3</strong></span>
+  </div>
+
+  <div class="knap-wrap">
+    <div class="knap-col">
+      <h5>Greedy &middot; 0-1 (whole items only)</h5>
+      <div class="knap-bag" id="knapBag01"></div>
+      <div class="knap-total" id="knapTot01">value <strong>0</strong> &middot; used 0 / 50 lb</div>
+    </div>
+    <div class="knap-col">
+      <h5>Greedy &middot; fractional (slices allowed)</h5>
+      <div class="knap-bag" id="knapBagFr"></div>
+      <div class="knap-total" id="knapTotFr">value <strong>0</strong> &middot; used 0 / 50 lb</div>
+    </div>
+  </div>
+
+  <div class="viz-legend">
+    <span class="lg"><span class="sw" style="background: var(--navy); border-color: var(--navy);"></span> item 1 &middot; 10 lb, $60 &middot; $6.0/lb</span>
+    <span class="lg"><span class="sw" style="background: var(--ochre); border-color: var(--ochre);"></span> item 2 &middot; 20 lb, $100 &middot; $5.0/lb</span>
+    <span class="lg"><span class="sw" style="background: var(--moss); border-color: var(--moss);"></span> item 3 &middot; 30 lb, $120 &middot; $4.0/lb</span>
+  </div>
+
+  <div class="viz-status" id="knapStatus">Both bags start empty. The hatched region is unused capacity.</div>
 </div>
 
 <h4 class="subsection">The Fix &mdash; Dynamic Programming for 0-1 Knapsack</h4>
@@ -4655,6 +4883,35 @@ An element with key $k$ lives in slot $h(k)$. Since $|U| \gg m$, multiple keys m
 
 <p>The two nested loops on lines 2&ndash;4 run $\Theta((|V| - 1) \cdot |E|) = \Theta(VE)$ times. The cycle-check pass on lines 5&ndash;7 adds $\Theta(E)$. <strong>Total: $\Theta(VE)$.</strong></p>
 
+<div class="visualizer" id="bellmanViz">
+  <div class="viz-title">Interactive &middot; Bellman&ndash;Ford on a Graph</div>
+  <div class="viz-sub">A real directed graph &mdash; not a table. The number on each vertex is its current estimate $d[v]$; the green arrows are the predecessor tree $\pi$. Each pass relaxes <em>every</em> edge once.</div>
+
+  <div class="viz-row">
+    <label class="viz-label" for="bfPreset">Graph:</label>
+    <select class="viz-input" id="bfPreset" style="width: auto;"></select>
+    <button class="btn btn-small" id="bfNeg">Negative cycle: off</button>
+  </div>
+  <div class="viz-row" style="margin-top: 0.6rem;">
+    <button class="btn btn-small" id="bfPrev">&larr; Prev</button>
+    <button class="btn primary btn-small" id="bfNext">Next &rarr;</button>
+    <button class="btn btn-small" id="bfAuto">Auto-play</button>
+    <button class="btn btn-small" id="bfReset">Restart</button>
+    <span class="viz-counter">pass <strong id="bfPass">0</strong>/<strong id="bfPasses">4</strong> &middot; step <strong id="bfStep">0</strong>/<strong id="bfMax">0</strong></span>
+  </div>
+
+  <div class="viz-graph" id="bfGraph"></div>
+
+  <div class="viz-legend">
+    <span class="lg"><span class="sw" style="background: var(--navy); border-color: var(--navy);"></span> source</span>
+    <span class="lg"><span class="sw" style="background: var(--oxblood); border-color: var(--oxblood);"></span> edge being relaxed</span>
+    <span class="lg"><span class="sw" style="background: var(--moss); border-color: var(--moss);"></span> predecessor ($\pi$) edge</span>
+    <span class="lg"><span class="sw" style="background: var(--paper-alt);"></span> reached, estimate finite</span>
+  </div>
+
+  <div class="viz-status" id="bfStatus">Step through the relaxations. Toggle "Negative cycle" to see the detection pass return <span class="sc">False</span>.</div>
+</div>
+
 <div class="box theorem">
   <div class="box-title">Theorem 24.4 (Correctness of Bellman&ndash;Ford)</div>
   Let $G = (V, E)$ be a weighted directed graph with source $s$ and weight function $w$. If $G$ contains no negative-weight cycles reachable from $s$, then after <span class="sc">Bellman-Ford</span> terminates, $v.d = \delta(s, v)$ for all $v$ reachable from $s$, and it returns <span class="sc">True</span>. If $G$ does contain a negative-weight cycle reachable from $s$, <span class="sc">Bellman-Ford</span> returns <span class="sc">False</span>.
@@ -4734,23 +4991,30 @@ An element with key $k$ lives in slot $h(k)$. Since $|U| \gg m$, multiple keys m
   The step $\delta(s, y) \le \delta(s, u)$ uses that the path from $s$ to $u$ continues from $y$ via nonnegative edges. With negative edges, $\delta(s, u)$ could be smaller than $\delta(s, y)$, breaking the proof. (Try Dijkstra on a graph with a negative edge: it can lock in an estimate too early and never revise.)
 </div>
 
-<div class="box example">
-  <div class="box-title">Worked trace</div>
-  <p>Consider a graph on $\{s, a, b, c, d\}$ with edges (weights in parens): $s \to a\,(10)$, $s \to b\,(5)$, $a \to b\,(2)$, $b \to a\,(3)$, $b \to c\,(9)$, $b \to d\,(2)$, $a \to c\,(1)$, $c \to d\,(4)$, $d \to s\,(7)$, $d \to c\,(6)$.</p>
-  <table class="tbl" style="max-width: 32rem;">
-    <thead>
-      <tr><th>Step</th><th>Extract</th><th>$d[s]$</th><th>$d[a]$</th><th>$d[b]$</th><th>$d[c]$</th><th>$d[d]$</th></tr>
-    </thead>
-    <tbody>
-      <tr><td>0</td><td>&mdash;</td><td class="mono">0</td><td class="mono">&infin;</td><td class="mono">&infin;</td><td class="mono">&infin;</td><td class="mono">&infin;</td></tr>
-      <tr><td>1</td><td>$s$</td><td class="mono">0</td><td class="mono">10</td><td class="mono">5</td><td class="mono">&infin;</td><td class="mono">&infin;</td></tr>
-      <tr><td>2</td><td>$b$</td><td class="mono">0</td><td class="mono">8</td><td class="mono">5</td><td class="mono">14</td><td class="mono">7</td></tr>
-      <tr><td>3</td><td>$d$</td><td class="mono">0</td><td class="mono">8</td><td class="mono">5</td><td class="mono">13</td><td class="mono">7</td></tr>
-      <tr><td>4</td><td>$a$</td><td class="mono">0</td><td class="mono">8</td><td class="mono">5</td><td class="mono">9</td><td class="mono">7</td></tr>
-      <tr><td>5</td><td>$c$</td><td class="mono">0</td><td class="mono">8</td><td class="mono">5</td><td class="mono">9</td><td class="mono">7</td></tr>
-    </tbody>
-  </table>
-  <p>Order of extraction: $s, b, d, a, c$ &mdash; always the smallest-$d$ unsettled vertex. After step 5 every $d[v] = \delta(s, v)$.</p>
+<div class="visualizer" id="dijkstraViz">
+  <div class="viz-title">Interactive &middot; Dijkstra on a Graph</div>
+  <div class="viz-sub">The same $\{s,a,b,c,d\}$ graph CLRS traces with a table &mdash; shown as the graph it actually is. Each round, the smallest-estimate unsettled vertex (oxblood) is settled (green), then its out-edges relax.</div>
+
+  <div class="viz-row">
+    <label class="viz-label" for="djPreset">Graph:</label>
+    <select class="viz-input" id="djPreset" style="width: auto;"></select>
+    <button class="btn btn-small" id="djPrev">&larr; Prev</button>
+    <button class="btn primary btn-small" id="djNext">Next &rarr;</button>
+    <button class="btn btn-small" id="djAuto">Auto-play</button>
+    <button class="btn btn-small" id="djReset">Restart</button>
+    <span class="viz-counter">settled <strong id="djSettled">0</strong>/<strong id="djTotal">5</strong> &middot; step <strong id="djStep">0</strong>/<strong id="djMax">0</strong></span>
+  </div>
+
+  <div class="viz-graph" id="djGraph"></div>
+
+  <div class="viz-legend">
+    <span class="lg"><span class="sw" style="background: var(--oxblood); border-color: var(--oxblood);"></span> extracting / relaxing now</span>
+    <span class="lg"><span class="sw" style="background: var(--moss); border-color: var(--moss);"></span> settled &amp; tree edge</span>
+    <span class="lg"><span class="sw" style="background: var(--paper-alt);"></span> in queue (finite $d$)</span>
+    <span class="lg"><span class="sw" style="background: var(--paper);"></span> unreached ($d=\infty$)</span>
+  </div>
+
+  <div class="viz-status" id="djStatus">Extraction order will be $s, b, d, a, c$ &mdash; always the smallest-$d$ unsettled vertex. Step through to see why.</div>
 </div>
 
 <div class="quiz" data-quiz>
@@ -4871,6 +5135,34 @@ An element with key $k$ lives in slot $h(k)$. Since $|U| \gg m$, multiple keys m
   </table>
   <p>After pass $k = 1$ (allowing vertex 1 as intermediate), only paths that can route through 1 change. Then pass $k = 2$, $k = 3$, $k = 4$. The final $D^{(4)}$ contains all shortest paths.</p>
   <p>Sample propagations: in pass 4, the path $3 \to 2 \to 4 \to 3$ (weight $4 + 1 + (-5) = 0$) is rejected (we already have $D[3][3] = 0$), but $1 \to 2 \to 4 \to 3$ (weight $3 + 1 + (-5) = -1$) improves $D[1][3]$ from $8$ to $-1$. The negative edge $4 \to 3$ propagates its discount through the matrix as intermediate vertices admit longer paths.</p>
+</div>
+
+<div class="visualizer" id="floydViz">
+  <div class="viz-title">Interactive &middot; Floyd&ndash;Warshall (graph + live matrix)</div>
+  <div class="viz-sub">The graph on the left is the territory; the matrix on the right is $D^{(k)}$. At round $k$ we unlock vertex $k$ as a waypoint and ask, for every pair $(i,j)$: is the detour $i \rightsquigarrow k \rightsquigarrow j$ cheaper than the best route so far?</div>
+
+  <div class="viz-row">
+    <label class="viz-label" for="fwPreset">Graph:</label>
+    <select class="viz-input" id="fwPreset" style="width: auto;"></select>
+    <button class="btn btn-small" id="fwPrev">&larr; Prev</button>
+    <button class="btn primary btn-small" id="fwNext">Next &rarr;</button>
+    <button class="btn btn-small" id="fwAuto">Auto-play</button>
+    <button class="btn btn-small" id="fwReset">Restart</button>
+    <span class="viz-counter">round $k$=<strong id="fwK">0</strong> &middot; step <strong id="fwStep">0</strong>/<strong id="fwMax">0</strong></span>
+  </div>
+
+  <div class="fw-wrap">
+    <div class="viz-graph" id="fwGraph" style="flex: 1 1 320px;"></div>
+    <div id="fwMatrixBox" style="flex: 1 1 260px;"></div>
+  </div>
+
+  <div class="viz-legend">
+    <span class="lg"><span class="sw" style="background: var(--oxblood); border-color: var(--oxblood);"></span> waypoint $k$ / detour</span>
+    <span class="lg"><span class="sw" style="background: var(--navy); border-color: var(--navy);"></span> endpoints $i,j$</span>
+    <span class="lg"><span class="sw" style="background: rgba(74,93,58,0.30);"></span> cell improved</span>
+  </div>
+
+  <div class="viz-status" id="fwStatus">Step forward to unlock vertices one at a time. Each green flash in the matrix is a pair $(i,j)$ whose shortest route just got shorter by passing through $k$.</div>
 </div>
 
 <h4 class="subsection">Reconstructing the Paths</h4>
@@ -6591,6 +6883,546 @@ An element with key $k$ lives in slot $h(k)$. Since $|U| \gg m$, multiple keys m
     prevB.addEventListener('click', prev);
     resetB.addEventListener('click', reset);
     load();
+  })();
+
+  /* ======================================================================
+     SHARED HELPERS FOR THE CHAPTER 11/16/24/25 VISUALIZERS
+     ====================================================================== */
+  function palette() {
+    const cs = getComputedStyle(document.documentElement);
+    const g = n => (cs.getPropertyValue(n) || '').trim();
+    return {
+      paper: g('--paper') || '#f5f1e8', paperAlt: g('--paper-alt') || '#ede7d7',
+      ink: g('--ink') || '#1a1712', inkMuted: g('--ink-muted') || '#6b6355',
+      rule: g('--rule') || '#cbc1a8', oxblood: g('--oxblood') || '#7a1f2b',
+      navy: g('--navy') || '#1e3a5f', moss: g('--moss') || '#4a5d3a',
+      ochre: g('--ochre') || '#a67c2b',
+    };
+  }
+  function mj(el) { if (el && window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([el]).catch(() => {}); }
+  function fmtInf(x) { return x === Infinity ? '∞' : (x === -Infinity ? '-∞' : String(x)); }
+
+  // Generic directed-graph SVG renderer. nodes:[{id,x,y,label,dist,state}], edges:[{u,v,w,state}], overlays:[{u,v,label}]
+  function drawDirectedGraph(o) {
+    const P = palette();
+    const idp = o.idPrefix || 'g';
+    const R = 21;
+    const map = {}; o.nodes.forEach(n => map[n.id] = n);
+    const ecol = { idle: P.inkMuted, active: P.oxblood, tree: P.moss };
+    let defs = '<defs>';
+    ['idle', 'active', 'tree'].forEach(st => {
+      defs += `<marker id="${idp}-arr-${st}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="${ecol[st]}"/></marker>`;
+    });
+    defs += `<marker id="${idp}-arr-over" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="${P.oxblood}"/></marker></defs>`;
+    let s = `<svg viewBox="0 0 ${o.width} ${o.height}" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:${o.width}px;height:auto;display:block;">` + defs;
+    function geom(ux, uy, vx, vy, off) {
+      const dx = vx - ux, dy = vy - uy, L = Math.hypot(dx, dy) || 1;
+      const ex = dx / L, ey = dy / L, px = -ey, py = ex;
+      const sx = ux + ex * R, sy = uy + ey * R, tx = vx - ex * (R + 5), ty = vy - ey * (R + 5);
+      const mx = (sx + tx) / 2, my = (sy + ty) / 2, cx = mx + px * off, cy = my + py * off;
+      const lx = 0.25 * sx + 0.5 * cx + 0.25 * tx, ly = 0.25 * sy + 0.5 * cy + 0.25 * ty;
+      return { d: `M ${sx.toFixed(1)} ${sy.toFixed(1)} Q ${cx.toFixed(1)} ${cy.toFixed(1)} ${tx.toFixed(1)} ${ty.toFixed(1)}`, lx, ly };
+    }
+    function label(x, y, txt, color, weight) {
+      const w = String(txt).length * 7 + 8;
+      return `<rect x="${(x - w / 2).toFixed(1)}" y="${(y - 9).toFixed(1)}" width="${w}" height="17" rx="3" fill="${P.paper}" opacity="0.92"/>`
+        + `<text x="${x.toFixed(1)}" y="${(y + 4).toFixed(1)}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" font-weight="${weight}" fill="${color}">${txt}</text>`;
+    }
+    (o.edges || []).forEach(e => {
+      const u = map[e.u], v = map[e.v], st = e.state || 'idle';
+      const g = geom(u.x, u.y, v.x, v.y, 26);
+      s += `<path d="${g.d}" fill="none" stroke="${ecol[st]}" stroke-width="${st === 'idle' ? 1.4 : 2.6}" marker-end="url(#${idp}-arr-${st})" ${st === 'idle' ? 'opacity="0.85"' : ''}/>`;
+      s += label(g.lx, g.ly, e.w, st === 'idle' ? P.inkMuted : ecol[st], st === 'idle' ? '400' : '600');
+    });
+    (o.overlays || []).forEach(ov => {
+      const u = map[ov.u], v = map[ov.v], g = geom(u.x, u.y, v.x, v.y, -42);
+      s += `<path d="${g.d}" fill="none" stroke="${P.oxblood}" stroke-width="2.2" stroke-dasharray="5,4" marker-end="url(#${idp}-arr-over)"/>`;
+      if (ov.label != null) s += label(g.lx, g.ly, ov.label, P.oxblood, '600');
+    });
+    o.nodes.forEach(n => {
+      let fill = P.paper, stroke = P.inkMuted, txt = P.ink;
+      if (n.state === 'source') { fill = P.navy; stroke = P.navy; txt = P.paper; }
+      else if (n.state === 'current') { fill = P.oxblood; stroke = P.oxblood; txt = P.paper; }
+      else if (n.state === 'settled') { fill = P.moss; stroke = P.moss; txt = P.paper; }
+      else if (n.state === 'frontier') { fill = P.paperAlt; stroke = P.navy; txt = P.ink; }
+      s += `<circle cx="${n.x}" cy="${n.y}" r="${R}" fill="${fill}" stroke="${stroke}" stroke-width="2.4"/>`;
+      s += `<text x="${n.x}" y="${n.y + 5}" text-anchor="middle" font-family="Spectral, Georgia, serif" font-size="15" font-weight="600" fill="${txt}">${n.label}</text>`;
+      if (n.dist != null) {
+        const bw = String(n.dist).length * 8 + 10, by = n.y - R - 19;
+        s += `<rect x="${(n.x - bw / 2).toFixed(1)}" y="${by}" width="${bw}" height="17" rx="4" fill="${P.paperAlt}" stroke="${P.rule}"/>`;
+        s += `<text x="${n.x}" y="${by + 12}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600" fill="${P.oxblood}">${n.dist}</text>`;
+      }
+    });
+    return s + '</svg>';
+  }
+
+  /* ======================================================================
+     16. HASH TABLE — CHAINING (§11.2)
+     ====================================================================== */
+  (function initHashChain() {
+    const host = document.getElementById('hashChainViz'); if (!host) return;
+    const keyI = document.getElementById('hcKey'), insertB = document.getElementById('hcInsert'),
+      randomB = document.getElementById('hcRandom'), searchB = document.getElementById('hcSearch'),
+      slotsI = document.getElementById('hcSlots'), applyB = document.getElementById('hcApply'),
+      resetB = document.getElementById('hcReset'), tableEl = document.getElementById('hcTable'),
+      nEl = document.getElementById('hcN'), alphaEl = document.getElementById('hcAlpha'),
+      maxEl = document.getElementById('hcMax'), statusEl = document.getElementById('hcStatus');
+    let m = 7, slots = [], busy = false;
+    const hash = k => ((k % m) + m) % m;
+    function clear() { slots = []; for (let i = 0; i < m; i++) slots.push([]); }
+    function stats() {
+      let n = 0, mx = 0; slots.forEach(c => { n += c.length; if (c.length > mx) mx = c.length; });
+      nEl.textContent = n; alphaEl.textContent = (n / m).toFixed(2); maxEl.textContent = mx;
+    }
+    function render(target) {
+      tableEl.innerHTML = slots.map((chain, i) =>
+        `<div class="hash-slot${i === target ? ' target' : ''}"><span class="hash-slot-idx">${i}</span><span class="hash-slot-box"></span><span class="hash-chain">`
+        + (chain.length ? chain.map((k, p) => `${p ? '<span class="hash-arrow">&rarr;</span>' : ''}<span class="hash-node" data-slot="${i}" data-pos="${p}">${k}</span>`).join('')
+          : '<span class="hash-empty">&empty;</span>')
+        + '</span></div>').join('');
+      stats();
+    }
+    function insert(k) {
+      if (busy || !Number.isFinite(k)) return;
+      const sl = hash(k); slots[sl].push(k); render(sl);
+      statusEl.innerHTML = `$h(${k}) = ${k} \\bmod ${m} = ${sl}$. Appended to slot ${sl}'s chain (length now ${slots[sl].length}).`; mj(statusEl);
+      const node = tableEl.querySelector(`.hash-node[data-slot="${sl}"][data-pos="${slots[sl].length - 1}"]`);
+      if (node) { node.classList.add('flash'); setTimeout(() => node.classList.remove('flash'), 700); }
+    }
+    function search(k) {
+      if (busy || !Number.isFinite(k)) return;
+      const sl = hash(k), chain = slots[sl]; render(sl);
+      if (!chain.length) { statusEl.innerHTML = `$h(${k}) = ${sl}$. Slot ${sl} is empty &mdash; ${k} is <b>not present</b>.`; mj(statusEl); return; }
+      busy = true; let p = 0;
+      statusEl.innerHTML = `$h(${k}) = ${sl}$. Scanning slot ${sl}'s chain&hellip;`; mj(statusEl);
+      const tick = () => {
+        const ns = tableEl.querySelectorAll(`.hash-node[data-slot="${sl}"]`);
+        ns.forEach(x => x.classList.remove('flash'));
+        if (p >= chain.length) { busy = false; statusEl.innerHTML = `Scanned all ${chain.length} node(s) in slot ${sl}; ${k} is <b>not present</b>.`; return; }
+        if (chain[p] === k) { ns[p].classList.add('found'); busy = false; statusEl.innerHTML = `Found <b>${k}</b> after ${p + 1} comparison(s) in slot ${sl}.`; return; }
+        ns[p].classList.add('flash'); p++; setTimeout(tick, 430);
+      };
+      setTimeout(tick, 300);
+    }
+    insertB.addEventListener('click', () => { insert(parseInt(keyI.value, 10)); keyI.value = ''; });
+    randomB.addEventListener('click', () => insert(Math.floor(Math.random() * 100)));
+    searchB.addEventListener('click', () => search(parseInt(keyI.value, 10)));
+    applyB.addEventListener('click', () => {
+      const v = parseInt(slotsI.value, 10); m = Math.max(2, Math.min(16, Number.isFinite(v) ? v : 7));
+      slotsI.value = m; clear(); render(); statusEl.innerHTML = `Table cleared with $m = ${m}$ slots.`; mj(statusEl);
+    });
+    resetB.addEventListener('click', () => { clear(); render(); statusEl.innerHTML = 'Cleared.'; });
+    clear(); [3, 10, 17, 42, 8].forEach(k => slots[hash(k)].push(k)); render();
+  })();
+
+  /* ======================================================================
+     17. HASH TABLE — OPEN ADDRESSING / LINEAR PROBING (§11.4)
+     ====================================================================== */
+  (function initProbe() {
+    const host = document.getElementById('probeViz'); if (!host) return;
+    const keyI = document.getElementById('opKey'), insertB = document.getElementById('opInsert'),
+      randomB = document.getElementById('opRandom'), searchB = document.getElementById('opSearch'),
+      resetB = document.getElementById('opReset'), gridEl = document.getElementById('opGrid'),
+      mEl = document.getElementById('opM'), nEl = document.getElementById('opN'),
+      alphaEl = document.getElementById('opAlpha'), probesEl = document.getElementById('opProbes'),
+      statusEl = document.getElementById('opStatus');
+    const m = 11; let T = new Array(m).fill(null), busy = false, lastProbes = 0;
+    function stats() { const n = T.filter(x => x !== null).length; mEl.textContent = m; nEl.textContent = n; alphaEl.textContent = (n / m).toFixed(2); probesEl.textContent = lastProbes; }
+    function render(hl) {
+      let h = '';
+      for (let i = 0; i < m; i++) {
+        let cls = 'probe-cell'; if (T[i] !== null) cls += ' occupied';
+        if (hl && hl.placed === i) cls += ' placed'; else if (hl && hl.probing === i) cls += ' probing';
+        h += `<div class="${cls}"><span class="pi">${i}</span><span>${T[i] === null ? '·' : T[i]}</span></div>`;
+      }
+      gridEl.innerHTML = h; stats();
+    }
+    function place(k) { const h0 = ((k % m) + m) % m; for (let i = 0; i < m; i++) { const s = (h0 + i) % m; if (T[s] === null) { T[s] = k; return; } if (T[s] === k) return; } }
+    function insert(k) {
+      if (busy || !Number.isFinite(k)) return;
+      const h0 = ((k % m) + m) % m; let i = 0; busy = true;
+      statusEl.innerHTML = `Insert ${k}: start at $h'(${k}) = ${k} \\bmod ${m} = ${h0}$.`; mj(statusEl);
+      const step = () => {
+        const slot = (h0 + i) % m; render({ probing: slot });
+        if (T[slot] === null) { T[slot] = k; lastProbes = i + 1; render({ placed: slot }); busy = false; statusEl.innerHTML = `Placed ${k} at slot ${slot} after <b>${i + 1}</b> probe(s).`; return; }
+        if (T[slot] === k) { lastProbes = i + 1; render({ placed: slot }); busy = false; statusEl.innerHTML = `${k} already present at slot ${slot}.`; return; }
+        i++; if (i >= m) { busy = false; statusEl.innerHTML = 'Table full &mdash; overflow.'; return; }
+        statusEl.innerHTML = `Slot ${slot} occupied by ${T[slot]}; probe forward to ${(h0 + i) % m} (probe #${i + 1}).`;
+        setTimeout(step, 460);
+      };
+      setTimeout(step, 320);
+    }
+    function search(k) {
+      if (busy || !Number.isFinite(k)) return;
+      const h0 = ((k % m) + m) % m; let i = 0; busy = true;
+      const step = () => {
+        const slot = (h0 + i) % m; render({ probing: slot });
+        if (T[slot] === null) { lastProbes = i + 1; busy = false; stats(); statusEl.innerHTML = `Empty slot ${slot} reached &mdash; ${k} not present (${i + 1} probes).`; return; }
+        if (T[slot] === k) { lastProbes = i + 1; render({ placed: slot }); busy = false; statusEl.innerHTML = `Found ${k} at slot ${slot} after <b>${i + 1}</b> probe(s).`; return; }
+        i++; if (i >= m) { busy = false; statusEl.innerHTML = `${k} not found.`; return; }
+        setTimeout(step, 400);
+      };
+      setTimeout(step, 280);
+    }
+    insertB.addEventListener('click', () => { insert(parseInt(keyI.value, 10)); keyI.value = ''; });
+    randomB.addEventListener('click', () => insert(Math.floor(Math.random() * 100)));
+    searchB.addEventListener('click', () => search(parseInt(keyI.value, 10)));
+    resetB.addEventListener('click', () => { T = new Array(m).fill(null); lastProbes = 0; render(); statusEl.innerHTML = 'Cleared.'; });
+    [18, 7, 29, 11, 40].forEach(place); render();
+  })();
+
+  /* ======================================================================
+     18. ACTIVITY SELECTION TIMELINE (§16.1)
+     ====================================================================== */
+  (function initActivity() {
+    const host = document.getElementById('activityViz'); if (!host) return;
+    const randomB = document.getElementById('acRandom'), prevB = document.getElementById('acPrev'),
+      nextB = document.getElementById('acNext'), autoB = document.getElementById('acAuto'),
+      resetB = document.getElementById('acReset'), tlEl = document.getElementById('acTimeline'),
+      stepEl = document.getElementById('acStep'), maxEl = document.getElementById('acMax'),
+      countEl = document.getElementById('acCount'), statusEl = document.getElementById('acStatus');
+    let acts = [], steps = [], cur = 0, auto = null, maxF = 16;
+    const DEFAULT = [[1, 4], [3, 5], [0, 6], [5, 7], [3, 9], [5, 9], [6, 10], [8, 11], [8, 12], [2, 14], [12, 16]];
+    function setActs(list) { acts = list.map((a, i) => ({ id: i + 1, s: a[0], f: a[1] })).sort((x, y) => x.f - y.f); maxF = Math.max.apply(null, acts.map(a => a.f)); }
+    function build() {
+      steps = []; const picked = new Set(), rejected = new Set(); let last = -Infinity;
+      const snap = (o) => steps.push(Object.assign({ picked: new Set(picked), rejected: new Set(rejected), last }, o));
+      snap({ phase: 'init', current: null, msg: 'Activities sorted by finish time (top = finishes earliest). Step to run the greedy rule.' });
+      acts.forEach((a, k) => {
+        snap({ phase: 'consider', current: k, msg: `Consider $a_{${a.id}}=[${a.s},${a.f})$. Last selected finishes at ${last === -Infinity ? '—' : last}. ${k === 0 ? 'The first activity is always taken.' : `Compatible iff start ${a.s} ≥ ${last}.`}` });
+        if (k === 0 || a.s >= last) { picked.add(k); last = a.f; snap({ phase: 'decide', current: k, msg: `✓ Select $a_{${a.id}}$. Last finish moves to <b>${a.f}</b>.` }); }
+        else { rejected.add(k); snap({ phase: 'decide', current: k, msg: `✗ Reject $a_{${a.id}}$: it starts at ${a.s} &lt; ${last}, so it overlaps the last selection.` }); }
+      });
+      snap({ phase: 'done', current: null, msg: `<b>Done.</b> Greedy chose ${picked.size} mutually-compatible activities &mdash; a maximum-size set.` });
+    }
+    function render() {
+      const s = steps[cur]; if (!s) return;
+      let h = '';
+      acts.forEach((a, k) => {
+        let cls = 'act-bar';
+        if (s.picked.has(k)) cls += ' selected';
+        else if (s.phase === 'consider' && s.current === k) cls += ' current';
+        else if (s.rejected.has(k)) cls += ' rejected';
+        const left = (a.s / maxF * 100), width = Math.max(((a.f - a.s) / maxF * 100), 6);
+        h += `<div class="act-row"><div class="${cls}" style="left:${left}%;width:${width}%;" title="a${a.id}: [${a.s}, ${a.f})">a${a.id} [${a.s},${a.f})</div></div>`;
+      });
+      if (s.last > -Infinity) { const lp = s.last / maxF * 100; h += `<div style="position:absolute;top:0;bottom:1.6rem;left:${lp}%;width:0;border-left:2px dashed var(--oxblood);opacity:0.7;"></div>`; }
+      let ticks = '<div class="tl-axis">';
+      for (let t = 0; t <= maxF; t += 2) ticks += `<span class="tl-tick" style="left:${t / maxF * 100}%">${t}</span>`;
+      ticks += '</div>';
+      tlEl.innerHTML = h + ticks;
+      stepEl.textContent = cur; maxEl.textContent = steps.length - 1; countEl.textContent = s.picked.size;
+      statusEl.innerHTML = s.msg; mj(statusEl);
+    }
+    function stopAuto() { if (auto) { clearInterval(auto); auto = null; autoB.textContent = 'Auto-play'; } }
+    function next() { if (cur < steps.length - 1) { cur++; render(); } else stopAuto(); }
+    function prev() { if (cur > 0) { cur--; render(); } }
+    function reset() { stopAuto(); cur = 0; render(); }
+    function reload(list) { stopAuto(); setActs(list); build(); cur = 0; render(); }
+    randomB.addEventListener('click', () => {
+      const n = 6 + Math.floor(Math.random() * 3), list = [];
+      for (let i = 0; i < n; i++) { const s = Math.floor(Math.random() * 13), d = 1 + Math.floor(Math.random() * 5); list.push([s, s + d]); }
+      reload(list);
+    });
+    prevB.addEventListener('click', prev);
+    nextB.addEventListener('click', next);
+    autoB.addEventListener('click', () => { if (auto) { stopAuto(); return; } autoB.textContent = 'Pause'; auto = setInterval(() => { if (cur >= steps.length - 1) stopAuto(); else next(); }, 1000); });
+    resetB.addEventListener('click', reset);
+    reload(DEFAULT);
+  })();
+
+  /* ======================================================================
+     19. FRACTIONAL vs 0-1 KNAPSACK (§16.3)
+     ====================================================================== */
+  (function initKnapsack() {
+    const host = document.getElementById('knapViz'); if (!host) return;
+    const prevB = document.getElementById('knapPrev'), nextB = document.getElementById('knapNext'),
+      resetB = document.getElementById('knapReset'), stepEl = document.getElementById('knapStep'),
+      maxEl = document.getElementById('knapMax'), bag01 = document.getElementById('knapBag01'),
+      bagFr = document.getElementById('knapBagFr'), tot01 = document.getElementById('knapTot01'),
+      totFr = document.getElementById('knapTotFr'), statusEl = document.getElementById('knapStatus');
+    const W = 50, items = [{ id: 1, w: 10, v: 60, c: 'navy' }, { id: 2, w: 20, v: 100, c: 'ochre' }, { id: 3, w: 30, v: 120, c: 'moss' }];
+    let steps = [], cur = 0;
+    function build() {
+      steps = []; let seg01 = [], used01 = 0, val01 = 0, segFr = [], usedFr = 0, valFr = 0;
+      steps.push({ seg01: [], val01: 0, used01: 0, segFr: [], valFr: 0, usedFr: 0, msg: 'Both knapsacks empty. Items are pre-sorted by value/lb: item 1 = $6.0, item 2 = $5.0, item 3 = $4.0.' });
+      items.forEach((it, idx) => {
+        let m01;
+        if (used01 + it.w <= W) { seg01 = seg01.concat([Object.assign({ wTaken: it.w, frac: 1 }, it)]); used01 += it.w; val01 += it.v; m01 = `<b>0-1:</b> item ${it.id} (${it.w} lb) fits &mdash; take it whole (+$${it.v}).`; }
+        else { m01 = `<b>0-1:</b> item ${it.id} needs ${it.w} lb but only ${W - used01} lb remain, and it cannot be split &mdash; <b>SKIP</b>. ${W - used01} lb wasted.`; }
+        let mFr;
+        if (usedFr + it.w <= W) { segFr = segFr.concat([Object.assign({ wTaken: it.w, frac: 1 }, it)]); usedFr += it.w; valFr += it.v; mFr = `<b>Fractional:</b> take item ${it.id} whole (+$${it.v}).`; }
+        else { const rem = W - usedFr; if (rem > 0) { const fr = rem / it.w; segFr = segFr.concat([Object.assign({ wTaken: rem, frac: fr }, it)]); valFr += it.v * fr; usedFr += rem; mFr = `<b>Fractional:</b> only ${rem} lb left &mdash; take ${rem}/${it.w} of item ${it.id} (+$${Math.round(it.v * fr)}). Bag full.`; } else mFr = '<b>Fractional:</b> bag already full.'; }
+        const extra = idx === items.length - 1 ? `<br><b>Outcome:</b> 0-1 greedy = $${val01} &mdash; but the true 0-1 optimum is $220 (take items 2+3), so greedy <b>loses</b>. Fractional greedy = $${Math.round(valFr)}, which is optimal.` : '';
+        steps.push({ seg01: seg01.slice(), val01, used01, segFr: segFr.slice(), valFr, usedFr, msg: m01 + ' ' + mFr + extra });
+      });
+    }
+    function renderBag(box, segs) {
+      let used = 0, h = '';
+      segs.forEach(sg => { used += sg.wTaken; const wp = sg.wTaken / W * 100; h += `<div class="knap-seg" style="width:${wp}%;background:var(--${sg.c});">${sg.id}${sg.frac < 1 ? ' (' + Math.round(sg.frac * 100) + '%)' : ''}</div>`; });
+      const ep = (W - used) / W * 100; if (ep > 0.4) h += `<div class="knap-empty" style="flex:0 0 ${ep}%;"></div>`;
+      box.innerHTML = h; return used;
+    }
+    function render() {
+      const s = steps[cur]; if (!s) return;
+      renderBag(bag01, s.seg01); renderBag(bagFr, s.segFr);
+      tot01.innerHTML = `value <strong>$${s.val01}</strong> &middot; used ${s.used01} / ${W} lb`;
+      totFr.innerHTML = `value <strong>$${Math.round(s.valFr)}</strong> &middot; used ${Math.round(s.usedFr)} / ${W} lb`;
+      stepEl.textContent = cur; maxEl.textContent = steps.length - 1;
+      statusEl.innerHTML = s.msg; mj(statusEl);
+    }
+    prevB.addEventListener('click', () => { if (cur > 0) { cur--; render(); } });
+    nextB.addEventListener('click', () => { if (cur < steps.length - 1) { cur++; render(); } });
+    resetB.addEventListener('click', () => { cur = 0; render(); });
+    build(); render();
+  })();
+
+  /* ======================================================================
+     20. DIJKSTRA ON A GRAPH (§24.3)
+     ====================================================================== */
+  (function initDijkstra() {
+    const host = document.getElementById('dijkstraViz'); if (!host) return;
+    const sel = document.getElementById('djPreset'),
+      prevB = document.getElementById('djPrev'), nextB = document.getElementById('djNext'),
+      autoB = document.getElementById('djAuto'), resetB = document.getElementById('djReset'),
+      graphBox = document.getElementById('djGraph'), settledEl = document.getElementById('djSettled'),
+      totalEl = document.getElementById('djTotal'), stepEl = document.getElementById('djStep'),
+      maxEl = document.getElementById('djMax'), statusEl = document.getElementById('djStatus');
+    const PRESETS = [
+      { name: 'Classic · CLRS (5)', source: 's',
+        pos: { s: [58, 165], a: [210, 72], b: [210, 258], c: [388, 72], d: [388, 258] },
+        E: [['s','a',10],['s','b',5],['a','b',2],['b','a',3],['b','c',9],['b','d',2],['a','c',1],['c','d',4],['d','s',7],['d','c',6]] },
+      { name: 'Diamond (5)', source: 's',
+        pos: { s: [55, 165], a: [195, 72], b: [195, 258], c: [330, 165], t: [432, 165] },
+        E: [['s','a',2],['s','b',5],['a','b',1],['a','c',7],['b','c',3],['c','t',2],['a','t',12],['b','t',9]] },
+      { name: 'Two layers (6)', source: 's',
+        pos: { s: [48, 165], a: [160, 80], b: [160, 250], c: [290, 80], d: [290, 250], t: [420, 165] },
+        E: [['s','a',7],['s','b',2],['b','a',3],['a','c',4],['b','d',5],['c','d',1],['c','t',6],['d','t',2],['a','d',10],['b','c',8]] },
+    ];
+    let G = PRESETS[0], steps = [], cur = 0, auto = null;
+    function build() {
+      const ids = Object.keys(G.pos), d = {}, pi = {};
+      ids.forEach(v => d[v] = Infinity); d[G.source] = 0;
+      const settled = new Set(), Q = new Set(ids), out = [];
+      const snap = o => out.push(Object.assign({ d: Object.assign({}, d), pi: Object.assign({}, pi), settled: new Set(settled) }, o));
+      snap({ current: null, activeEdge: null, msg: `Initialize: $d[${G.source}]=0$, every other estimate $\\infty$. Nothing settled yet.` });
+      while (Q.size) {
+        let u = null, best = Infinity; Q.forEach(v => { if (d[v] < best) { best = d[v]; u = v; } });
+        if (u === null) break;
+        Q.delete(u); settled.add(u);
+        snap({ current: u, activeEdge: null, msg: `<b>Extract-Min</b> picks <b>${u}</b> (smallest estimate $d[${u}]=${fmtInf(d[u])}$). Settle it &mdash; its distance is now final.` });
+        G.E.filter(e => e[0] === u).forEach(e => {
+          const a = e[0], b = e[1], w = e[2], cand = d[a] + w; let imp = false;
+          if (cand < d[b]) { d[b] = cand; pi[b] = a; imp = true; }
+          snap({ current: u, activeEdge: [a, b], msg: imp
+            ? `Relax ${a}→${b} (w=${w}): ${fmtInf(cand)} &lt; old $d[${b}]$, so $d[${b}] \\leftarrow$ <b>${fmtInf(cand)}</b>. Tree edge ${a}→${b} recorded.`
+            : `Relax ${a}→${b} (w=${w}): ${fmtInf(cand)} ≥ $d[${b}]=${fmtInf(d[b])}$ &mdash; no improvement.` });
+        });
+      }
+      snap({ current: null, activeEdge: null, msg: `All vertices settled. Final shortest distances: ${ids.map(v => `$d[${v}]=${fmtInf(d[v])}$`).join(', ')}.` });
+      return out;
+    }
+    function render() {
+      const s = steps[cur]; if (!s) return;
+      const ids = Object.keys(G.pos);
+      const nodes = ids.map(id => ({ id, x: G.pos[id][0], y: G.pos[id][1], label: id, dist: fmtInf(s.d[id]),
+        state: s.current === id ? 'current' : (s.settled.has(id) ? 'settled' : (s.d[id] < Infinity ? 'frontier' : 'idle')) }));
+      const edges = G.E.map(e => ({ u: e[0], v: e[1], w: e[2],
+        state: (s.activeEdge && s.activeEdge[0] === e[0] && s.activeEdge[1] === e[1]) ? 'active' : (s.pi[e[1]] === e[0] ? 'tree' : 'idle') }));
+      graphBox.innerHTML = drawDirectedGraph({ width: 470, height: 330, idPrefix: 'dj', nodes, edges });
+      settledEl.textContent = s.settled.size; totalEl.textContent = ids.length;
+      stepEl.textContent = cur; maxEl.textContent = steps.length - 1;
+      statusEl.innerHTML = s.msg; mj(statusEl);
+    }
+    function stopAuto() { if (auto) { clearInterval(auto); auto = null; autoB.textContent = 'Auto-play'; } }
+    function next() { if (cur < steps.length - 1) { cur++; render(); } else stopAuto(); }
+    function rebuild() { stopAuto(); steps = build(); cur = 0; render(); }
+    sel.innerHTML = PRESETS.map((p, i) => `<option value="${i}">${p.name}</option>`).join('');
+    sel.addEventListener('change', () => { G = PRESETS[+sel.value]; rebuild(); });
+    prevB.addEventListener('click', () => { if (cur > 0) { cur--; render(); } });
+    nextB.addEventListener('click', next);
+    autoB.addEventListener('click', () => { if (auto) { stopAuto(); return; } autoB.textContent = 'Pause'; auto = setInterval(next, 1100); });
+    resetB.addEventListener('click', () => { stopAuto(); cur = 0; render(); });
+    rebuild();
+  })();
+
+  /* ======================================================================
+     21. BELLMAN–FORD ON A GRAPH (§24.1)
+     ====================================================================== */
+  (function initBellman() {
+    const host = document.getElementById('bellmanViz'); if (!host) return;
+    const prevB = document.getElementById('bfPrev'), nextB = document.getElementById('bfNext'),
+      autoB = document.getElementById('bfAuto'), negB = document.getElementById('bfNeg'),
+      resetB = document.getElementById('bfReset'), graphBox = document.getElementById('bfGraph'),
+      passEl = document.getElementById('bfPass'), stepEl = document.getElementById('bfStep'),
+      maxEl = document.getElementById('bfMax'), statusEl = document.getElementById('bfStatus');
+    const passesEl = document.getElementById('bfPasses'), sel = document.getElementById('bfPreset');
+    const PRESETS = [
+      { name: 'Classic · CLRS (5)', source: 's',
+        pos: { s: [55, 172], t: [215, 70], x: [395, 70], y: [215, 278], z: [395, 278] },
+        E: [['t','x',5],['t','y',8],['t','z',-4],['x','t',-2],['y','x',-3],['y','z',9],['z','x',7],['z','s',2],['s','t',6],['s','y',7]],
+        neg: { edge: ['z', 'x'], weight: -7 } },
+      { name: 'Negative edge, no cycle (4)', source: 's',
+        pos: { s: [60, 174], a: [225, 72], b: [225, 278], c: [400, 174] },
+        E: [['s','a',4],['s','b',5],['a','b',-3],['b','c',4],['a','c',6]], neg: null },
+      { name: 'Negative cycle present (4)', source: 's',
+        pos: { s: [60, 174], a: [225, 72], b: [225, 278], c: [400, 174] },
+        E: [['s','a',1],['a','b',2],['b','c',-4],['c','a',1]], neg: null },
+    ];
+    let G = PRESETS[0], steps = [], cur = 0, auto = null, neg = false;
+    function edges() {
+      if (!G.neg || !neg) return G.E;
+      return G.E.map(e => (e[0] === G.neg.edge[0] && e[1] === G.neg.edge[1]) ? [e[0], e[1], G.neg.weight] : e);
+    }
+    function build() {
+      const ids = Object.keys(G.pos), E = edges(), d = {}, pi = {};
+      ids.forEach(v => d[v] = Infinity); d[G.source] = 0;
+      const out = [];
+      const snap = o => out.push(Object.assign({ d: Object.assign({}, d), pi: Object.assign({}, pi) }, o));
+      snap({ pass: 0, activeEdge: null, msg: `Initialize: $d[${G.source}]=0$, all others $\\infty$. The source is navy.` });
+      for (let pass = 1; pass <= ids.length - 1; pass++) {
+        snap({ pass, activeEdge: null, msg: `<b>Pass ${pass} of ${ids.length - 1}.</b> Relax every edge once, in a fixed order.` });
+        E.forEach(e => {
+          const a = e[0], b = e[1], w = e[2], cand = d[a] + w; let imp = false;
+          if (cand < d[b]) { d[b] = cand; pi[b] = a; imp = true; }
+          snap({ pass, activeEdge: [a, b], msg: imp
+            ? `Relax ${a}→${b} (w=${w}): ${fmtInf(cand)} &lt; $d[${b}]$, so $d[${b}] \\leftarrow$ <b>${fmtInf(cand)}</b>.`
+            : `Relax ${a}→${b} (w=${w}): no improvement ($d[${b}]=${fmtInf(d[b])}$).` });
+        });
+      }
+      snap({ pass: 'check', activeEdge: null, msg: '<b>Verification pass.</b> Try to relax once more &mdash; any successful relaxation means a reachable negative-weight cycle.' });
+      let found = false;
+      for (const e of E) { const a = e[0], b = e[1], w = e[2]; if (d[a] + w < d[b]) { found = true; snap({ pass: 'check', activeEdge: [a, b], msg: `Edge ${a}→${b} <b>still relaxes</b> (${fmtInf(d[a] + w)} &lt; ${fmtInf(d[b])}). A negative-weight cycle is reachable from the source &rArr; <span class="sc">Bellman-Ford</span> returns <b>False</b>.` }); break; } }
+      if (!found) snap({ pass: 'check', activeEdge: null, msg: `No edge relaxes &rArr; no negative cycle. Final distances ${ids.map(v => `$d[${v}]=${fmtInf(d[v])}$`).join(', ')}. Returns <b>True</b>.` });
+      return out;
+    }
+    function render() {
+      const s = steps[cur]; if (!s) return;
+      const ids = Object.keys(G.pos);
+      const nodes = ids.map(id => ({ id, x: G.pos[id][0], y: G.pos[id][1], label: id, dist: fmtInf(s.d[id]),
+        state: id === G.source ? 'source' : (s.d[id] < Infinity ? 'frontier' : 'idle') }));
+      const eds = edges().map(e => ({ u: e[0], v: e[1], w: e[2],
+        state: (s.activeEdge && s.activeEdge[0] === e[0] && s.activeEdge[1] === e[1]) ? 'active' : (s.pi[e[1]] === e[0] ? 'tree' : 'idle') }));
+      graphBox.innerHTML = drawDirectedGraph({ width: 470, height: 348, idPrefix: 'bf', nodes, edges: eds });
+      passEl.textContent = s.pass === 'check' ? '✓' : s.pass; passesEl.textContent = ids.length - 1;
+      stepEl.textContent = cur; maxEl.textContent = steps.length - 1;
+      statusEl.innerHTML = s.msg; mj(statusEl);
+    }
+    function stopAuto() { if (auto) { clearInterval(auto); auto = null; autoB.textContent = 'Auto-play'; } }
+    function next() { if (cur < steps.length - 1) { cur++; render(); } else stopAuto(); }
+    function rebuild() { stopAuto(); steps = build(); cur = 0; render(); }
+    function applyPreset() {
+      G = PRESETS[+sel.value]; neg = false;
+      if (G.neg) { negB.style.display = ''; negB.textContent = 'Negative cycle: off'; }
+      else negB.style.display = 'none';
+      rebuild();
+    }
+    sel.innerHTML = PRESETS.map((p, i) => `<option value="${i}">${p.name}</option>`).join('');
+    sel.addEventListener('change', applyPreset);
+    prevB.addEventListener('click', () => { if (cur > 0) { cur--; render(); } });
+    nextB.addEventListener('click', next);
+    autoB.addEventListener('click', () => { if (auto) { stopAuto(); return; } autoB.textContent = 'Pause'; auto = setInterval(next, 850); });
+    negB.addEventListener('click', () => { neg = !neg; negB.textContent = 'Negative cycle: ' + (neg ? 'on' : 'off'); rebuild(); });
+    resetB.addEventListener('click', () => { stopAuto(); cur = 0; render(); });
+    applyPreset();
+  })();
+
+  /* ======================================================================
+     22. FLOYD–WARSHALL (GRAPH + LIVE MATRIX) (§25.2)
+     ====================================================================== */
+  (function initFloyd() {
+    const host = document.getElementById('floydViz'); if (!host) return;
+    const prevB = document.getElementById('fwPrev'), nextB = document.getElementById('fwNext'),
+      autoB = document.getElementById('fwAuto'), resetB = document.getElementById('fwReset'),
+      graphBox = document.getElementById('fwGraph'), matrixBox = document.getElementById('fwMatrixBox'),
+      kEl = document.getElementById('fwK'), stepEl = document.getElementById('fwStep'),
+      maxEl = document.getElementById('fwMax'), statusEl = document.getElementById('fwStatus');
+    const sel = document.getElementById('fwPreset');
+    const INF = Infinity;
+    const PRESETS = [
+      { name: 'Classic (4, neg edge)', w: 420, h: 350,
+        pos: { 1: [85, 80], 2: [335, 80], 3: [85, 275], 4: [335, 275] },
+        E: [[1,2,3],[1,3,8],[2,4,1],[3,2,4],[4,1,2],[4,3,-5]] },
+      { name: 'Pentagon (5)', w: 420, h: 384,
+        pos: { 1: [210, 52], 2: [366, 168], 3: [305, 330], 4: [115, 330], 5: [54, 168] },
+        E: [[1,2,3],[2,3,2],[3,4,5],[4,5,2],[5,1,4],[1,3,9],[2,4,8],[3,5,1],[5,2,6],[4,1,7]] },
+      { name: 'Square (4, neg edges)', w: 420, h: 350,
+        pos: { 1: [85, 80], 2: [335, 80], 3: [85, 275], 4: [335, 275] },
+        E: [[1,2,2],[2,3,3],[3,4,-2],[4,1,8],[1,3,10],[2,4,5],[4,2,1]] },
+    ];
+    let G = PRESETS[0], steps = [], cur = 0, auto = null;
+    function initMatrix(n, E) {
+      const D = []; for (let i = 0; i < n; i++) { D.push(new Array(n).fill(INF)); D[i][i] = 0; }
+      E.forEach(e => { D[e[0] - 1][e[1] - 1] = e[2]; });
+      return D;
+    }
+    function build() {
+      const n = Object.keys(G.pos).length;
+      const D = initMatrix(n, G.E), out = [];
+      const snap = o => out.push(Object.assign({ D: D.map(r => r.slice()), n }, o));
+      snap({ k: 0, kind: 'init', msg: '$D^{(0)}$ is the raw weight matrix: 0 on the diagonal, edge weights where edges exist, $\\infty$ otherwise.' });
+      for (let k = 1; k <= n; k++) {
+        snap({ k, kind: 'announce', msg: `<b>Round k=${k}:</b> unlock vertex ${k} as a waypoint. Row ${k} and column ${k} (amber) feed every candidate detour $i \\to ${k} \\to j$.` });
+        for (let i = 1; i <= n; i++) for (let j = 1; j <= n; j++) {
+          if (i === k || j === k || i === j) continue;
+          const via = D[i - 1][k - 1] + D[k - 1][j - 1];
+          if (via < D[i - 1][j - 1]) {
+            const ik = D[i - 1][k - 1], kj = D[k - 1][j - 1], old = D[i - 1][j - 1];
+            D[i - 1][j - 1] = via;
+            snap({ k, kind: 'update', i, j, ik, kj, via, msg: `$d_{${i}${j}}$: detour ${i}→${k}→${j} costs ${fmtInf(ik)} + ${fmtInf(kj)} = <b>${fmtInf(via)}</b>, beating the old ${fmtInf(old)}. Update.` });
+          }
+        }
+      }
+      snap({ k: n, kind: 'done', msg: `<b>Done.</b> Every vertex has served as a waypoint; $D^{(${n})}$ now holds all-pairs shortest distances.` });
+      return out;
+    }
+    function renderMatrix(s) {
+      const n = s.n;
+      let h = `<table class="fw-matrix"><caption>D<sup>(${s.k})</sup></caption><tr><th></th>`;
+      for (let j = 1; j <= n; j++) h += `<th>${j}</th>`;
+      h += '</tr>';
+      for (let i = 1; i <= n; i++) {
+        h += `<tr><th>${i}</th>`;
+        for (let j = 1; j <= n; j++) {
+          let cls = '';
+          if (s.kind === 'announce') { if (i === s.k || j === s.k) cls = 'hl-line'; }
+          else if (s.kind === 'update') {
+            if (i === s.i && j === s.k) cls = 'hl-via';
+            else if (i === s.k && j === s.j) cls = 'hl-via';
+            if (i === s.i && j === s.j) cls = 'hl-target updated';
+          }
+          h += `<td class="${cls}">${fmtInf(s.D[i - 1][j - 1])}</td>`;
+        }
+        h += '</tr>';
+      }
+      matrixBox.innerHTML = h + '</table>';
+    }
+    function render() {
+      const s = steps[cur]; if (!s) return;
+      const ids = Object.keys(G.pos).map(Number);
+      const nodes = ids.map(id => {
+        let st = 'idle';
+        if (s.kind === 'announce' && id === s.k) st = 'current';
+        else if (s.kind === 'update') { if (id === s.k) st = 'current'; else if (id === s.i || id === s.j) st = 'source'; }
+        return { id, x: G.pos[id][0], y: G.pos[id][1], label: id, dist: null, state: st };
+      });
+      const edges = G.E.map(e => ({ u: e[0], v: e[1], w: e[2], state: 'idle' }));
+      const overlays = (s.kind === 'update') ? [{ u: s.i, v: s.k, label: fmtInf(s.ik) }, { u: s.k, v: s.j, label: fmtInf(s.kj) }] : [];
+      graphBox.innerHTML = drawDirectedGraph({ width: G.w, height: G.h, idPrefix: 'fw', nodes, edges, overlays });
+      renderMatrix(s);
+      kEl.textContent = s.k; stepEl.textContent = cur; maxEl.textContent = steps.length - 1;
+      statusEl.innerHTML = s.msg; mj(statusEl);
+    }
+    function stopAuto() { if (auto) { clearInterval(auto); auto = null; autoB.textContent = 'Auto-play'; } }
+    function next() { if (cur < steps.length - 1) { cur++; render(); } else stopAuto(); }
+    function rebuild() { stopAuto(); steps = build(); cur = 0; render(); }
+    sel.innerHTML = PRESETS.map((p, i) => `<option value="${i}">${p.name}</option>`).join('');
+    sel.addEventListener('change', () => { G = PRESETS[+sel.value]; rebuild(); });
+    prevB.addEventListener('click', () => { if (cur > 0) { cur--; render(); } });
+    nextB.addEventListener('click', next);
+    autoB.addEventListener('click', () => { if (auto) { stopAuto(); return; } autoB.textContent = 'Pause'; auto = setInterval(next, 1100); });
+    resetB.addEventListener('click', () => { stopAuto(); cur = 0; render(); });
+    rebuild();
   })();
 
 
