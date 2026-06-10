@@ -427,6 +427,36 @@ li::marker { color: var(--oxblood); }
 .box.intuition { border-color: var(--navy-soft); background: rgba(74,106,138,0.07); border-style: dashed; }
 .box.intuition .box-label { color: var(--navy); font-style: italic; }
 
+/* .box-title is the div-based title used in later chapters; mirror .box-label */
+.box .box-title {
+  font-family: var(--serif-display);
+  font-variant: small-caps;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  font-size: 0.95rem;
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--ink-soft);
+}
+.box.definition .box-title { color: var(--navy); }
+.box.theorem .box-title { color: var(--oxblood); }
+.box.lemma .box-title { color: var(--ochre); }
+.box.example .box-title { color: var(--moss); }
+.box.note .box-title { color: var(--ink-muted); }
+.box.intuition .box-title { color: var(--navy); font-style: italic; }
+.box.proof .box-title { color: var(--ink); font-style: italic; }
+
+/* Exam-focus callout */
+.box.exam {
+  border-left-color: var(--ochre);
+  border-left-width: 4px;
+  background: rgba(166,124,43,0.11);
+}
+.box.exam .box-title, .box.exam .box-label { color: var(--ochre); }
+.box.exam .box-title::before { content: '✦ '; }
+.box.exam.critical { border-left-color: var(--oxblood); background: rgba(122,31,43,0.09); }
+.box.exam.critical .box-title, .box.exam.critical .box-label { color: var(--oxblood); }
+
 /* Proof */
 .proof {
   max-width: var(--content-max);
@@ -1063,6 +1093,49 @@ table.fw-matrix td.updated   { background: rgba(74,93,58,0.30); color: var(--mos
 .probe-cell.placed   { background: var(--moss);  border-color: var(--moss);  color: var(--paper); }
 .probe-cell.placed .pi { color: var(--paper); }
 
+/* ===== DP tables (rod cutting / matrix chain) ===== */
+table.dp-table { border-collapse: collapse; font-family: var(--mono); font-size: 0.9rem; margin: 0.4rem 0; }
+table.dp-table caption {
+  font-family: var(--serif-display); font-variant: small-caps; letter-spacing: 0.1em;
+  color: var(--navy); font-weight: 600; margin-bottom: 0.4rem; caption-side: top;
+}
+table.dp-table th, table.dp-table td {
+  border: 1px solid var(--rule); min-width: 2.6rem; height: 2.2rem; padding: 0 0.4rem;
+  text-align: center; transition: background 0.25s, color 0.25s, outline-color 0.25s;
+}
+table.dp-table th { background: var(--paper-alt); color: var(--ink-muted); font-weight: 600; }
+table.dp-table td.empty   { color: var(--rule); }
+table.dp-table td.cand    { background: rgba(166,124,43,0.16); color: var(--ochre); }
+table.dp-table td.source  { background: rgba(30,58,95,0.14); color: var(--navy); }
+table.dp-table td.target  { outline: 2px solid var(--oxblood); outline-offset: -2px; background: var(--paper); }
+table.dp-table td.filled  { background: rgba(74,93,58,0.16); color: var(--moss); font-weight: 700; }
+
+/* ===== Rod bar ===== */
+.rod-bar { display: flex; height: 40px; border: 2px solid var(--ink); border-radius: 4px; overflow: hidden; margin: 0.8rem 0; background: var(--paper); }
+.rod-seg {
+  height: 100%; display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 0.74rem; color: var(--paper);
+  border-right: 2px solid var(--paper); transition: width 0.4s ease, background 0.3s; min-width: 0;
+}
+.rod-seg:last-child { border-right: none; }
+
+/* ===== Chips: priority queue, BFS queue, topo output ===== */
+.viz-chips { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; margin: 0.6rem 0; min-height: 34px; }
+.viz-chips .chip-label { font-family: var(--serif-body); font-style: italic; font-size: 0.82rem; color: var(--ink-muted); margin-right: 0.3rem; }
+.chip {
+  font-family: var(--mono); font-size: 0.82rem; padding: 0.3rem 0.6rem;
+  background: var(--paper); border: 1px solid var(--ink-muted); border-radius: 3px; color: var(--ink);
+  transition: background 0.3s, border-color 0.3s, color 0.3s;
+}
+.chip.hot   { background: var(--oxblood); border-color: var(--oxblood); color: var(--paper); }
+.chip.cool  { background: var(--moss);    border-color: var(--moss);    color: var(--paper); }
+.chip.warm  { background: var(--ochre);   border-color: var(--ochre);   color: var(--ink); }
+.chip.ghost { opacity: 0.4; }
+.chip-arrow { color: var(--ink-muted); font-family: var(--mono); }
+
+/* ===== Binary-tree SVG host (Huffman) ===== */
+.viz-tree svg { width: 100%; height: auto; display: block; margin: 0 auto; }
+
 /* ========== SCROLL / RESPONSIVE ========== */
 @media (max-width: 900px) {
   .shell { grid-template-columns: 1fr; }
@@ -1184,6 +1257,19 @@ footer {
 
 /* Selection */
 ::selection { background: var(--highlight); color: var(--ink); }
+
+/* Scrollbars — themed (page, sidebar, code blocks, tables, visualizers) */
+* { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
+::-webkit-scrollbar { width: 11px; height: 11px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--rule);
+  border-radius: 7px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--ink-muted); }
+::-webkit-scrollbar-corner { background: transparent; }
 </style>
 </head>
 <body>
@@ -1198,6 +1284,9 @@ footer {
     <span class="theme-label">Dark</span>
   </button>
   <hr class="sidebar-divider" />
+
+  <div class="nav-chapter">Final Exam</div>
+  <a class="nav-link" href="#s-exam"><span class="nav-num">&#10022;</span>Topic Map</a>
 
   <div class="nav-chapter">Ch. 2 &mdash; Getting Started</div>
   <a class="nav-link" href="#s-2-1"><span class="nav-num">2.1</span>Insertion Sort</a>
@@ -1247,18 +1336,30 @@ footer {
   <a class="nav-link" href="#s-11-3"><span class="nav-num">11.3</span>Hash Functions</a>
   <a class="nav-link" href="#s-11-4"><span class="nav-num">11.4</span>Open Addressing</a>
 
+  <div class="nav-chapter">Ch. 15 &mdash; Dynamic Programming</div>
+  <a class="nav-link" href="#s-15-1"><span class="nav-num">15.1</span>Rod Cutting</a>
+  <a class="nav-link" href="#s-15-2"><span class="nav-num">15.2</span>Matrix-Chain Multiplication</a>
+
   <div class="nav-chapter">Ch. 16 &mdash; Greedy Algorithms</div>
   <a class="nav-link" href="#s-16-1"><span class="nav-num">16.1</span>Activity Selection</a>
   <a class="nav-link" href="#s-16-2"><span class="nav-num">16.2</span>Elements of the Greedy Strategy</a>
   <a class="nav-link" href="#s-16-3"><span class="nav-num">16.3</span>Fractional vs.\ 0-1 Knapsack</a>
+  <a class="nav-link" href="#s-16-4"><span class="nav-num">16.4</span>Huffman Codes</a>
+
+  <div class="nav-chapter">Ch. 22 &mdash; Elementary Graph Algorithms</div>
+  <a class="nav-link" href="#s-22-2"><span class="nav-num">22.2</span>Breadth-First Search</a>
+  <a class="nav-link" href="#s-22-3"><span class="nav-num">22.3</span>Depth-First Search</a>
+  <a class="nav-link" href="#s-22-4"><span class="nav-num">22.4</span>Topological Sort</a>
 
   <div class="nav-chapter">Ch. 24 &mdash; Shortest Paths</div>
   <a class="nav-link" href="#s-24-0"><span class="nav-num">24.0</span>Foundations &amp; Relaxation</a>
   <a class="nav-link" href="#s-24-1"><span class="nav-num">24.1</span>Bellman&ndash;Ford</a>
+  <a class="nav-link" href="#s-24-2"><span class="nav-num">24.2</span>Shortest Paths in a DAG</a>
   <a class="nav-link" href="#s-24-3"><span class="nav-num">24.3</span>Dijkstra</a>
 
   <div class="nav-chapter">Ch. 25 &mdash; All-Pairs Shortest Paths</div>
   <a class="nav-link" href="#s-25-2"><span class="nav-num">25.2</span>Floyd&ndash;Warshall</a>
+  <a class="nav-link" href="#s-25-3"><span class="nav-num">25.3</span>One-Intermediate Pattern</a>
 
   <div class="progress-row" style="margin-top: 2.5rem;">
     <span>Progress</span>
@@ -1283,6 +1384,62 @@ footer {
 <div class="ornament">&#x2767;</div>
 
 <!-- ============================================================ -->
+<!-- FINAL EXAM GUIDE -->
+<!-- ============================================================ -->
+<div class="chapter-header" id="s-exam">
+  <div class="chapter-num">Final Exam</div>
+  <h2 class="chapter-title">Topic <em>Map</em></h2>
+</div>
+
+<p class="noindent">This guide doubles as a study companion for the final. The exam contains <strong>approximately 58&ndash;60 questions</strong>. Describe algorithms in <strong>clear English prose, not code</strong>. A reference sheet supplies the <strong>Master Theorem cases</strong> and <strong>Stirling's Approximation</strong>, so you need not memorize those formulas. The map below mirrors every topic on the exam, with its emphasis and a link to the full treatment. The gold <span style="color: var(--ochre); font-weight: 600;">&#10022; Exam focus</span> boxes throughout the chapters flag the same points in context.</p>
+
+<h3 class="section-title"><span class="sec-num">I</span>Mathematical Foundations &amp; Analysis Tools</h3>
+<ul>
+  <li><strong><a href="#s-3-1">Asymptotic notation</a></strong> (Ch. 3) &mdash; several questions. Know the <em>formal</em> definitions of Big-O ($O$), Big-Omega ($\Omega$), and Theta ($\Theta$).</li>
+  <li><strong>Recurrences</strong> (Ch. 4), tested three ways:
+    <ul>
+      <li><a href="#s-4-3">Substitution method</a> &mdash; one problem solving/proving a recurrence.</li>
+      <li><a href="#s-4-5">Master method</a> &mdash; multiple problems (cases given on the reference sheet).</li>
+      <li><a href="#s-4-4">Recursion-tree method</a> &mdash; exactly one question, tied to divide-and-conquer (Merge Sort).</li>
+    </ul>
+  </li>
+  <li><strong><a href="#s-5-2">Probabilistic analysis</a></strong> (Ch. 5) &mdash; one question using probability, random variables, and <strong>indicator random variables</strong>.</li>
+</ul>
+
+<h3 class="section-title"><span class="sec-num">II</span>Sorting &amp; Order Statistics</h3>
+<ul>
+  <li><strong><a href="#s-2-1">Insertion sort</a></strong> (Ch. 2) &mdash; describe it conceptually in English; understand the right-to-left scan into a growing sorted prefix.</li>
+  <li><strong><a href="#s-2-3">Merge sort</a></strong> (Ch. 2 &amp; 4) &mdash; the divide-and-conquer strategy: split at the middle, recurse on both halves, merge.</li>
+  <li><strong><a href="#s-6-1">Heaps &amp; heap sort</a></strong> (Ch. 6) &mdash; <span style="color: var(--oxblood); font-weight: 600;">CRITICAL.</span> Expect a <strong>4-item heap</strong> to sort step-by-step. Know <span class="sc">Max-Heapify</span>, why <span class="sc">Build-Max-Heap</span> is $O(n)$ not $O(n\lg n)$, and why heap sort is <strong>not stable</strong>.</li>
+  <li><strong><a href="#s-7-1">Quicksort &amp; partitioning</a></strong> (Ch. 7) &mdash; best/average $n\lg n$ vs.\ worst $n^2$; how <span class="sc">Partition</span> works; how a random pivot enforces average-case behavior.</li>
+  <li><strong><a href="#s-8-1">Lower bounds for sorting</a></strong> (Ch. 8.1) &mdash; the $\Omega(n\lg n)$ proof via the decision-tree model ($h$ height, $\ge n!$ leaves) and Stirling's approximation.</li>
+  <li><strong><a href="#s-8-2">Linear-time sorts</a></strong> (Ch. 8.2&ndash;8.4) &mdash; counting sort (3 passes), radix sort (LSD, needs a <em>stable</em> subroutine &mdash; why not heap sort), bucket sort ($O(n)$ average, $O(n^2)$ if all in one bucket).</li>
+  <li><strong><a href="#s-9-1">Selection / medians</a></strong> (Ch. 9) &mdash; the $i$th element; min and max <em>simultaneously</em>; randomized select recursing into <em>one</em> side for expected $O(n)$.</li>
+</ul>
+
+<h3 class="section-title"><span class="sec-num">III</span>Advanced Design Techniques &amp; Structures</h3>
+<ul>
+  <li><strong><a href="#s-11-1">Hashing</a></strong> (Ch. 11) &mdash; minor questions on basic concepts (hash functions, chaining, load factor).</li>
+  <li><strong><a href="#s-15-1">Dynamic programming</a></strong> (Ch. 15) &mdash; <strong>rod cutting</strong> (overlapping subproblems, memoization) and <strong>matrix-chain multiplication</strong> (optimal parenthesization). Be ready to prove by <em>substitution / strong induction</em> that the number of parenthesizations $P(n) = \Omega(2^n)$.</li>
+  <li><strong><a href="#s-16-1">Greedy &amp; knapsack</a></strong> (Ch. 16) &mdash; activity selection's greedy choice; <strong>fractional knapsack</strong> (greedy works, by value-per-pound) vs.\ <strong>0-1 knapsack</strong> (greedy fails &rArr; dynamic programming); <strong><a href="#s-16-4">Huffman coding</a></strong> (greedy choice merges the two least-frequent symbols).</li>
+</ul>
+
+<h3 class="section-title"><span class="sec-num">IV</span>Graph Algorithms</h3>
+<ul>
+  <li><strong><a href="#s-22-2">Elementary graph algorithms</a></strong> (Ch. 22) &mdash; <strong>BFS</strong> (shortest paths by edge count, queue), <strong>DFS</strong> (discovery/finish times, edge classification), and <strong>topological sort</strong> (order a DAG by decreasing finish time).</li>
+  <li><strong><a href="#s-24-1">Single-source shortest paths</a></strong> (Ch. 24) &mdash; <strong>Bellman&ndash;Ford</strong> (relax all edges $V-1$ times), <strong><a href="#s-24-2">shortest paths in a DAG</a></strong> (relax in topological order, $\Theta(V+E)$), and <strong><a href="#s-24-3">Dijkstra</a></strong> (greedy: repeatedly extract the smallest-estimate vertex).</li>
+  <li><strong><a href="#s-25-2">All-pairs shortest paths</a></strong> (Ch. 25.2) &mdash; <strong>Floyd&ndash;Warshall</strong>'s dynamic-programming matrices: $D^{(k)}[i][j]$ uses intermediates only from $\{1,\dots,k\}$, built from $D^{(k-1)}$.</li>
+  <li><strong><a href="#s-25-3">The "one intermediate at a time" pattern</a></strong> &mdash; conceptual: which algorithms build a solution by adding one allowed intermediate vertex/state at a time? <strong>Floyd&ndash;Warshall</strong> and the <strong>DFA&nbsp;&rarr;&nbsp;regular-expression</strong> construction.</li>
+</ul>
+
+<div class="box note">
+  <div class="box-title">Explicitly excluded &mdash; will NOT appear</div>
+  The professor confirmed these are off the exam: <strong>Strassen's algorithm</strong> for matrix multiplication (&sect;4.2 &mdash; "there won't be anything on the final about Strassen's") and <strong>amortized analysis</strong> (Ch. 17; 4th ed.\ Ch. 16 &mdash; "there won't be any of that on the exam").
+</div>
+
+<div class="ornament">&#x2767;</div>
+
+<!-- ============================================================ -->
 <!-- CHAPTER 2 -->
 <!-- ============================================================ -->
 <div class="chapter-header">
@@ -1295,6 +1452,11 @@ footer {
 <!-- ============ 2.1 ============ -->
 <section id="s-2-1">
 <h3 class="section-title"><span class="sec-num">2.1</span>Insertion Sort</h3>
+
+<div class="box exam">
+  <div class="box-title">Exam focus</div>
+  Describe insertion sort <em>conceptually in English</em> &mdash; do not write a program. Be ready to explain the right-to-left scan that inserts each new element into the already-sorted prefix.
+</div>
 
 <p class="noindent"><strong>Insertion sort</strong> is the algorithm most people would invent if handed a pile of index cards to sort. You pick up one card at a time, and slide each new card into its correct position among the cards you have already sorted. Formally:</p>
 
@@ -1546,6 +1708,11 @@ footer {
 <section id="s-2-3">
 <h3 class="section-title"><span class="sec-num">2.3</span>Designing Algorithms</h3>
 
+<div class="box exam">
+  <div class="box-title">Exam focus</div>
+  Know merge sort's divide-and-conquer strategy in words: split the array at the middle, recursively sort both halves, then merge the two sorted halves back together.
+</div>
+
 <p class="noindent">Insertion sort uses an <strong>incremental</strong> design: we build up the sorted prefix one element at a time. In this section we introduce a different paradigm that will reappear throughout the book.</p>
 
 <h4 class="subsection">2.3.1 The Divide-and-Conquer Approach</h4>
@@ -1723,6 +1890,11 @@ footer {
 <!-- ============ 3.1 ============ -->
 <section id="s-3-1">
 <h3 class="section-title"><span class="sec-num">3.1</span>Asymptotic Notation</h3>
+
+<div class="box exam">
+  <div class="box-title">Exam focus</div>
+  Several questions live here. Reproduce the <em>formal</em> definitions of $O$, $\Omega$, and $\Theta$ &mdash; naming the constant(s) $c$ (or $c_1, c_2$), the threshold $n_0$, and the inequality each must satisfy for all $n \ge n_0$.
+</div>
 
 <p class="noindent">The symbols $O$, $\Theta$, $\Omega$, $o$, and $\omega$ describe the <em>asymptotic running time</em> of an algorithm &mdash; its behavior as $n \to \infty$. Each describes a <em>set of functions</em>; equations like "$T(n) = O(n^2)$" are abuses of notation that should be read as "$T(n)$ is an element of the set $O(n^2)$".</p>
 
@@ -1984,6 +2156,11 @@ $a^{\log_b c} = c^{\log_b a}$
 <section id="s-4-3">
 <h3 class="section-title"><span class="sec-num">4.3</span>The Substitution Method</h3>
 
+<div class="box exam">
+  <div class="box-title">Exam focus</div>
+  Expect one problem asking you to solve or prove a recurrence by substitution: state the guess, then prove the inductive step carefully (watch the constant).
+</div>
+
 <p class="noindent">The <strong>substitution method</strong> has two steps:</p>
 
 <ol>
@@ -2075,6 +2252,11 @@ which is <em>not</em> $\leq c n$. The induction fails &mdash; but the guess is r
 <!-- ============ 4.4 ============ -->
 <section id="s-4-4">
 <h3 class="section-title"><span class="sec-num">4.4</span>The Recursion-Tree Method</h3>
+
+<div class="box exam">
+  <div class="box-title">Exam focus</div>
+  Exactly one question, tied to a divide-and-conquer algorithm such as Merge Sort: draw the tree, give the per-level cost and the number of levels ($\lg n + 1$), then sum to $\Theta(n \lg n)$.
+</div>
 
 <p class="noindent">In a <strong>recursion tree</strong>, each node represents the cost of a single subproblem in the set of recursive function invocations. We sum the costs <em>within each level</em> to obtain a per-level total, then sum those over all levels. The recursion tree is especially good at generating a guess that we can then verify by the substitution method.</p>
 
@@ -2170,6 +2352,11 @@ We want this $\leq d n^2$, i.e. $\tfrac{3}{16} d + c \leq d$, i.e. $d \geq \tfra
 <!-- ============ 4.5 ============ -->
 <section id="s-4-5">
 <h3 class="section-title"><span class="sec-num">4.5</span>The Master Method</h3>
+
+<div class="box exam">
+  <div class="box-title">Exam focus</div>
+  Multiple problems. The three cases appear on the reference sheet &mdash; practice extracting $a$, $b$, and $f(n)$, computing the watershed $n^{\log_b a}$, and deciding which case applies.
+</div>
 
 <p class="noindent">The <strong>master method</strong> is a <em>cookbook</em> for recurrences of the form
 $$T(n) = a T(n/b) + f(n), \qquad a \geq 1, \quad b > 1, \quad f(n) \text{ asymptotically positive}.$$
@@ -2445,6 +2632,11 @@ Here the problem of size $n$ is divided into $a$ subproblems of size $n/b$, and 
 <section id="s-5-2">
 <h3 class="section-title"><span class="sec-num">5.2</span>Indicator Random Variables</h3>
 
+<div class="box exam">
+  <div class="box-title">Exam focus</div>
+  One question uses probability, random variables, and <strong>indicator random variables</strong> (as on the homework): define $I\{A\}$, apply $E[I\{A\}] = \Pr\{A\}$, then finish with linearity of expectation.
+</div>
+
 <p>We now develop the tool used above. The technique is simple to state but extraordinarily powerful &mdash; it reduces almost every expected-value calculation in this book to a sum of probabilities.</p>
 
 <div class="box intuition">
@@ -2643,6 +2835,11 @@ Here the problem of size $n$ is divided into $a$ subproblems of size $n/b$, and 
 <!-- ============ 6.1 ============ -->
 <section id="s-6-1">
 <h3 class="section-title"><span class="sec-num">6.1</span>Heaps</h3>
+
+<div class="box exam critical">
+  <div class="box-title">Exam focus &mdash; critical</div>
+  You will be given a heap of <strong>exactly 4 items</strong> and must execute heap sort step-by-step. Master <span class="sc">Max-Heapify</span>, why <span class="sc">Build-Max-Heap</span> runs in $O(n)$ rather than $O(n \lg n)$, the basic heap property, and why heap sort is <strong>not stable</strong>. Drill the 4-item case ($[4,1,3,2]$) in the interactive visualizer in &sect;6.4.
+</div>
 
 <div class="box intuition">
   <div class="box-title">The picture to hold in your head</div>
@@ -3008,6 +3205,11 @@ Here the problem of size $n$ is divided into $a$ subproblems of size $n/b$, and 
 <section id="s-7-1">
 <h3 class="section-title"><span class="sec-num">7.1</span>Description of Quicksort</h3>
 
+<div class="box exam">
+  <div class="box-title">Exam focus</div>
+  Know best/average ($n \lg n$) vs.\ worst-case ($n^2$) runtimes, how the standard <span class="sc">Partition</span> routine operates, and how <strong>randomized</strong> quicksort's random pivot avoids the worst case and enforces average-case performance.
+</div>
+
 <p>Quicksort is divide-and-conquer. Given $A[p\mathinner{.\,.}r]$:</p>
 <ol>
   <li><strong>Divide.</strong> Partition $A[p\mathinner{.\,.}r]$ into two (possibly empty) subarrays $A[p\mathinner{.\,.}q-1]$ and $A[q+1\mathinner{.\,.}r]$ such that every element of the first is $\le A[q]$ and every element of the second is $\ge A[q]$. Compute the index $q$ as part of this step.</li>
@@ -3329,6 +3531,11 @@ Here the problem of size $n$ is divided into $a$ subproblems of size $n/b$, and 
 <section id="s-8-1">
 <h3 class="section-title"><span class="sec-num">8.1</span>Lower Bounds for Sorting</h3>
 
+<div class="box exam">
+  <div class="box-title">Exam focus</div>
+  Prove every comparison sort is $\Omega(n \lg n)$: a decision tree of height $h$ has at most $2^h$ leaves but needs at least $n!$ of them, so $h \ge \lg(n!) = \Omega(n \lg n)$ by Stirling's approximation (given on the reference sheet).
+</div>
+
 <div class="box intuition">
   <div class="box-title">The big question of this chapter</div>
   Chapters 2&ndash;7 built a menu of $\Theta(n \lg n)$ sorts. Is that the best we can do? Can someone, ever, find a sort that runs in $\Theta(n)$? The answer is: <em>not by comparisons alone</em> &mdash; which is what this section proves. But if we let the algorithm <em>look at the bits of each element</em> (not just compare them), we can do better. The rest of Chapter 8 exhibits three such algorithms.
@@ -3399,6 +3606,11 @@ Here the problem of size $n$ is divided into $a$ subproblems of size $n/b$, and 
 <!-- ============ 8.2 ============ -->
 <section id="s-8-2">
 <h3 class="section-title"><span class="sec-num">8.2</span>Counting Sort</h3>
+
+<div class="box exam">
+  <div class="box-title">Exam focus &mdash; linear-time sorts</div>
+  <strong>Counting sort</strong> (3 passes; place each item using how many elements are $\le$ it), <strong>radix sort</strong> (least-significant digit first; needs a <em>stable</em> subroutine &mdash; counting sort works, heap sort does not), and <strong>bucket sort</strong> ($O(n)$ average across $M$ buckets, degrading to $O(n^2)$ if all inputs land in one bucket).
+</div>
 
 <p><strong>Counting sort</strong> sorts an array $A$ of $n$ integers each in the range $\{0, 1, \ldots, k\}$. It runs in $\Theta(n + k)$ time &mdash; <em>linear in $n$ when $k = O(n)$</em>. No comparisons are performed; instead, we count how many elements are $\le$ each value.</p>
 
@@ -3765,6 +3977,11 @@ Here the problem of size $n$ is divided into $a$ subproblems of size $n/b$, and 
 <!-- ============ 9.1 ============ -->
 <section id="s-9-1">
 <h3 class="section-title"><span class="sec-num">9.1</span>Minimum and Maximum</h3>
+
+<div class="box exam">
+  <div class="box-title">Exam focus</div>
+  Find the $i$th smallest/largest element; find the minimum <em>and</em> maximum simultaneously in about $3n/2$ comparisons; and understand <strong>randomized select</strong>, which recurses into only <em>one</em> side of the partition for expected $O(n)$ time (unlike merge sort, which recurses into both).
+</div>
 
 <p class="noindent">How many comparisons does it take to find the minimum of $n$ elements? The obvious algorithm sweeps through, keeping the smallest seen so far:</p>
 
@@ -4191,6 +4408,11 @@ Here the problem of size $n$ is divided into $a$ subproblems of size $n/b$, and 
 <section id="s-11-1">
 <h3 class="section-title"><span class="sec-num">11.1</span>Direct-Address Tables</h3>
 
+<div class="box exam">
+  <div class="box-title">Exam focus</div>
+  Expect minor questions on the basics: a hash function $h(k)$, collision resolution by <strong>chaining</strong>, and the load factor $\alpha = n/m$ giving expected $\Theta(1 + \alpha)$ search time.
+</div>
+
 <p class="noindent">When the universe $U$ of possible keys is small, the cleanest dictionary is a flat array indexed by key. To represent a set $S \subseteq U$, allocate an array $T[0\mathinner{.\,.}|U|-1]$, with $T[k]$ pointing to the element whose key is $k$ &mdash; or <strong>NIL</strong> if no such element is present.</p>
 
 <div class="pseudocode">
@@ -4503,6 +4725,241 @@ An element with key $k$ lives in slot $h(k)$. Since $|U| \gg m$, multiple keys m
 
 
 <!-- ============================================================ -->
+<!-- CHAPTER 15 -->
+<!-- ============================================================ -->
+<div class="chapter-header">
+  <div class="chapter-num">Chapter 15</div>
+  <h2 class="chapter-title">Dynamic <em>Programming</em></h2>
+</div>
+
+<p><strong>Dynamic programming</strong> (DP) solves problems by combining the solutions to subproblems &mdash; like divide-and-conquer &mdash; but applies when the subproblems <em>overlap</em>: the recursion solves the same subproblem again and again. DP solves each distinct subproblem <em>once</em> and stores the answer in a table, trading memory for a dramatic reduction in time. Two ingredients license it: <strong>optimal substructure</strong> (an optimal solution is built from optimal solutions to subproblems) and <strong>overlapping subproblems</strong> (the same subproblems recur). This chapter develops both on two classic examples &mdash; rod cutting and matrix-chain multiplication &mdash; and proves the exponential blow-up that DP exists to avoid.</p>
+
+<!-- ============ 15.1 ============ -->
+<section id="s-15-1">
+<h3 class="section-title"><span class="sec-num">15.1</span>Rod Cutting</h3>
+
+<div class="box exam">
+  <div class="box-title">Exam focus</div>
+  Be able to describe rod cutting in English: a length-$n$ rod has $2^{n-1}$ possible cut patterns, but the problem has <em>optimal substructure</em>, so a $\Theta(n^2)$ DP (memoized recursion or bottom-up table) replaces the exponential brute force. Know the recurrence $r_n = \max_{1 \le i \le n}(p_i + r_{n-i})$.
+</div>
+
+<div class="box definition">
+  <div class="box-title">The rod-cutting problem</div>
+  <strong>Input.</strong> A rod of integer length $n$, and a price table giving a price $p_i$ for each rod piece of length $i = 1, 2, \ldots, n$.<br />
+  <strong>Output.</strong> A way of cutting the rod into integer-length pieces that maximizes the total revenue $r_n$. (A piece may be left uncut.)
+</div>
+
+<div class="box intuition">
+  <div class="box-title">Why brute force is hopeless &mdash; and why DP isn't</div>
+  <p>There are $n - 1$ positions where we may or may not cut, so there are $2^{n-1}$ distinct ways to cut a length-$n$ rod. Enumerating them is exponential.</p>
+  <p>But the problem has <strong>optimal substructure</strong>: after we make the <em>first</em> cut of length $i$ (earning $p_i$), the remaining length-$(n-i)$ rod is itself a rod-cutting problem, and we should solve <em>it</em> optimally. That gives the recurrence
+  $$r_n = \max_{1 \le i \le n}\,\bigl(p_i + r_{n-i}\bigr), \qquad r_0 = 0.$$
+  A naive recursion on this formula re-solves the same subproblems exponentially often ($T(n) = 2^n$). The fix: each $r_k$ for $k = 0, 1, \ldots, n$ is one of only $n + 1$ distinct subproblems &mdash; compute each once.</p>
+</div>
+
+<div class="pseudocode">
+<div class="algo-title">Bottom-Up-Cut-Rod($p$, $n$)</div>
+<div class="algo-body"><span class="line">1</span>  let $r[0\mathinner{.\,.}n]$ be a new array
+<span class="line">2</span>  $r[0] = 0$
+<span class="line">3</span>  <b>for</b> $j = 1$ <b>to</b> $n$            <span class="comment">// solve subproblems in increasing size</span>
+<span class="line">4</span>    $q = -\infty$
+<span class="line">5</span>    <b>for</b> $i = 1$ <b>to</b> $j$
+<span class="line">6</span>      $q = \max(q,\ p[i] + r[j - i])$
+<span class="line">7</span>    $r[j] = q$
+<span class="line">8</span>  <b>return</b> $r[n]$
+</div>
+</div>
+
+<p>The doubly nested loop performs $\sum_{j=1}^{n} j = \Theta(n^2)$ iterations, each $O(1)$: total $\Theta(n^2)$ &mdash; an exponential-to-polynomial collapse. To recover the actual cuts (not just the revenue), keep a second array $s[j]$ recording the optimal first-piece length $i$ that achieved $r[j]$, then read off the cuts by following $j \to j - s[j] \to \cdots$.</p>
+
+<div class="box note">
+  <div class="box-title">Two equivalent implementations</div>
+  <strong>Top-down with memoization</strong> writes the recurrence directly as a recursive function but caches each $r[k]$ the first time it is computed, returning the cached value thereafter. <strong>Bottom-up</strong> (above) fills the table from the smallest subproblem upward. Both are $\Theta(n^2)$; bottom-up avoids recursion overhead, top-down only computes subproblems it actually needs.
+</div>
+
+<div class="box example">
+  <div class="box-title">A worked price table</div>
+  <p>Prices: $p_1=1,\ p_2=5,\ p_3=8,\ p_4=9$. For $n = 4$:</p>
+  <ul style="margin-top:0.3rem;">
+    <li>$r_1 = p_1 = 1$.</li>
+    <li>$r_2 = \max(p_1 + r_1,\ p_2 + r_0) = \max(1+1,\ 5+0) = 5$ (one piece of length 2).</li>
+    <li>$r_3 = \max(p_1+r_2,\ p_2+r_1,\ p_3+r_0) = \max(1+5,\ 5+1,\ 8+0) = 8$ (one piece of length 3).</li>
+    <li>$r_4 = \max(p_1+r_3,\ p_2+r_2,\ p_3+r_1,\ p_4+r_0) = \max(1+8,\ 5+5,\ 8+1,\ 9+0) = 10$ (two pieces of length 2).</li>
+  </ul>
+  <p>Note that the best cut for $n=4$ earns $10$, beating the no-cut price $p_4 = 9$.</p>
+</div>
+
+<div class="visualizer" id="rodViz">
+  <div class="viz-title">Interactive &middot; Building the Rod-Cutting Table</div>
+  <div class="viz-sub">Watch the DP fill $r[0], r[1], \ldots, r[n]$ from the bottom up. For each length $j$ it tries every first-piece length $i$ (gold = candidate $p_i + r[j-i]$) and keeps the best. The bar shows the optimal cut for the current length.</div>
+
+  <div class="viz-row">
+    <label class="viz-label" for="rodPreset">Prices:</label>
+    <select class="viz-input" id="rodPreset" style="width:auto;"></select>
+    <button class="btn btn-small" id="rodPrev">&larr; Prev</button>
+    <button class="btn primary btn-small" id="rodNext">Next &rarr;</button>
+    <button class="btn btn-small" id="rodAuto">Auto-play</button>
+    <button class="btn btn-small" id="rodReset">Reset</button>
+    <span class="viz-counter">step <strong id="rodStep">0</strong>/<strong id="rodMax">0</strong></span>
+  </div>
+
+  <div id="rodTableBox"></div>
+  <div class="rod-bar" id="rodBar"></div>
+
+  <div class="viz-legend">
+    <span class="lg"><span class="sw" style="background: var(--ochre); border-color: var(--ochre);"></span> candidate $p_i + r[j-i]$ being tried</span>
+    <span class="lg"><span class="sw" style="background: rgba(30,58,95,0.4); border-color: var(--navy);"></span> subproblem $r[j-i]$ reused</span>
+    <span class="lg"><span class="sw" style="background: rgba(74,93,58,0.3); border-color: var(--moss);"></span> $r[j]$ finalized</span>
+  </div>
+
+  <div class="viz-status" id="rodStatus">Step forward to compute each $r[j]$ as the best of all first cuts.</div>
+</div>
+
+<div class="ornament">&#x2767;</div>
+</section>
+
+<!-- ============ 15.2 ============ -->
+<section id="s-15-2">
+<h3 class="section-title"><span class="sec-num">15.2</span>Matrix-Chain Multiplication</h3>
+
+<div class="box exam">
+  <div class="box-title">Exam focus</div>
+  Two things. <strong>(1)</strong> The DP itself: given a chain $A_1 A_2 \cdots A_n$ with dimensions $p_0, p_1, \ldots, p_n$, find the parenthesization minimizing scalar multiplications via $m[i,j]$ in $\Theta(n^3)$. <strong>(2)</strong> The proof &mdash; expect to show by <em>substitution / strong induction</em> that the number of parenthesizations $P(n) = \Omega(2^n)$, i.e.\ brute force is exponential.
+</div>
+
+<div class="box definition">
+  <div class="box-title">The matrix-chain problem</div>
+  <strong>Input.</strong> A sequence (chain) of $n$ matrices $\langle A_1, A_2, \ldots, A_n \rangle$ to be multiplied, where $A_i$ has dimension $p_{i-1} \times p_i$ (so the chain is described by the dimension sequence $p_0, p_1, \ldots, p_n$).<br />
+  <strong>Output.</strong> A full parenthesization of the product $A_1 A_2 \cdots A_n$ that minimizes the number of scalar multiplications. We do <em>not</em> multiply anything &mdash; we only decide the order.
+</div>
+
+<div class="box intuition">
+  <div class="box-title">Why order matters so much</div>
+  <p>Multiplying a $p \times q$ matrix by a $q \times r$ matrix costs $p \cdot q \cdot r$ scalar multiplications. Matrix multiplication is associative, so the <em>result</em> is the same for any parenthesization &mdash; but the <em>cost</em> is not.</p>
+  <p>Take $A_1\,(10\times100),\ A_2\,(100\times5),\ A_3\,(5\times50)$. Parenthesizing as $((A_1 A_2) A_3)$ costs $10\cdot100\cdot5 + 10\cdot5\cdot50 = 5000 + 2500 = 7500$. As $(A_1 (A_2 A_3))$ it costs $100\cdot5\cdot50 + 10\cdot100\cdot50 = 25000 + 50000 = 75000$ &mdash; <strong>ten times worse</strong>. With many matrices the gap can be astronomical.</p>
+</div>
+
+<h4 class="subsection">The DP Recurrence</h4>
+
+<div class="box definition">
+  <div class="box-title">Optimal substructure and the cost table</div>
+  <p>Let $m[i, j]$ be the minimum number of scalar multiplications needed to compute the subchain $A_i A_{i+1} \cdots A_j$. Any parenthesization splits the chain at some $k$ ($i \le k < j$): first compute $A_i \cdots A_k$, then $A_{k+1} \cdots A_j$, then multiply the two results (a $p_{i-1} \times p_k$ by a $p_k \times p_j$, costing $p_{i-1}\,p_k\,p_j$). The optimal split is the best over all $k$:</p>
+  $$m[i, j] = \begin{cases} 0 & \text{if } i = j, \\[2pt] \displaystyle\min_{i \le k < j}\ \bigl(m[i, k] + m[k+1, j] + p_{i-1}\,p_k\,p_j\bigr) & \text{if } i < j. \end{cases}$$
+</div>
+
+<p>Filling the table by increasing subchain length, there are $\Theta(n^2)$ entries and each minimization scans $O(n)$ split points, giving <strong>$\Theta(n^3)$</strong> time and $\Theta(n^2)$ space. A parallel table $s[i,j]$ records the optimal split $k$ for reconstructing the parenthesization.</p>
+
+<div class="pseudocode">
+<div class="algo-title">Matrix-Chain-Order($p$)</div>
+<div class="algo-body"><span class="line">1</span>  $n = p.$length $- 1$
+<span class="line">2</span>  let $m[1\mathinner{.\,.}n, 1\mathinner{.\,.}n]$ and $s[1\mathinner{.\,.}n, 1\mathinner{.\,.}n]$ be new tables
+<span class="line">3</span>  <b>for</b> $i = 1$ <b>to</b> $n$:  $m[i, i] = 0$
+<span class="line">4</span>  <b>for</b> $\ell = 2$ <b>to</b> $n$          <span class="comment">// $\ell$ = chain length</span>
+<span class="line">5</span>    <b>for</b> $i = 1$ <b>to</b> $n - \ell + 1$
+<span class="line">6</span>      $j = i + \ell - 1$
+<span class="line">7</span>      $m[i, j] = \infty$
+<span class="line">8</span>      <b>for</b> $k = i$ <b>to</b> $j - 1$
+<span class="line">9</span>        $q = m[i, k] + m[k+1, j] + p_{i-1}\,p_k\,p_j$
+<span class="line">10</span>       <b>if</b> $q < m[i, j]$
+<span class="line">11</span>         $m[i, j] = q$;  $s[i, j] = k$
+<span class="line">12</span> <b>return</b> $m$ and $s$
+</div>
+</div>
+
+<div class="box intuition">
+  <div class="box-title">An everyday analogy</div>
+  Think of multiplying the chain as a knockout bracket: the matrices are players in a fixed line-up, and each &ldquo;match&rdquo; multiplies two adjacent results into one. You cannot reorder the players, but you <em>can</em> choose the bracket &mdash; who plays whom first. Some brackets are cheap (small intermediate matrices), some ruinously expensive. The DP finds the cheapest bracket by first solving every <em>small</em> bracket (short subchains) and reusing those answers to build up the bigger ones.
+</div>
+
+<div class="visualizer" id="mcViz">
+  <div class="viz-title">Interactive &middot; Filling the Matrix-Chain Cost Table</div>
+  <div class="viz-sub">The table is $m[i,j]$. We fill it by <em>diagonal</em> &mdash; length-1 subchains (cost 0) first, then length 2, and so on. For each cell we test every split point $k$ (gold = the two subcosts $m[i,k]$ and $m[k{+}1,j]$ being added); the winning split is stored in green.</div>
+
+  <div class="viz-row">
+    <label class="viz-label" for="mcPreset">Dimensions:</label>
+    <select class="viz-input" id="mcPreset" style="width:auto;"></select>
+    <button class="btn btn-small" id="mcPrev">&larr; Prev</button>
+    <button class="btn primary btn-small" id="mcNext">Next &rarr;</button>
+    <button class="btn btn-small" id="mcAuto">Auto-play</button>
+    <button class="btn btn-small" id="mcReset">Reset</button>
+    <span class="viz-counter">step <strong id="mcStep">0</strong>/<strong id="mcMax">0</strong></span>
+  </div>
+
+  <div id="mcTableBox" style="overflow-x:auto;"></div>
+
+  <div class="viz-legend">
+    <span class="lg"><span class="sw" style="background: var(--oxblood); border-color: var(--oxblood);"></span> cell $m[i,j]$ being computed</span>
+    <span class="lg"><span class="sw" style="background: rgba(166,124,43,0.16); border-color: var(--ochre);"></span> subcosts being added at split $k$</span>
+    <span class="lg"><span class="sw" style="background: rgba(74,93,58,0.16); border-color: var(--moss);"></span> finalized minimum</span>
+  </div>
+
+  <div class="viz-status" id="mcStatus">Step forward to fill the table one diagonal at a time.</div>
+</div>
+
+<h4 class="subsection">Proof &mdash; The Number of Parenthesizations Is Exponential</h4>
+
+<p class="noindent">This is the derivation the professor flagged as a likely proof question: brute-forcing every parenthesization is hopeless, and we prove it formally with the <strong>substitution method</strong> (strong induction).</p>
+
+<div class="box theorem">
+  <div class="box-title">Theorem 15.1 (Parenthesization count)</div>
+  Let $P(n)$ be the number of ways to fully parenthesize a product of $n$ matrices. Then $P(1) = 1$ and, for $n \ge 2$,
+  $$P(n) = \sum_{k=1}^{n-1} P(k)\,P(n-k).$$
+  Moreover $P(n) = \Omega(2^n)$ &mdash; the number of parenthesizations grows at least exponentially.
+</div>
+
+<div class="box proof">
+  <div class="box-title">Proof that $P(n) \ge c\,2^{n}$ by strong induction</div>
+  <p><em>Recurrence.</em> A parenthesization of $A_1 \cdots A_n$ splits at some $k$ into a parenthesized left product (of $k$ matrices) and a parenthesized right product (of $n - k$ matrices); summing over all split points $k$ gives $P(n) = \sum_{k=1}^{n-1} P(k)P(n-k)$.</p>
+  <p><em>Claim.</em> We prove $P(n) \ge 2^{\,n-2}$ for all $n \ge 1$ (so $P(n) = \Omega(2^n)$, with constant $c = \tfrac14$). </p>
+  <p><em>Base cases.</em> $P(1) = 1 \ge 2^{-1}$ and $P(2) = 1 \ge 2^{0} = 1$. Both hold.</p>
+  <p><em>Inductive step.</em> Fix $n \ge 3$ and assume (strong induction hypothesis) that $P(m) \ge 2^{\,m-2}$ for <em>all</em> $1 \le m < n$. Keep only the two extreme terms $k = 1$ and $k = n-1$ of the sum (all terms are positive, so dropping the rest only decreases the right side):
+  $$P(n) = \sum_{k=1}^{n-1} P(k)P(n-k) \ \ge\ P(1)P(n-1) + P(n-1)P(1) = 2\,P(n-1).$$
+  By the hypothesis $P(n-1) \ge 2^{\,(n-1)-2} = 2^{\,n-3}$, so
+  $$P(n) \ \ge\ 2 \cdot 2^{\,n-3} = 2^{\,n-2}.$$
+  This is exactly the claim for $n$, completing the induction. Hence $P(n) \ge 2^{\,n-2} = \tfrac14 \cdot 2^{n} = \Omega(2^n)$. $\blacksquare$</p>
+</div>
+
+<div class="box intuition">
+  <div class="box-title">The moral &mdash; why DP, not brute force</div>
+  $P(n)$ is in fact the $(n-1)$st <strong>Catalan number</strong>, which grows like $4^n / n^{3/2}$ &mdash; super-exponential in the looser sense. Checking every parenthesization is impossible even for modest $n$. Yet there are only $\Theta(n^2)$ <em>distinct subchains</em> $A_i \cdots A_j$, and DP exploits exactly that: solve each subchain once, in $\Theta(n^3)$ total. This is the recurring DP story &mdash; an exponential search space collapsed to a polynomial table because the subproblems overlap.
+</div>
+
+<div class="quiz" data-quiz>
+  <div class="quiz-title">Check Your Understanding &mdash; Dynamic Programming</div>
+
+  <div class="quiz-q"><strong>Q1.</strong> What two properties must a problem have for dynamic programming to apply?</div>
+  <ul class="quiz-options" data-answer="B">
+    <li class="quiz-option" data-letter="A">Greedy-choice property and a sorted input.</li>
+    <li class="quiz-option" data-letter="B">Optimal substructure and overlapping subproblems.</li>
+    <li class="quiz-option" data-letter="C">Nonnegative weights and a connected graph.</li>
+    <li class="quiz-option" data-letter="D">A balanced recursion tree and a stable sort.</li>
+  </ul>
+  <div class="quiz-explain">Optimal substructure lets us build an optimal solution from optimal subsolutions; overlapping subproblems (the same subproblem recurring) is what makes memoization pay off. Without overlap, plain divide-and-conquer suffices.</div>
+
+  <div class="quiz-q" style="margin-top: 1.5rem;"><strong>Q2.</strong> The rod-cutting DP runs in $\Theta(n^2)$. Why is that an improvement worth making?</div>
+  <ul class="quiz-options" data-answer="C">
+    <li class="quiz-option" data-letter="A">Because $n^2$ is always small.</li>
+    <li class="quiz-option" data-letter="B">Because it sorts the price table first.</li>
+    <li class="quiz-option" data-letter="C">Because the naive recursion re-solves overlapping subproblems and runs in $\Theta(2^n)$; memoizing the $n+1$ distinct subproblems collapses it to $\Theta(n^2)$.</li>
+    <li class="quiz-option" data-letter="D">Because it uses a greedy choice.</li>
+  </ul>
+  <div class="quiz-explain">There are only $n+1$ distinct values $r_0, \ldots, r_n$; the exponential cost of naive recursion comes entirely from recomputing them. Caching each once is the whole trick.</div>
+
+  <div class="quiz-q" style="margin-top: 1.5rem;"><strong>Q3.</strong> In the proof that $P(n) = \Omega(2^n)$, which proof technique is used and what makes it valid?</div>
+  <ul class="quiz-options" data-answer="A">
+    <li class="quiz-option" data-letter="A">Strong induction: the step bounds $P(n) \ge 2P(n-1)$ by keeping only the $k=1$ and $k=n-1$ terms, then applies the hypothesis to $P(n-1)$ &mdash; which requires assuming the claim for a smaller value.</li>
+    <li class="quiz-option" data-letter="B">The master theorem, applied to $P(n) = 2P(n/2) + n$.</li>
+    <li class="quiz-option" data-letter="C">A decision-tree argument with $n!$ leaves.</li>
+    <li class="quiz-option" data-letter="D">A greedy exchange argument.</li>
+  </ul>
+  <div class="quiz-explain">We discard all but two positive terms of the sum to get $P(n) \ge 2P(n-1)$, then substitute the inductive bound on $P(n-1)$. Because we invoke the hypothesis at $n-1$ (a smaller value), this is strong/complete induction &mdash; the substitution method applied to a recurrence.</div>
+</div>
+
+<div class="ornament">&#x2767;</div>
+</section>
+
+
+<!-- ============================================================ -->
 <!-- CHAPTER 16 -->
 <!-- ============================================================ -->
 <div class="chapter-header">
@@ -4515,6 +4972,11 @@ An element with key $k$ lives in slot $h(k)$. Since $|U| \gg m$, multiple keys m
 <!-- ============ 16.1 ============ -->
 <section id="s-16-1">
 <h3 class="section-title"><span class="sec-num">16.1</span>The Activity-Selection Problem</h3>
+
+<div class="box exam">
+  <div class="box-title">Exam focus</div>
+  Be ready for general questions on how the greedy choice is applied: repeatedly select the compatible activity that <em>finishes earliest</em>, which leaves the most room for the rest.
+</div>
 
 <div class="box definition">
   <div class="box-title">Activity selection</div>
@@ -4628,6 +5090,11 @@ An element with key $k$ lives in slot $h(k)$. Since $|U| \gg m$, multiple keys m
 <!-- ============ 16.3 ============ -->
 <section id="s-16-3">
 <h3 class="section-title"><span class="sec-num">16.3</span>Fractional vs.\ 0-1 Knapsack</h3>
+
+<div class="box exam">
+  <div class="box-title">Exam focus</div>
+  Know the contrast cold: the value-per-pound greedy is <strong>optimal for fractional knapsack</strong> but <strong>fails for 0-1 knapsack</strong> (items must be taken whole), which requires dynamic programming.
+</div>
 
 <p class="noindent">Two superficially identical problems &mdash; one yields to greedy in $\Theta(n \lg n)$, the other does not yield to any known polynomial-time exact algorithm. The contrast is the cleanest illustration of the greedy-choice property in the book.</p>
 
@@ -4777,6 +5244,347 @@ An element with key $k$ lives in slot $h(k)$. Since $|U| \gg m$, multiple keys m
 </section>
 
 
+<!-- ============ 16.4 ============ -->
+<section id="s-16-4">
+<h3 class="section-title"><span class="sec-num">16.4</span>Huffman Codes</h3>
+
+<div class="box exam">
+  <div class="box-title">Exam focus</div>
+  Huffman is the second canonical greedy algorithm. Know the <strong>greedy choice</strong> in words: repeatedly merge the <em>two least-frequent</em> symbols into a subtree and reinsert it with their combined frequency. The result is an optimal <strong>prefix-free</strong> code that minimizes total encoded length.
+</div>
+
+<p class="noindent"><strong>Huffman coding</strong> is a greedy algorithm for lossless data compression. Given the frequency of each character in a file, it builds a variable-length, prefix-free binary code that minimizes the expected number of bits &mdash; frequent characters get short codewords, rare ones get long codewords.</p>
+
+<div class="box definition">
+  <div class="box-title">Prefix-free codes</div>
+  A <strong>prefix-free</strong> (or "prefix") code is one in which no codeword is a prefix of another. This is what makes decoding unambiguous: scan the bit stream left to right, and the moment the bits match a codeword, emit that character &mdash; no lookahead or delimiters needed. A prefix-free code corresponds to a binary tree whose <em>leaves</em> are the characters; the path from the root (left = 0, right = 1) spells the codeword, and the codeword length equals the leaf's depth.
+</div>
+
+<div class="box intuition">
+  <div class="box-title">The greedy choice</div>
+  <p>To minimize the total cost $\sum_{c} f(c)\cdot d_T(c)$ (frequency times depth, summed over characters), the two <em>least</em>-frequent characters should sit deepest in the tree &mdash; and they can be made siblings. So:</p>
+  <p style="margin: 0.4rem 0 0.4rem 1rem;"><em>Repeatedly take the two lowest-frequency nodes, make them children of a new internal node whose frequency is their sum, and put that node back into the pool.</em></p>
+  <p>After $n - 1$ merges, a single tree remains &mdash; the optimal code. A min-priority queue keyed on frequency makes each "extract two minima, insert one" step $O(\lg n)$, for $O(n \lg n)$ total.</p>
+</div>
+
+<div class="pseudocode">
+<div class="algo-title">Huffman($C$)</div>
+<div class="algo-body"><span class="line">1</span>  $n = |C|$
+<span class="line">2</span>  $Q = C$                 <span class="comment">// min-priority queue keyed on frequency $f$</span>
+<span class="line">3</span>  <b>for</b> $i = 1$ <b>to</b> $n - 1$
+<span class="line">4</span>    allocate a new node $z$
+<span class="line">5</span>    $z.left  = x = $ <span class="sc">Extract-Min</span>($Q$)
+<span class="line">6</span>    $z.right = y = $ <span class="sc">Extract-Min</span>($Q$)
+<span class="line">7</span>    $z.f = x.f + y.f$
+<span class="line">8</span>    <span class="sc">Insert</span>($Q$, $z$)
+<span class="line">9</span>  <b>return</b> <span class="sc">Extract-Min</span>($Q$)   <span class="comment">// the root of the code tree</span>
+</div>
+</div>
+
+<div class="box example">
+  <div class="box-title">A worked merge</div>
+  <p>Frequencies: $\textsf{a}{:}45,\ \textsf{b}{:}13,\ \textsf{c}{:}12,\ \textsf{d}{:}16,\ \textsf{e}{:}9,\ \textsf{f}{:}5$ (in some unit). The two smallest are $\textsf{f}{:}5$ and $\textsf{e}{:}9$; merge into a node of frequency $14$. Now the two smallest are $\textsf{c}{:}12$ and $\textsf{b}{:}13$; merge into $25$. Continue &mdash; $14$ and $\textsf{d}{:}16 \to 30$; $25$ and $30 \to 55$; finally $\textsf{a}{:}45$ and $55 \to 100$. The frequent $\textsf{a}$ ends up at depth $1$ (codeword $\texttt{0}$); the rare $\textsf{f}$ ends deepest.</p>
+</div>
+
+<div class="visualizer" id="huffViz">
+  <div class="viz-title">Interactive &middot; Building a Huffman Tree</div>
+  <div class="viz-sub">The pool below is a min-priority queue of subtrees, kept sorted by frequency. Each step extracts the <strong>two smallest</strong> (oxblood), merges them under a new parent whose frequency is their sum, and drops that parent back into the pool. After $n-1$ merges, one tree remains &mdash; read codewords by walking down (left = 0, right = 1).</div>
+
+  <div class="viz-row">
+    <label class="viz-label" for="huffPreset">Frequencies:</label>
+    <select class="viz-input" id="huffPreset" style="width:auto;"></select>
+    <button class="btn btn-small" id="huffPrev">&larr; Prev</button>
+    <button class="btn primary btn-small" id="huffNext">Next &rarr;</button>
+    <button class="btn btn-small" id="huffAuto">Auto-play</button>
+    <button class="btn btn-small" id="huffReset">Reset</button>
+    <span class="viz-counter">merge <strong id="huffStep">0</strong>/<strong id="huffMax">0</strong></span>
+  </div>
+
+  <div class="viz-chips" id="huffPool"><span class="chip-label">pool:</span></div>
+  <div class="viz-tree" id="huffTree"></div>
+
+  <div class="viz-legend">
+    <span class="lg"><span class="sw" style="background: var(--oxblood); border-color: var(--oxblood);"></span> two smallest (being merged)</span>
+    <span class="lg"><span class="sw" style="background: var(--paper); border-color: var(--ink-muted);"></span> leaf (character)</span>
+    <span class="lg"><span class="sw" style="background: var(--paper-alt); border-color: var(--navy);"></span> internal (merged) node</span>
+  </div>
+
+  <div class="viz-status" id="huffStatus">Step forward to merge the two lowest-frequency nodes.</div>
+</div>
+
+<div class="box theorem">
+  <div class="box-title">Lemma 16.2 (Greedy-choice property)</div>
+  Let $x$ and $y$ be the two lowest-frequency characters. Then there exists an optimal prefix-free code in which $x$ and $y$ are sibling leaves of maximum depth.
+</div>
+
+<div class="box proof">
+  <div class="box-title">Proof (exchange argument)</div>
+  Take any optimal tree $T$. Let $a, b$ be two sibling leaves of maximum depth in $T$. Swapping $x$ with $a$ and $y$ with $b$ cannot increase the cost: $x, y$ have the smallest frequencies, and they are being moved to the deepest positions, so every term $f(c)\,d_T(c)$ that changes does so favorably (a smaller frequency now multiplies the larger depth). The resulting tree is still optimal and has $x, y$ as deepest siblings. Combined with optimal substructure (an optimal code for the reduced alphabet, with $x, y$ replaced by their merged node, extends to an optimal code for the original), this proves <span class="sc">Huffman</span> produces an optimal code. $\blacksquare$
+</div>
+
+<div class="box note">
+  <div class="box-title">Why it counts as greedy</div>
+  Huffman makes an irrevocable local decision &mdash; merge the two rarest nodes &mdash; before knowing the rest of the tree, and the exchange argument proves that decision is consistent with some global optimum. That is exactly the greedy template of &sect;16.2, now applied to building a tree instead of selecting a set.
+</div>
+
+<div class="ornament">&#x2767;</div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- CHAPTER 22 -->
+<!-- ============================================================ -->
+<div class="chapter-header">
+  <div class="chapter-num">Chapter 22</div>
+  <h2 class="chapter-title">Elementary <em>Graph Algorithms</em></h2>
+</div>
+
+<p>Before shortest paths come the two fundamental graph searches every later algorithm builds on. <strong>Breadth-first search</strong> (BFS) explores a graph level by level, computing the fewest-edges distance from a source. <strong>Depth-first search</strong> (DFS) plunges as deep as possible before backtracking, and its <em>discovery</em> and <em>finishing</em> times reveal the graph's structure &mdash; cycles, connectivity, and a valid <strong>topological order</strong> for any DAG. Both run in $\Theta(V + E)$ on an adjacency-list representation.</p>
+
+<!-- ============ 22.2 ============ -->
+<section id="s-22-2">
+<h3 class="section-title"><span class="sec-num">22.2</span>Breadth-First Search</h3>
+
+<div class="box exam">
+  <div class="box-title">Exam focus</div>
+  BFS uses a <strong>FIFO queue</strong> to visit vertices in increasing distance (edge count) from the source $s$. On an unweighted graph it finds a shortest path (fewest edges) to every reachable vertex, in $\Theta(V + E)$ time.
+</div>
+
+<div class="box intuition">
+  <div class="box-title">The idea in one breath</div>
+  <p>Drop a pebble in a pond at $s$: the ripple reaches everything one edge away, then everything two edges away, and so on. BFS is that ripple. Visit all of $s$'s neighbors (distance 1), then all of <em>their</em> unvisited neighbors (distance 2), expanding outward in concentric shells. A queue enforces the order: enqueue a vertex when first discovered, dequeue it to expand its neighbors. Each vertex is colored white (undiscovered) &rarr; gray (discovered, waiting in the queue) &rarr; black (finished). Because the ripple reaches nearer vertices strictly before farther ones, the first time you touch a vertex is along a fewest-edges path &mdash; that's why $d[v] = \delta(s, v)$.</p>
+</div>
+
+<div class="pseudocode">
+<div class="algo-title">BFS($G$, $s$)</div>
+<div class="algo-body"><span class="line">1</span>  <b>for</b> each vertex $u \in G.V \setminus \{s\}$:  $u.d = \infty$;  $u.\pi = $ <span class="sc">Nil</span>
+<span class="line">2</span>  $s.d = 0$;  $s.\pi = $ <span class="sc">Nil</span>;  $Q = \emptyset$
+<span class="line">3</span>  <span class="sc">Enqueue</span>($Q$, $s$)
+<span class="line">4</span>  <b>while</b> $Q \ne \emptyset$
+<span class="line">5</span>    $u = $ <span class="sc">Dequeue</span>($Q$)
+<span class="line">6</span>    <b>for</b> each $v \in G.\text{Adj}[u]$
+<span class="line">7</span>      <b>if</b> $v.d == \infty$            <span class="comment">// v undiscovered</span>
+<span class="line">8</span>        $v.d = u.d + 1$;  $v.\pi = u$
+<span class="line">9</span>        <span class="sc">Enqueue</span>($Q$, $v$)
+</div>
+</div>
+
+<p>Each vertex is enqueued and dequeued at most once ($O(V)$); each adjacency list is scanned once when its vertex is dequeued ($O(E)$ total). Hence <strong>$\Theta(V + E)$</strong>. The predecessor pointers $\pi$ form the <strong>BFS tree</strong>; the path it stores from $s$ to any $v$ uses exactly $v.d = \delta(s, v)$ edges &mdash; a shortest path in the unweighted sense.</p>
+
+<div class="visualizer" id="bfsViz">
+  <div class="viz-title">Interactive &middot; Breadth-First Search</div>
+  <div class="viz-sub">Vertices are colored white (undiscovered) &rarr; gray (in the queue, on the frontier) &rarr; settled (dequeued). The number above each vertex is its distance $d$ from the source. Notice how BFS sweeps outward in distance order &mdash; all of shell 1, then all of shell 2.</div>
+
+  <div class="viz-row">
+    <label class="viz-label" for="bfsPreset">Graph:</label>
+    <select class="viz-input" id="bfsPreset" style="width:auto;"></select>
+    <button class="btn btn-small" id="bfsPrev">&larr; Prev</button>
+    <button class="btn primary btn-small" id="bfsNext">Next &rarr;</button>
+    <button class="btn btn-small" id="bfsAuto">Auto-play</button>
+    <button class="btn btn-small" id="bfsReset">Restart</button>
+    <span class="viz-counter">step <strong id="bfsStep">0</strong>/<strong id="bfsMax">0</strong></span>
+  </div>
+
+  <div class="viz-graph" id="bfsGraph"></div>
+  <div class="viz-chips" id="bfsQueue"><span class="chip-label">queue (front&rarr;back):</span></div>
+
+  <div class="viz-legend">
+    <span class="lg"><span class="sw" style="background: var(--navy); border-color: var(--navy);"></span> source</span>
+    <span class="lg"><span class="sw" style="background: var(--oxblood); border-color: var(--oxblood);"></span> dequeued now</span>
+    <span class="lg"><span class="sw" style="background: var(--paper-alt); border-color: var(--navy);"></span> gray (in queue)</span>
+    <span class="lg"><span class="sw" style="background: var(--moss); border-color: var(--moss);"></span> tree edge / finished</span>
+    <span class="lg"><span class="sw" style="background: var(--paper);"></span> white (undiscovered)</span>
+  </div>
+
+  <div class="viz-status" id="bfsStatus">Step forward to dequeue a vertex and discover its white neighbors.</div>
+</div>
+
+<div class="box note">
+  <div class="box-title">BFS is Dijkstra's special case</div>
+  On an unweighted graph (all weights $= 1$), BFS <em>is</em> the shortest-path algorithm; Dijkstra with a FIFO queue instead of a priority queue reduces to exactly this. The queue works because every edge has the same cost, so first-discovered is always closest.
+</div>
+
+<div class="ornament">&#x2767;</div>
+</section>
+
+<!-- ============ 22.3 ============ -->
+<section id="s-22-3">
+<h3 class="section-title"><span class="sec-num">22.3</span>Depth-First Search</h3>
+
+<div class="box exam">
+  <div class="box-title">Exam focus</div>
+  DFS recursively follows edges as deep as possible before backtracking. Each vertex gets a <strong>discovery time</strong> $u.d$ and a <strong>finishing time</strong> $u.f$. Know the <strong>parenthesis theorem</strong> and the four edge types (tree, back, forward, cross); a <strong>back edge</strong> exists iff the graph has a cycle. Runs in $\Theta(V + E)$.
+</div>
+
+<div class="box intuition">
+  <div class="box-title">The maze analogy</div>
+  <p>Imagine walking a maze with a ball of string. At every junction you take the first unexplored corridor and unspool string behind you. When you hit a dead end (or a place you've already been), you <em>backtrack</em> along the string to the last junction with an untried corridor. DFS is exactly this: dive as deep as possible, and only retreat when forced.</p>
+  <p>The two timestamps record that walk. $u.d$ is the clock reading when you first <em>enter</em> $u$ (color it gray, push it on the string); $u.f$ is when you <em>leave</em> it for good (color it black, reel the string back). Because you always finish a corridor entirely before returning, these $[d, f]$ intervals can <strong>nest</strong> but never partially overlap &mdash; the parenthesis theorem. Contrast BFS, which fans out evenly in all directions like ripples; DFS commits to one direction until it bottoms out.</p>
+</div>
+
+<div class="pseudocode">
+<div class="algo-title">DFS($G$)</div>
+<div class="algo-body"><span class="line">1</span>  <b>for</b> each $u \in G.V$:  $u.color = $ <span class="sc">White</span>;  $u.\pi = $ <span class="sc">Nil</span>
+<span class="line">2</span>  $time = 0$
+<span class="line">3</span>  <b>for</b> each $u \in G.V$
+<span class="line">4</span>    <b>if</b> $u.color == $ <span class="sc">White</span>:  <span class="sc">DFS-Visit</span>($G$, $u$)
+</div>
+<div class="algo-title" style="margin-top:0.8rem;">DFS-Visit($G$, $u$)</div>
+<div class="algo-body"><span class="line">1</span>  $time = time + 1$;  $u.d = time$;  $u.color = $ <span class="sc">Gray</span>
+<span class="line">2</span>  <b>for</b> each $v \in G.\text{Adj}[u]$
+<span class="line">3</span>    <b>if</b> $v.color == $ <span class="sc">White</span>
+<span class="line">4</span>      $v.\pi = u$;  <span class="sc">DFS-Visit</span>($G$, $v$)
+<span class="line">5</span>  $u.color = $ <span class="sc">Black</span>;  $time = time + 1$;  $u.f = time$
+</div>
+</div>
+
+<div class="box theorem">
+  <div class="box-title">Theorem 22.7 (Parenthesis theorem)</div>
+  In any DFS, for any two vertices $u$ and $v$, exactly one of three holds: the intervals $[u.d, u.f]$ and $[v.d, v.f]$ are entirely <em>disjoint</em> (neither is a descendant of the other in the DFS forest); or one interval is entirely <em>contained</em> within the other (the inner vertex is a descendant of the outer). The intervals are properly nested, like balanced parentheses &mdash; they never partially overlap.
+</div>
+
+<div class="box definition">
+  <div class="box-title">Edge classification</div>
+  DFS partitions the edges into four types by the color of $v$ when edge $(u, v)$ is explored:
+  <ul style="margin-top: 0.3rem;">
+    <li><strong>Tree edge</strong> &mdash; $v$ is white: $(u,v)$ enters the DFS forest.</li>
+    <li><strong>Back edge</strong> &mdash; $v$ is gray: $v$ is an ancestor of $u$ (includes self-loops). <em>A back edge exists iff the graph contains a cycle.</em></li>
+    <li><strong>Forward edge</strong> &mdash; $v$ is black and $v.d > u.d$: a non-tree edge to a descendant.</li>
+    <li><strong>Cross edge</strong> &mdash; $v$ is black and $v.d < u.d$: all other edges (between subtrees).</li>
+  </ul>
+  In an <em>undirected</em> graph only tree and back edges occur.
+</div>
+
+<p>The initialization loops cost $\Theta(V)$, and <span class="sc">DFS-Visit</span> is called once per vertex, scanning each adjacency list once: $\Theta(E)$. Total <strong>$\Theta(V + E)$</strong>.</p>
+
+<div class="visualizer" id="dfsViz">
+  <div class="viz-title">Interactive &middot; Depth-First Search</div>
+  <div class="viz-sub">DFS plunges as deep as it can, then backtracks. Each vertex shows its $d/f$ stamp (discovery / finish). The label on the right is the recursion stack &mdash; the gray (active) vertices. Watch the timestamps nest like balanced parentheses, and see each edge classified as it is explored.</div>
+
+  <div class="viz-row">
+    <label class="viz-label" for="dfsPreset">Graph:</label>
+    <select class="viz-input" id="dfsPreset" style="width:auto;"></select>
+    <button class="btn btn-small" id="dfsPrev">&larr; Prev</button>
+    <button class="btn primary btn-small" id="dfsNext">Next &rarr;</button>
+    <button class="btn btn-small" id="dfsAuto">Auto-play</button>
+    <button class="btn btn-small" id="dfsReset">Restart</button>
+    <span class="viz-counter">step <strong id="dfsStep">0</strong>/<strong id="dfsMax">0</strong></span>
+  </div>
+
+  <div class="viz-graph" id="dfsGraph"></div>
+  <div class="viz-chips" id="dfsStack"><span class="chip-label">recursion stack:</span></div>
+
+  <div class="viz-legend">
+    <span class="lg"><span class="sw" style="background: var(--oxblood); border-color: var(--oxblood);"></span> exploring now</span>
+    <span class="lg"><span class="sw" style="background: var(--paper-alt); border-color: var(--navy);"></span> gray (on stack)</span>
+    <span class="lg"><span class="sw" style="background: var(--moss); border-color: var(--moss);"></span> black (finished) / tree edge</span>
+    <span class="lg"><span class="sw" style="background: var(--paper);"></span> white (undiscovered)</span>
+  </div>
+
+  <div class="viz-status" id="dfsStatus">Step forward to discover vertices depth-first and stamp discovery/finish times.</div>
+</div>
+
+<div class="box note">
+  <div class="box-title">What the times are good for</div>
+  Finishing times drive topological sort (next section) and Kosaraju's strongly-connected-components algorithm; the white-path theorem and back-edge test give a clean cycle detector: a directed graph is acyclic <strong>iff</strong> DFS produces no back edges.
+</div>
+
+<div class="ornament">&#x2767;</div>
+</section>
+
+<!-- ============ 22.4 ============ -->
+<section id="s-22-4">
+<h3 class="section-title"><span class="sec-num">22.4</span>Topological Sort</h3>
+
+<div class="box exam">
+  <div class="box-title">Exam focus</div>
+  A topological sort of a <strong>DAG</strong> is a linear ordering of its vertices such that every edge $(u, v)$ goes from earlier to later. Algorithm: run DFS, then list vertices in <strong>decreasing order of finishing time</strong>. $\Theta(V + E)$. Only DAGs have one &mdash; a back edge (cycle) makes a valid order impossible.
+</div>
+
+<div class="box definition">
+  <div class="box-title">Topological sort</div>
+  A <strong>topological sort</strong> of a directed acyclic graph $G = (V, E)$ is a linear ordering of $V$ such that if $(u, v) \in E$, then $u$ appears before $v$ in the ordering. Intuitively: lay the vertices on a horizontal line so every edge points left-to-right. (Think course prerequisites or a Makefile build order.)
+</div>
+
+<div class="pseudocode">
+<div class="algo-title">Topological-Sort($G$)</div>
+<div class="algo-body"><span class="line">1</span>  call <span class="sc">DFS</span>($G$) to compute finishing times $v.f$ for each $v$
+<span class="line">2</span>  as each vertex finishes, prepend it to the front of a linked list
+<span class="line">3</span>  <b>return</b> the linked list of vertices
+</div>
+</div>
+
+<div class="box intuition">
+  <div class="box-title">Why decreasing finish time works</div>
+  When DFS explores edge $(u, v)$ in a DAG, $v$ can never be gray (that would be a back edge, i.e.\ a cycle). So $v$ is either already finished ($v.f < u.f$) or white &mdash; in which case it becomes a descendant of $u$ and finishes first, again $v.f < u.f$. Either way $u.f > v.f$ for every edge $(u, v)$. Ordering by <em>decreasing</em> finishing time therefore places $u$ before $v$ for every edge &mdash; exactly the topological property.
+</div>
+
+<div class="box theorem">
+  <div class="box-title">Theorem 22.12</div>
+  <span class="sc">Topological-Sort</span> produces a valid topological sort of any DAG, in $\Theta(V + E)$ time. A directed graph has a topological ordering <strong>if and only if</strong> it is acyclic.
+</div>
+
+<div class="visualizer" id="topoViz">
+  <div class="viz-title">Interactive &middot; Topological Sort via DFS</div>
+  <div class="viz-sub">Run DFS on a DAG; the instant a vertex <em>finishes</em> (turns black), prepend it to the output list. Because every edge $(u,v)$ satisfies $u.f &gt; v.f$, the finished-order-reversed list places every edge left-to-right. The growing order is shown below the graph.</div>
+
+  <div class="viz-row">
+    <label class="viz-label" for="topoPreset">DAG:</label>
+    <select class="viz-input" id="topoPreset" style="width:auto;"></select>
+    <button class="btn btn-small" id="topoPrev">&larr; Prev</button>
+    <button class="btn primary btn-small" id="topoNext">Next &rarr;</button>
+    <button class="btn btn-small" id="topoAuto">Auto-play</button>
+    <button class="btn btn-small" id="topoReset">Restart</button>
+    <span class="viz-counter">step <strong id="topoStep">0</strong>/<strong id="topoMax">0</strong></span>
+  </div>
+
+  <div class="viz-graph" id="topoGraph"></div>
+  <div class="viz-chips" id="topoOrder"><span class="chip-label">topological order:</span></div>
+
+  <div class="viz-legend">
+    <span class="lg"><span class="sw" style="background: var(--oxblood); border-color: var(--oxblood);"></span> exploring now</span>
+    <span class="lg"><span class="sw" style="background: var(--paper-alt); border-color: var(--navy);"></span> gray (on stack)</span>
+    <span class="lg"><span class="sw" style="background: var(--moss); border-color: var(--moss);"></span> finished &rarr; prepended</span>
+  </div>
+
+  <div class="viz-status" id="topoStatus">Step forward; each vertex joins the front of the order as it finishes.</div>
+</div>
+
+<div class="quiz" data-quiz>
+  <div class="quiz-title">Check Your Understanding &mdash; Graph Search</div>
+
+  <div class="quiz-q"><strong>Q1.</strong> Which data structure gives BFS its level-by-level order, and what does $v.d$ compute?</div>
+  <ul class="quiz-options" data-answer="C">
+    <li class="quiz-option" data-letter="A">A stack; the finishing time of $v$.</li>
+    <li class="quiz-option" data-letter="B">A priority queue; the weighted shortest-path distance.</li>
+    <li class="quiz-option" data-letter="C">A FIFO queue; the fewest-edges distance $\delta(s, v)$ from the source.</li>
+    <li class="quiz-option" data-letter="D">A hash table; the discovery order.</li>
+  </ul>
+  <div class="quiz-explain">The FIFO queue dequeues vertices in nondecreasing distance, so BFS sets $v.d$ to the minimum number of edges from $s$ to $v$ &mdash; the unweighted shortest path.</div>
+
+  <div class="quiz-q" style="margin-top: 1.5rem;"><strong>Q2.</strong> A directed graph is acyclic if and only if a DFS of it produces:</div>
+  <ul class="quiz-options" data-answer="B">
+    <li class="quiz-option" data-letter="A">no cross edges.</li>
+    <li class="quiz-option" data-letter="B">no back edges.</li>
+    <li class="quiz-option" data-letter="C">no forward edges.</li>
+    <li class="quiz-option" data-letter="D">only tree edges.</li>
+  </ul>
+  <div class="quiz-explain">A back edge points to a gray (ancestor) vertex, which closes a cycle. No back edges &hArr; no cycles &hArr; the graph is a DAG &mdash; which is precisely when a topological sort exists.</div>
+
+  <div class="quiz-q" style="margin-top: 1.5rem;"><strong>Q3.</strong> How does topological sort order the vertices using DFS?</div>
+  <ul class="quiz-options" data-answer="D">
+    <li class="quiz-option" data-letter="A">By increasing discovery time.</li>
+    <li class="quiz-option" data-letter="B">By increasing finishing time.</li>
+    <li class="quiz-option" data-letter="C">By increasing degree.</li>
+    <li class="quiz-option" data-letter="D">By decreasing finishing time (equivalently, prepend each vertex to a list as it finishes).</li>
+  </ul>
+  <div class="quiz-explain">For every edge $(u,v)$ in a DAG, $u.f > v.f$. Listing vertices from highest finishing time to lowest therefore respects every edge's direction.</div>
+</div>
+
+<div class="ornament">&#x2767;</div>
+</section>
+
+
 <!-- ============================================================ -->
 <!-- CHAPTER 24 -->
 <!-- ============================================================ -->
@@ -4859,6 +5667,11 @@ An element with key $k$ lives in slot $h(k)$. Since $|U| \gg m$, multiple keys m
 <section id="s-24-1">
 <h3 class="section-title"><span class="sec-num">24.1</span>The Bellman&ndash;Ford Algorithm</h3>
 
+<div class="box exam">
+  <div class="box-title">Exam focus</div>
+  Bellman&ndash;Ford relaxes <em>all</em> edges exactly $V - 1$ times, tolerates negative edge weights, and detects a reachable negative-weight cycle with one extra relaxation pass.
+</div>
+
 <p class="noindent"><strong>Bellman&ndash;Ford</strong> solves the single-source shortest-paths problem on graphs that may contain negative-weight edges (but no negative cycles reachable from the source). It also <em>detects</em> the presence of a reachable negative cycle, returning <span class="sc">False</span> if one exists.</p>
 
 <div class="box intuition">
@@ -4931,9 +5744,80 @@ An element with key $k$ lives in slot $h(k)$. Since $|U| \gg m$, multiple keys m
 <div class="ornament">&#x2767;</div>
 </section>
 
+<!-- ============ 24.2 ============ -->
+<section id="s-24-2">
+<h3 class="section-title"><span class="sec-num">24.2</span>Shortest Paths in a DAG</h3>
+
+<div class="box exam">
+  <div class="box-title">Exam focus</div>
+  On a <strong>directed acyclic graph</strong>, relax edges in <strong>topologically sorted order</strong> and single-source shortest paths fall out in a single pass &mdash; $\Theta(V + E)$, faster than both Bellman&ndash;Ford and Dijkstra, and negative edge weights are fine (a DAG has no cycles at all).
+</div>
+
+<p class="noindent">If the graph has no cycles, we can do better than the general algorithms. Topologically sort the vertices, then process them in that order, relaxing each one's out-edges. Because every edge goes "forward" in topological order, by the time we process a vertex $u$ its estimate $u.d$ is already final &mdash; all paths into $u$ pass through vertices that came earlier and have already been relaxed.</p>
+
+<div class="pseudocode">
+<div class="algo-title">DAG-Shortest-Paths($G$, $w$, $s$)</div>
+<div class="algo-body"><span class="line">1</span>  topologically sort the vertices of $G$
+<span class="line">2</span>  <span class="sc">Initialize-Single-Source</span>($G$, $s$)
+<span class="line">3</span>  <b>for</b> each vertex $u$, taken in topologically sorted order
+<span class="line">4</span>    <b>for</b> each vertex $v \in G.\text{Adj}[u]$
+<span class="line">5</span>      <span class="sc">Relax</span>($u$, $v$, $w$)
+</div>
+</div>
+
+<div class="box intuition">
+  <div class="box-title">Why one pass suffices</div>
+  <p>Bellman&ndash;Ford needs $|V| - 1$ passes because it does not know a good order to relax edges in. A DAG <em>gives</em> us that order for free: the topological sort. Once vertices are processed left-to-right along it, every predecessor of $u$ has been finalized before $u$ is touched, so a single relaxation of each edge is enough. There is no need to repeat passes, and no negative-cycle worry &mdash; an acyclic graph cannot contain one.</p>
+</div>
+
+<div class="box theorem">
+  <div class="box-title">Theorem 24.5 (Correctness &amp; complexity)</div>
+  If $G$ is a DAG, then after <span class="sc">DAG-Shortest-Paths</span> terminates, $v.d = \delta(s, v)$ for all $v \in V$. The topological sort is $\Theta(V + E)$ and the relaxation loop touches each edge exactly once, also $\Theta(V + E)$; total <strong>$\Theta(V + E)$</strong>.
+</div>
+
+<div class="visualizer" id="dagViz">
+  <div class="viz-title">Interactive &middot; Shortest Paths in a DAG</div>
+  <div class="viz-sub">Vertices are processed strictly left-to-right in <strong>topological order</strong> (shown beneath). Each is finalized the moment we reach it (green) &mdash; no second pass needed &mdash; then its out-edges relax. Negative weights are welcome; a DAG can have none of the cycles that would cause trouble.</div>
+
+  <div class="viz-row">
+    <label class="viz-label" for="dagPreset">DAG:</label>
+    <select class="viz-input" id="dagPreset" style="width:auto;"></select>
+    <button class="btn btn-small" id="dagPrev">&larr; Prev</button>
+    <button class="btn primary btn-small" id="dagNext">Next &rarr;</button>
+    <button class="btn btn-small" id="dagAuto">Auto-play</button>
+    <button class="btn btn-small" id="dagReset">Restart</button>
+    <span class="viz-counter">step <strong id="dagStep">0</strong>/<strong id="dagMax">0</strong></span>
+  </div>
+
+  <div class="viz-graph" id="dagGraph"></div>
+  <div class="viz-chips" id="dagOrder"><span class="chip-label">topological order:</span></div>
+
+  <div class="viz-legend">
+    <span class="lg"><span class="sw" style="background: var(--navy); border-color: var(--navy);"></span> source</span>
+    <span class="lg"><span class="sw" style="background: var(--oxblood); border-color: var(--oxblood);"></span> processing / relaxing now</span>
+    <span class="lg"><span class="sw" style="background: var(--moss); border-color: var(--moss);"></span> finalized / tree edge</span>
+    <span class="lg"><span class="sw" style="background: var(--paper-alt); border-color: var(--navy);"></span> reached (finite $d$)</span>
+  </div>
+
+  <div class="viz-status" id="dagStatus">Step forward to process vertices in topological order.</div>
+</div>
+
+<div class="box note">
+  <div class="box-title">When this is the right tool</div>
+  Any problem with a natural acyclic ordering &mdash; PERT charts / critical-path scheduling, dependency resolution, dynamic-programming-on-a-DAG &mdash; should use this instead of Dijkstra or Bellman&ndash;Ford. It is strictly faster and accepts negative weights. (Maximizing instead of minimizing finds the <em>longest</em> path, the critical path, equally easily.)
+</div>
+
+<div class="ornament">&#x2767;</div>
+</section>
+
 <!-- ============ 24.3 ============ -->
 <section id="s-24-3">
 <h3 class="section-title"><span class="sec-num">24.3</span>Dijkstra's Algorithm</h3>
+
+<div class="box exam">
+  <div class="box-title">Exam focus</div>
+  Dijkstra is greedy: it repeatedly extracts the unsettled vertex with the lowest estimate $d[v]$, settles it, and relaxes its out-edges &mdash; correct only when edge weights are nonnegative.
+</div>
 
 <p class="noindent"><strong>Dijkstra's algorithm</strong> solves single-source shortest paths in $O((V + E) \lg V)$ time using a binary min-heap (or $O(E + V \lg V)$ with a Fibonacci heap), provided all edge weights are <em>nonnegative</em>. It is a greedy algorithm: at each step it commits to the vertex whose tentative distance is smallest, never to be revisited.</p>
 
@@ -5065,6 +5949,11 @@ An element with key $k$ lives in slot $h(k)$. Since $|U| \gg m$, multiple keys m
 <!-- ============ 25.2 ============ -->
 <section id="s-25-2">
 <h3 class="section-title"><span class="sec-num">25.2</span>The Floyd&ndash;Warshall Algorithm</h3>
+
+<div class="box exam">
+  <div class="box-title">Exam focus</div>
+  A dynamic-programming algorithm building matrices $D^{(0)}, \dots, D^{(n)}$, where $D^{(k)}[i][j]$ is the shortest $i \to j$ path using intermediate vertices only from $\{1, \dots, k\}$, computed from the previous matrix $D^{(k-1)}$.
+</div>
 
 <p class="noindent"><strong>Floyd&ndash;Warshall</strong> is a dynamic-programming algorithm. Number the vertices $1, 2, \ldots, n$. The central object is a sequence of matrices $D^{(0)}, D^{(1)}, \ldots, D^{(n)}$, where $D^{(k)}[i][j]$ is the weight of the shortest path from $i$ to $j$ whose intermediate vertices come from the set $\{1, 2, \ldots, k\}$.</p>
 
@@ -5202,6 +6091,53 @@ An element with key $k$ lives in slot $h(k)$. Since $|U| \gg m$, multiple keys m
     <li class="quiz-option" data-letter="D">When the graph is dense (so $|E| = \Theta(V^2)$) and/or has negative edges. Floyd&ndash;Warshall is $\Theta(V^3)$ regardless; running Dijkstra from each vertex is $\Theta(V \cdot (V + E) \lg V) = \Theta(V^3 \lg V)$ on a dense graph &mdash; worse &mdash; and Dijkstra fails entirely on negative edges.</li>
   </ul>
   <div class="quiz-explain">On a dense graph $E = \Theta(V^2)$, $V$ Dijkstra runs cost $\Theta(V^3 \lg V)$, slower than $\Theta(V^3)$ Floyd&ndash;Warshall. On a sparse graph $E = \Theta(V)$, Dijkstra-from-each gives $\Theta(V^2 \lg V)$, which beats $\Theta(V^3)$ &mdash; so use Dijkstra there. Negative edges force the choice regardless.</div>
+</div>
+
+<div class="ornament">&#x2767;</div>
+</section>
+
+<!-- ============ 25.3 ============ -->
+<section id="s-25-3">
+<h3 class="section-title"><span class="sec-num">25.3</span>The &ldquo;One Intermediate at a Time&rdquo; Pattern</h3>
+
+<div class="box exam">
+  <div class="box-title">Exam focus &mdash; conceptual question</div>
+  Be ready to answer: <em>&ldquo;Which algorithms build their solution by recursively adding one allowed intermediate vertex (or state) at a time?&rdquo;</em> The answer is <strong>Floyd&ndash;Warshall</strong> (all-pairs shortest paths) and the <strong>DFA&nbsp;&rarr;&nbsp;regular-expression</strong> construction. The DFA&rarr;regex topic itself will <em>not</em> be asked directly &mdash; it is here as the second example of this shared recursive technique.
+</div>
+
+<p class="noindent">Floyd&ndash;Warshall's defining move (&sect;25.2) is to grow a permitted set of intermediates one element at a time: $D^{(k)}$ allows intermediate vertices from $\{1, \ldots, k\}$, and is computed from $D^{(k-1)}$ by asking, for every pair, &ldquo;does routing through the newly unlocked vertex $k$ help?&rdquo; This same idea &mdash; <em>recurse on the set of allowed intermediates, adding one at a time</em> &mdash; appears in a seemingly unrelated place.</p>
+
+<div class="box intuition">
+  <div class="box-title">DFA &rarr; regular expression (state elimination / Kleene's construction)</div>
+  <p>To convert a deterministic finite automaton into an equivalent regular expression, define $R^{(k)}_{ij}$ = a regex matching every string that drives the automaton from state $i$ to state $j$ <em>using only intermediate states drawn from $\{1, \ldots, k\}$</em>. The recurrence mirrors Floyd&ndash;Warshall exactly, with $\min/+$ replaced by the regex operators union ($\cup$), concatenation, and Kleene star ($*$):
+  $$R^{(k)}_{ij} = R^{(k-1)}_{ij} \ \cup\ R^{(k-1)}_{ik}\,\bigl(R^{(k-1)}_{kk}\bigr)^{*}\,R^{(k-1)}_{kj}.$$
+  In words: either get from $i$ to $j$ without ever passing through state $k$ (the first term), or go $i \rightsquigarrow k$, loop at $k$ any number of times, then $k \rightsquigarrow j$ (the second term &mdash; the $(\cdot)^*$ is what a self-loop on the unlocked state becomes). After unlocking all $n$ states, $R^{(n)}$ between the start state and each accepting state, unioned together, is the regex for the whole language.</p>
+</div>
+
+<div class="box note">
+  <div class="box-title">The shared skeleton</div>
+  Both algorithms share one recursive schema: a quantity indexed by a pair of endpoints and a &ldquo;highest allowed intermediate&rdquo; $k$, with a base case at $k=0$ (direct edges / direct transitions) and a step that splits on whether the optimal/accepting object uses the newly admitted intermediate $k$. Floyd&ndash;Warshall instantiates it in the $(\min, +)$ semiring; the DFA&rarr;regex construction instantiates it in the $(\cup, \cdot, {}^{*})$ algebra of regular expressions. Recognizing this kinship is the point of the conceptual question.
+</div>
+
+<div class="visualizer" id="dfaViz">
+  <div class="viz-title">Interactive &middot; DFA &rarr; Regular Expression</div>
+  <div class="viz-sub">A 2-state automaton (start $=1$, accepting $=2$, alphabet $\{a,b\}$) with transitions $1\!\xrightarrow{a}\!1,\ 1\!\xrightarrow{b}\!2,\ 2\!\xrightarrow{a}\!2,\ 2\!\xrightarrow{b}\!2$ &mdash; its language is &ldquo;contains at least one $b$.&rdquo; We unlock intermediate states one at a time (exactly Floyd&ndash;Warshall's move) and watch $R^{(k)}_{ij}$ grow until the start&rarr;accept entry $R^{(2)}_{12}$ becomes the final regex.</div>
+
+  <div class="viz-row">
+    <button class="btn btn-small" id="dfaPrev">&larr; Prev</button>
+    <button class="btn primary btn-small" id="dfaNext">Next &rarr;</button>
+    <button class="btn btn-small" id="dfaReset">Reset</button>
+    <span class="viz-counter">unlocked up to $k=$<strong id="dfaK">0</strong></span>
+  </div>
+
+  <div id="dfaTableBox"></div>
+
+  <div class="viz-legend">
+    <span class="lg"><span class="sw" style="background: rgba(30,58,95,0.14); border-color: var(--navy);"></span> row/column of the newly unlocked state $k$</span>
+    <span class="lg"><span class="sw" style="background: var(--paper); border-color: var(--oxblood);"></span> answer cell $R_{12}$ (start &rarr; accept)</span>
+  </div>
+
+  <div class="viz-status" id="dfaStatus">Step forward to unlock one intermediate state at a time.</div>
 </div>
 
 <div class="ornament">&#x2767;</div>
@@ -6932,7 +7868,7 @@ An element with key $k$ lives in slot $h(k)$. Since $|U| \gg m$, multiple keys m
       const u = map[e.u], v = map[e.v], st = e.state || 'idle';
       const g = geom(u.x, u.y, v.x, v.y, 26);
       s += `<path d="${g.d}" fill="none" stroke="${ecol[st]}" stroke-width="${st === 'idle' ? 1.4 : 2.6}" marker-end="url(#${idp}-arr-${st})" ${st === 'idle' ? 'opacity="0.85"' : ''}/>`;
-      s += label(g.lx, g.ly, e.w, st === 'idle' ? P.inkMuted : ecol[st], st === 'idle' ? '400' : '600');
+      if (e.w !== '' && e.w != null) s += label(g.lx, g.ly, e.w, st === 'idle' ? P.inkMuted : ecol[st], st === 'idle' ? '400' : '600');
     });
     (o.overlays || []).forEach(ov => {
       const u = map[ov.u], v = map[ov.v], g = geom(u.x, u.y, v.x, v.y, -42);
@@ -7258,6 +8194,9 @@ An element with key $k$ lives in slot $h(k)$. Since $|U| \gg m$, multiple keys m
       maxEl = document.getElementById('bfMax'), statusEl = document.getElementById('bfStatus');
     const passesEl = document.getElementById('bfPasses'), sel = document.getElementById('bfPreset');
     const PRESETS = [
+      { name: 'Simple path (3)', source: 's',
+        pos: { s: [70, 170], a: [245, 75], b: [420, 170] },
+        E: [['s','a',4],['a','b',1],['s','b',8]], neg: null },
       { name: 'Classic · CLRS (5)', source: 's',
         pos: { s: [55, 172], t: [215, 70], x: [395, 70], y: [215, 278], z: [395, 278] },
         E: [['t','x',5],['t','y',8],['t','z',-4],['x','t',-2],['y','x',-3],['y','z',9],['z','x',7],['z','s',2],['s','t',6],['s','y',7]],
@@ -7423,6 +8362,552 @@ An element with key $k$ lives in slot $h(k)$. Since $|U| \gg m$, multiple keys m
     autoB.addEventListener('click', () => { if (auto) { stopAuto(); return; } autoB.textContent = 'Pause'; auto = setInterval(next, 1100); });
     resetB.addEventListener('click', () => { stopAuto(); cur = 0; render(); });
     rebuild();
+  })();
+
+  /* ======================================================================
+     22. ROD CUTTING — DP TABLE (§15.1)
+     ====================================================================== */
+  (function initRod() {
+    const host = document.getElementById('rodViz'); if (!host) return;
+    const sel = document.getElementById('rodPreset'), prevB = document.getElementById('rodPrev'),
+      nextB = document.getElementById('rodNext'), autoB = document.getElementById('rodAuto'),
+      resetB = document.getElementById('rodReset'), tableBox = document.getElementById('rodTableBox'),
+      barEl = document.getElementById('rodBar'), stepEl = document.getElementById('rodStep'),
+      maxEl = document.getElementById('rodMax'), statusEl = document.getElementById('rodStatus');
+    const PRESETS = [
+      { name: 'CLRS · p=[1,5,8,9,10,17,17,20]', p: [1, 5, 8, 9, 10, 17, 17, 20] },
+      { name: 'Linear · p=[2,4,6,8]', p: [2, 4, 6, 8] },
+      { name: 'Tricky · p=[3,5,8,9,10]', p: [3, 5, 8, 9, 10] },
+    ];
+    const COL = ['var(--navy)', 'var(--ochre)', 'var(--moss)', 'var(--oxblood)', '#5a6b8c', '#8a6d3b'];
+    let P = PRESETS[0], steps = [], cur = 0, auto = null;
+    function build() {
+      const p = P.p, n = p.length, r = [0], cut = [[]], out = [];
+      const snap = o => out.push(Object.assign({ r: r.slice(), cut: cut.map(c => c.slice()) }, o));
+      snap({ j: null, sub: null, msg: `Prices $p_1\\ldots p_{${n}}$ loaded. $r[0]=0$ (an empty rod earns nothing). Now build $r[1..${n}]$ bottom-up.` });
+      for (let j = 1; j <= n; j++) {
+        let best = -Infinity, bestI = 1;
+        snap({ j, sub: null, msg: `<b>Length $j=${j}$.</b> Try each first-piece length $i=1\\ldots${j}$ and keep the best $p_i + r[j-i]$.` });
+        for (let i = 1; i <= j; i++) {
+          const cand = p[i - 1] + r[j - i], imp = cand > best;
+          if (imp) { best = cand; bestI = i; }
+          snap({ j, sub: j - i, i, msg: `$i=${i}$: $p_{${i}} + r[${j - i}] = ${p[i - 1]} + ${r[j - i]} = ${cand}$. ${imp ? '<b>New best.</b>' : 'Not better than ' + best + '.'}` });
+        }
+        r[j] = best; cut[j] = [bestI].concat(cut[j - bestI]);
+        snap({ j, sub: null, done: true, msg: `$r[${j}] = ${best}$ &mdash; via a first piece of length ${bestI}. Optimal cut of a length-${j} rod: [${cut[j].join(', ')}].` });
+      }
+      snap({ j: null, sub: null, msg: `<b>Done.</b> Maximum revenue $r[${n}] = ${r[n]}$. The bar shows its optimal cut: [${cut[n].join(', ')}].` });
+      return out;
+    }
+    function render() {
+      const s = steps[cur]; if (!s) return; const p = P.p, n = p.length;
+      let h = '<table class="dp-table"><caption>revenue table $r[j]$</caption><thead><tr><th>$j$</th>';
+      for (let j = 0; j <= n; j++) h += `<th>${j}</th>`;
+      h += '</tr></thead><tbody><tr><th>$r[j]$</th>';
+      for (let j = 0; j <= n; j++) {
+        let cls = ''; const has = j < s.r.length && s.r[j] !== undefined;
+        if (!has) cls = 'empty';
+        if (s.sub != null && j === s.sub) cls = 'source';
+        if (s.j != null && j === s.j) cls = s.done ? 'filled' : 'target';
+        h += `<td class="${cls}">${has ? s.r[j] : '·'}</td>`;
+      }
+      h += '</tr></tbody></table>';
+      tableBox.innerHTML = h;
+      const jj = s.j != null ? s.j : n, cut = s.cut[jj] || [];
+      if (cut.length) { const tot = cut.reduce((a, b) => a + b, 0); barEl.innerHTML = cut.map((len, idx) => `<div class="rod-seg" style="width:${len / tot * 100}%;background:${COL[idx % COL.length]};">${len}</div>`).join(''); }
+      else barEl.innerHTML = '<div class="rod-seg" style="width:100%;background:var(--paper-alt);color:var(--ink-muted);">empty</div>';
+      stepEl.textContent = cur; maxEl.textContent = steps.length - 1;
+      statusEl.innerHTML = s.msg; mj(statusEl); mj(tableBox);
+    }
+    function stopAuto() { if (auto) { clearInterval(auto); auto = null; autoB.textContent = 'Auto-play'; } }
+    function next() { if (cur < steps.length - 1) { cur++; render(); } else stopAuto(); }
+    function rebuild() { stopAuto(); steps = build(); cur = 0; render(); }
+    sel.innerHTML = PRESETS.map((x, i) => `<option value="${i}">${x.name}</option>`).join('');
+    sel.addEventListener('change', () => { P = PRESETS[+sel.value]; rebuild(); });
+    prevB.addEventListener('click', () => { if (cur > 0) { cur--; render(); } });
+    nextB.addEventListener('click', next);
+    autoB.addEventListener('click', () => { if (auto) { stopAuto(); return; } autoB.textContent = 'Pause'; auto = setInterval(next, 900); });
+    resetB.addEventListener('click', () => { stopAuto(); cur = 0; render(); });
+    rebuild();
+  })();
+
+  /* ======================================================================
+     23. MATRIX-CHAIN — COST TABLE (§15.2)
+     ====================================================================== */
+  (function initMC() {
+    const host = document.getElementById('mcViz'); if (!host) return;
+    const sel = document.getElementById('mcPreset'), prevB = document.getElementById('mcPrev'),
+      nextB = document.getElementById('mcNext'), autoB = document.getElementById('mcAuto'),
+      resetB = document.getElementById('mcReset'), tableBox = document.getElementById('mcTableBox'),
+      stepEl = document.getElementById('mcStep'), maxEl = document.getElementById('mcMax'),
+      statusEl = document.getElementById('mcStatus');
+    const PRESETS = [
+      { name: '3 matrices · p=[10,100,5,50]', p: [10, 100, 5, 50] },
+      { name: 'CLRS 6 · p=[30,35,15,5,10,20,25]', p: [30, 35, 15, 5, 10, 20, 25] },
+      { name: '4 · p=[5,10,3,12,5]', p: [5, 10, 3, 12, 5] },
+    ];
+    let P = PRESETS[0], steps = [], cur = 0, auto = null;
+    function build() {
+      const p = P.p, n = p.length - 1, m = [];
+      for (let i = 0; i <= n; i++) m.push(new Array(n + 1).fill(null));
+      for (let i = 1; i <= n; i++) m[i][i] = 0;
+      const out = []; const snap = o => out.push(Object.assign({ m: m.map(r => r.slice()) }, o));
+      snap({ i: null, j: null, k: null, msg: `Chain of ${n} matrices, dims [${p.join(', ')}]. The diagonal $m[i,i]=0$ (a lone matrix costs nothing). Fill by increasing subchain length.` });
+      for (let L = 2; L <= n; L++) {
+        for (let i = 1; i <= n - L + 1; i++) {
+          const j = i + L - 1; let best = Infinity, bestK = i;
+          snap({ i, j, k: null, msg: `<b>Subchain $A_{${i}}\\ldots A_{${j}}$</b> (length ${L}). Test every split $k=${i}\\ldots${j - 1}$.` });
+          for (let k = i; k < j; k++) {
+            const cost = m[i][k] + m[k + 1][j] + p[i - 1] * p[k] * p[j], imp = cost < best;
+            if (imp) { best = cost; bestK = k; }
+            snap({ i, j, k, msg: `Split $k=${k}$: $m[${i},${k}] + m[${k + 1},${j}] + p_{${i - 1}}p_{${k}}p_{${j}} = ${m[i][k]} + ${m[k + 1][j]} + ${p[i - 1] * p[k] * p[j]} = ${cost}$. ${imp ? '<b>New best.</b>' : '&ge; current best ' + best + '.'}` });
+          }
+          m[i][j] = best;
+          snap({ i, j, k: null, done: true, msg: `$m[${i},${j}] = ${best}$ (best split at $k=${bestK}$).` });
+        }
+      }
+      snap({ i: null, j: null, k: null, msg: `<b>Done.</b> $m[1,${n}] = ${m[1][n]}$ scalar multiplications &mdash; the optimal-parenthesization cost.` });
+      return out;
+    }
+    function render() {
+      const s = steps[cur]; if (!s) return; const p = P.p, n = p.length - 1;
+      let h = '<table class="dp-table"><caption>cost table $m[i,j]$</caption><thead><tr><th>$i\\,\\backslash\\,j$</th>';
+      for (let j = 1; j <= n; j++) h += `<th>${j}</th>`;
+      h += '</tr></thead><tbody>';
+      for (let ri = 1; ri <= n; ri++) {
+        h += `<tr><th>${ri}</th>`;
+        for (let cj = 1; cj <= n; cj++) {
+          if (cj < ri) { h += '<td class="empty"></td>'; continue; }
+          const v = s.m[ri][cj]; let cls = '', val = (v == null ? '·' : v);
+          if (v == null) cls = 'empty';
+          if (s.k != null && ri === s.i && cj === s.k) cls = 'cand';
+          else if (s.k != null && ri === s.k + 1 && cj === s.j) cls = 'cand';
+          if (ri === s.i && cj === s.j) cls = s.done ? 'filled' : 'target';
+          h += `<td class="${cls}">${val}</td>`;
+        }
+        h += '</tr>';
+      }
+      h += '</tbody></table>';
+      tableBox.innerHTML = h;
+      stepEl.textContent = cur; maxEl.textContent = steps.length - 1;
+      statusEl.innerHTML = s.msg; mj(statusEl); mj(tableBox);
+    }
+    function stopAuto() { if (auto) { clearInterval(auto); auto = null; autoB.textContent = 'Auto-play'; } }
+    function next() { if (cur < steps.length - 1) { cur++; render(); } else stopAuto(); }
+    function rebuild() { stopAuto(); steps = build(); cur = 0; render(); }
+    sel.innerHTML = PRESETS.map((x, i) => `<option value="${i}">${x.name}</option>`).join('');
+    sel.addEventListener('change', () => { P = PRESETS[+sel.value]; rebuild(); });
+    prevB.addEventListener('click', () => { if (cur > 0) { cur--; render(); } });
+    nextB.addEventListener('click', next);
+    autoB.addEventListener('click', () => { if (auto) { stopAuto(); return; } autoB.textContent = 'Pause'; auto = setInterval(next, 850); });
+    resetB.addEventListener('click', () => { stopAuto(); cur = 0; render(); });
+    rebuild();
+  })();
+
+  /* ======================================================================
+     24. HUFFMAN — TREE BUILDING (§16.4)
+     ====================================================================== */
+  (function initHuffman() {
+    const host = document.getElementById('huffViz'); if (!host) return;
+    const sel = document.getElementById('huffPreset'), prevB = document.getElementById('huffPrev'),
+      nextB = document.getElementById('huffNext'), autoB = document.getElementById('huffAuto'),
+      resetB = document.getElementById('huffReset'), poolEl = document.getElementById('huffPool'),
+      treeEl = document.getElementById('huffTree'), stepEl = document.getElementById('huffStep'),
+      maxEl = document.getElementById('huffMax'), statusEl = document.getElementById('huffStatus');
+    const PRESETS = [
+      { name: 'CLRS · a45 b13 c12 d16 e9 f5', F: [['a', 45], ['b', 13], ['c', 12], ['d', 16], ['e', 9], ['f', 5]] },
+      { name: 'Powers · a1 b2 c4 d8', F: [['a', 1], ['b', 2], ['c', 4], ['d', 8]] },
+      { name: 'Even-ish · a5 b6 c7 d8 e9', F: [['a', 5], ['b', 6], ['c', 7], ['d', 8], ['e', 9]] },
+    ];
+    let P = PRESETS[0], steps = [], cur = 0, auto = null;
+    const disp = nd => nd.ch ? ("'" + nd.ch + "'") : ('•' + nd.f);
+    function build() {
+      let idc = 0;
+      let pool = P.F.map(o => ({ id: o[0], f: o[1], ch: o[0], left: null, right: null }));
+      const out = []; const snap = o => out.push(Object.assign({ pool: pool.slice() }, o));
+      snap({ sel: [], msg: `Start: ${pool.length} leaves in the pool, one per character. Repeatedly merge the two rarest.` });
+      while (pool.length > 1) {
+        pool.sort((a, b) => (a.f - b.f) || (a.ch ? -1 : 1));
+        const x = pool[0], y = pool[1];
+        snap({ sel: [x.id, y.id], msg: `Two smallest: <b>${disp(x)}</b> ($f=${x.f}$) and <b>${disp(y)}</b> ($f=${y.f}$). Merge under a new node of frequency ${x.f + y.f}.` });
+        const z = { id: '#' + (idc++), f: x.f + y.f, ch: null, left: x, right: y };
+        pool = pool.slice(2); pool.push(z);
+        snap({ sel: [z.id], msg: `New internal node ($f=${z.f}$) created. Pool now holds ${pool.length} tree${pool.length === 1 ? '' : 's'}.` });
+      }
+      snap({ sel: [pool[0].id], done: true, msg: `<b>Done.</b> One tree remains &mdash; the Huffman code. Frequent characters sit near the root (short codewords); rare ones sit deepest.` });
+      return out;
+    }
+    function drawForest(roots, selSet) {
+      const Q = palette(); const SP = 50, ROWH = 56, R = 17;
+      let leafX = 0, maxY = 0;
+      function place(node, depth) {
+        const y = depth * ROWH + R + 8; node._y = y; if (y > maxY) maxY = y;
+        if (!node.left) { node._x = leafX * SP + R + 8; leafX++; return; }
+        place(node.left, depth + 1); place(node.right, depth + 1);
+        node._x = (node.left._x + node.right._x) / 2;
+      }
+      roots.forEach(r => { place(r, 0); leafX += 0.5; });
+      const W = Math.max(leafX * SP + R, 140), H = maxY + R + 24;
+      let s = `<svg viewBox="0 0 ${W.toFixed(0)} ${H.toFixed(0)}" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:${Math.max(W, 320).toFixed(0)}px;height:auto;display:block;">`;
+      function edges(node) {
+        if (!node.left) return;
+        [['0', node.left], ['1', node.right]].forEach(pr => {
+          const c = pr[1];
+          s += `<line x1="${node._x.toFixed(1)}" y1="${node._y}" x2="${c._x.toFixed(1)}" y2="${c._y}" stroke="${Q.inkMuted}" stroke-width="1.5"/>`;
+          const mx = (node._x + c._x) / 2, my = (node._y + c._y) / 2;
+          s += `<rect x="${(mx - 5).toFixed(1)}" y="${(my - 8).toFixed(1)}" width="10" height="13" rx="2" fill="${Q.paper}" opacity="0.9"/>`;
+          s += `<text x="${mx.toFixed(1)}" y="${(my + 2).toFixed(1)}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="${Q.ink}">${pr[0]}</text>`;
+          edges(c);
+        });
+      }
+      function nodes(node) {
+        const hot = selSet.has(node.id), leaf = !node.left;
+        let fill = leaf ? Q.paper : Q.paperAlt, stroke = leaf ? Q.inkMuted : Q.navy, txt = Q.ink;
+        if (hot) { fill = Q.oxblood; stroke = Q.oxblood; txt = Q.paper; }
+        s += `<circle cx="${node._x.toFixed(1)}" cy="${node._y}" r="${R}" fill="${fill}" stroke="${stroke}" stroke-width="2.2"/>`;
+        s += `<text x="${node._x.toFixed(1)}" y="${node._y + (leaf ? -1 : 4)}" text-anchor="middle" font-family="Spectral, Georgia, serif" font-size="${leaf ? 13 : 12}" font-weight="600" fill="${txt}">${leaf ? node.ch : node.f}</text>`;
+        if (leaf) s += `<text x="${node._x.toFixed(1)}" y="${node._y + 11}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8" fill="${txt}">${node.f}</text>`;
+        if (node.left) { nodes(node.left); nodes(node.right); }
+      }
+      roots.forEach(edges); roots.forEach(nodes);
+      return s + '</svg>';
+    }
+    function render() {
+      const s = steps[cur]; if (!s) return; const selSet = new Set(s.sel || []);
+      let ph = '<span class="chip-label">pool:</span>';
+      s.pool.slice().sort((a, b) => a.f - b.f).forEach(nd => { ph += `<span class="chip ${selSet.has(nd.id) ? 'hot' : ''}">${nd.ch ? ('&#39;' + nd.ch + '&#39;') : '&bull;'}:${nd.f}</span>`; });
+      poolEl.innerHTML = ph;
+      treeEl.innerHTML = drawForest(s.pool, selSet);
+      stepEl.textContent = cur; maxEl.textContent = steps.length - 1;
+      statusEl.innerHTML = s.msg; mj(statusEl);
+    }
+    function stopAuto() { if (auto) { clearInterval(auto); auto = null; autoB.textContent = 'Auto-play'; } }
+    function next() { if (cur < steps.length - 1) { cur++; render(); } else stopAuto(); }
+    function rebuild() { stopAuto(); steps = build(); cur = 0; render(); }
+    sel.innerHTML = PRESETS.map((x, i) => `<option value="${i}">${x.name}</option>`).join('');
+    sel.addEventListener('change', () => { P = PRESETS[+sel.value]; rebuild(); });
+    prevB.addEventListener('click', () => { if (cur > 0) { cur--; render(); } });
+    nextB.addEventListener('click', next);
+    autoB.addEventListener('click', () => { if (auto) { stopAuto(); return; } autoB.textContent = 'Pause'; auto = setInterval(next, 1100); });
+    resetB.addEventListener('click', () => { stopAuto(); cur = 0; render(); });
+    rebuild();
+  })();
+
+  /* ======================================================================
+     25. BREADTH-FIRST SEARCH (§22.2)
+     ====================================================================== */
+  (function initBFS() {
+    const host = document.getElementById('bfsViz'); if (!host) return;
+    const sel = document.getElementById('bfsPreset'), prevB = document.getElementById('bfsPrev'),
+      nextB = document.getElementById('bfsNext'), autoB = document.getElementById('bfsAuto'),
+      resetB = document.getElementById('bfsReset'), graphBox = document.getElementById('bfsGraph'),
+      queueEl = document.getElementById('bfsQueue'), stepEl = document.getElementById('bfsStep'),
+      maxEl = document.getElementById('bfsMax'), statusEl = document.getElementById('bfsStatus');
+    const PRESETS = [
+      { name: '6 vertices', source: 's',
+        pos: { s: [55, 165], a: [185, 70], b: [185, 260], c: [320, 70], d: [320, 260], e: [450, 165] },
+        E: [['s', 'a'], ['s', 'b'], ['a', 'c'], ['b', 'a'], ['b', 'd'], ['c', 'e'], ['d', 'c'], ['d', 'e']] },
+      { name: 'tree-like (7)', source: 'r',
+        pos: { r: [55, 165], a: [185, 90], b: [185, 245], c: [320, 45], d: [320, 150], e: [320, 255], f: [450, 150] },
+        E: [['r', 'a'], ['r', 'b'], ['a', 'c'], ['a', 'd'], ['b', 'e'], ['d', 'f'], ['e', 'f']] },
+    ];
+    let G = PRESETS[0], steps = [], cur = 0, auto = null;
+    function build() {
+      const ids = Object.keys(G.pos), d = {}, pi = {}, color = {};
+      ids.forEach(v => { d[v] = Infinity; color[v] = 'white'; });
+      d[G.source] = 0; color[G.source] = 'gray';
+      const Q = [G.source], out = [];
+      const snap = o => out.push(Object.assign({ d: Object.assign({}, d), pi: Object.assign({}, pi), color: Object.assign({}, color), Q: Q.slice() }, o));
+      snap({ current: null, activeEdge: null, msg: `Enqueue source <b>${G.source}</b> ($d=0$, gray). Queue: [${Q.join(', ')}].` });
+      while (Q.length) {
+        const u = Q.shift();
+        snap({ current: u, activeEdge: null, msg: `<b>Dequeue ${u}</b> ($d[${u}]=${d[u]}$). Scan its neighbors for white (undiscovered) vertices.` });
+        G.E.filter(e => e[0] === u).forEach(e => {
+          const v = e[1];
+          if (color[v] === 'white') {
+            color[v] = 'gray'; d[v] = d[u] + 1; pi[v] = u; Q.push(v);
+            snap({ current: u, activeEdge: [u, v], msg: `${v} is white &rarr; discover it: $d[${v}] = ${d[u]}+1 = ${d[v]}$, color it gray, enqueue. Queue: [${Q.join(', ')}].` });
+          } else {
+            snap({ current: u, activeEdge: [u, v], msg: `${v} is already ${color[v]} &mdash; skip (not a tree edge).` });
+          }
+        });
+        color[u] = 'black';
+        snap({ current: null, activeEdge: null, msg: `${u} fully scanned &mdash; mark it black (done). Queue: [${Q.join(', ') || '∅'}].` });
+      }
+      snap({ current: null, activeEdge: null, msg: `Queue empty &mdash; BFS complete. Each $d[v]$ is the fewest-edges distance from ${G.source}.` });
+      return out;
+    }
+    function render() {
+      const s = steps[cur]; if (!s) return; const ids = Object.keys(G.pos);
+      const nodes = ids.map(id => ({ id, x: G.pos[id][0], y: G.pos[id][1], label: id,
+        dist: (s.d[id] < Infinity ? s.d[id] : null),
+        state: s.current === id ? 'current' : (id === G.source ? 'source' : (s.color[id] === 'black' ? 'settled' : (s.color[id] === 'gray' ? 'frontier' : 'idle'))) }));
+      const edges = G.E.map(e => ({ u: e[0], v: e[1], w: '',
+        state: (s.activeEdge && s.activeEdge[0] === e[0] && s.activeEdge[1] === e[1]) ? 'active' : (s.pi[e[1]] === e[0] ? 'tree' : 'idle') }));
+      graphBox.innerHTML = drawDirectedGraph({ width: 510, height: 330, idPrefix: 'bfs', nodes, edges });
+      let qh = '<span class="chip-label">queue (front&rarr;back):</span>';
+      if (s.Q.length) s.Q.forEach((v, i) => qh += `<span class="chip ${i === 0 ? 'warm' : ''}">${v}</span>`); else qh += '<span class="chip ghost">empty</span>';
+      queueEl.innerHTML = qh;
+      stepEl.textContent = cur; maxEl.textContent = steps.length - 1;
+      statusEl.innerHTML = s.msg; mj(statusEl);
+    }
+    function stopAuto() { if (auto) { clearInterval(auto); auto = null; autoB.textContent = 'Auto-play'; } }
+    function next() { if (cur < steps.length - 1) { cur++; render(); } else stopAuto(); }
+    function rebuild() { stopAuto(); steps = build(); cur = 0; render(); }
+    sel.innerHTML = PRESETS.map((x, i) => `<option value="${i}">${x.name}</option>`).join('');
+    sel.addEventListener('change', () => { G = PRESETS[+sel.value]; rebuild(); });
+    prevB.addEventListener('click', () => { if (cur > 0) { cur--; render(); } });
+    nextB.addEventListener('click', next);
+    autoB.addEventListener('click', () => { if (auto) { stopAuto(); return; } autoB.textContent = 'Pause'; auto = setInterval(next, 1000); });
+    resetB.addEventListener('click', () => { stopAuto(); cur = 0; render(); });
+    rebuild();
+  })();
+
+  /* ======================================================================
+     26. DEPTH-FIRST SEARCH (§22.3)
+     ====================================================================== */
+  (function initDFS() {
+    const host = document.getElementById('dfsViz'); if (!host) return;
+    const sel = document.getElementById('dfsPreset'), prevB = document.getElementById('dfsPrev'),
+      nextB = document.getElementById('dfsNext'), autoB = document.getElementById('dfsAuto'),
+      resetB = document.getElementById('dfsReset'), graphBox = document.getElementById('dfsGraph'),
+      stackEl = document.getElementById('dfsStack'), stepEl = document.getElementById('dfsStep'),
+      maxEl = document.getElementById('dfsMax'), statusEl = document.getElementById('dfsStatus');
+    const PRESETS = [
+      { name: '6 vertices', order: ['u', 'v', 'w', 'x', 'y', 'z'],
+        pos: { u: [70, 80], v: [210, 80], w: [70, 250], x: [210, 250], y: [350, 250], z: [350, 80] },
+        E: [['u', 'v'], ['u', 'x'], ['v', 'y'], ['x', 'v'], ['y', 'x'], ['w', 'y'], ['w', 'z'], ['z', 'z']] },
+      { name: 'DAG-ish (6)', order: ['a', 'b', 'c', 'd', 'e', 'f'],
+        pos: { a: [60, 80], b: [60, 250], c: [210, 165], d: [340, 80], e: [340, 250], f: [460, 165] },
+        E: [['a', 'c'], ['b', 'c'], ['c', 'd'], ['c', 'e'], ['d', 'f'], ['e', 'f'], ['a', 'd']] },
+    ];
+    let G = PRESETS[0], steps = [], cur = 0, auto = null;
+    function build() {
+      const color = {}, d = {}, f = {}, pi = {}; let time = 0;
+      G.order.forEach(v => color[v] = 'white');
+      const tree = [], stack = [], out = [];
+      const snap = o => out.push(Object.assign({ color: Object.assign({}, color), d: Object.assign({}, d), f: Object.assign({}, f), pi: Object.assign({}, pi), tree: tree.slice(), stack: stack.slice() }, o));
+      snap({ current: null, activeEdge: null, msg: `All vertices white. The outer loop visits ${G.order.join(', ')} in order, recursing depth-first.` });
+      function visit(u) {
+        time++; d[u] = time; color[u] = 'gray'; stack.push(u);
+        snap({ current: u, activeEdge: null, msg: `<b>Discover ${u}</b> at time ${time} (gray, pushed). Explore its out-edges.` });
+        G.E.filter(e => e[0] === u).forEach(e => {
+          const v = e[1]; let kind;
+          if (color[v] === 'white') kind = 'tree';
+          else if (color[v] === 'gray') kind = 'back';
+          else kind = d[u] < d[v] ? 'forward' : 'cross';
+          snap({ current: u, activeEdge: [u, v], msg: `Edge ${u}&rarr;${v}: ${v} is ${color[v]} &rarr; <b>${kind} edge</b>${kind === 'back' ? ' &mdash; a cycle!' : ''}.` });
+          if (kind === 'tree') { pi[v] = u; tree.push(u + '>' + v); visit(v); snap({ current: u, activeEdge: null, msg: `Back at ${u} after finishing the ${v}-subtree; continue its edges.` }); }
+        });
+        color[u] = 'black'; time++; f[u] = time; stack.pop();
+        snap({ current: stack.length ? stack[stack.length - 1] : null, activeEdge: null, msg: `<b>Finish ${u}</b> at time ${time} (black, popped). Interval $[${d[u]},${time}]$.` });
+      }
+      G.order.forEach(v => { if (color[v] === 'white') visit(v); });
+      snap({ current: null, activeEdge: null, msg: `DFS complete. Every interval $[d,f]$ is either disjoint from or nested inside another &mdash; the parenthesis structure.` });
+      return out;
+    }
+    function render() {
+      const s = steps[cur]; if (!s) return; const ids = Object.keys(G.pos);
+      const nodes = ids.map(id => ({ id, x: G.pos[id][0], y: G.pos[id][1], label: id,
+        dist: (s.d[id] != null ? (s.d[id] + '/' + (s.f[id] != null ? s.f[id] : '·')) : null),
+        state: s.current === id ? 'current' : (s.color[id] === 'gray' ? 'frontier' : (s.color[id] === 'black' ? 'settled' : 'idle')) }));
+      const edges = G.E.filter(e => e[0] !== e[1]).map(e => ({ u: e[0], v: e[1], w: '',
+        state: (s.activeEdge && s.activeEdge[0] === e[0] && s.activeEdge[1] === e[1]) ? 'active' : (s.tree.indexOf(e[0] + '>' + e[1]) >= 0 ? 'tree' : 'idle') }));
+      graphBox.innerHTML = drawDirectedGraph({ width: 520, height: 330, idPrefix: 'dfs', nodes, edges });
+      let sh = '<span class="chip-label">recursion stack:</span>';
+      if (s.stack.length) s.stack.forEach((v, i) => sh += `<span class="chip ${i === s.stack.length - 1 ? 'hot' : 'frontier'}" style="${i === s.stack.length - 1 ? '' : 'background:var(--paper-alt);border-color:var(--navy);'}">${v}</span>`); else sh += '<span class="chip ghost">empty</span>';
+      stackEl.innerHTML = sh;
+      stepEl.textContent = cur; maxEl.textContent = steps.length - 1;
+      statusEl.innerHTML = s.msg; mj(statusEl);
+    }
+    function stopAuto() { if (auto) { clearInterval(auto); auto = null; autoB.textContent = 'Auto-play'; } }
+    function next() { if (cur < steps.length - 1) { cur++; render(); } else stopAuto(); }
+    function rebuild() { stopAuto(); steps = build(); cur = 0; render(); }
+    sel.innerHTML = PRESETS.map((x, i) => `<option value="${i}">${x.name}</option>`).join('');
+    sel.addEventListener('change', () => { G = PRESETS[+sel.value]; rebuild(); });
+    prevB.addEventListener('click', () => { if (cur > 0) { cur--; render(); } });
+    nextB.addEventListener('click', next);
+    autoB.addEventListener('click', () => { if (auto) { stopAuto(); return; } autoB.textContent = 'Pause'; auto = setInterval(next, 950); });
+    resetB.addEventListener('click', () => { stopAuto(); cur = 0; render(); });
+    rebuild();
+  })();
+
+  /* ======================================================================
+     27. TOPOLOGICAL SORT (§22.4)
+     ====================================================================== */
+  (function initTopo() {
+    const host = document.getElementById('topoViz'); if (!host) return;
+    const sel = document.getElementById('topoPreset'), prevB = document.getElementById('topoPrev'),
+      nextB = document.getElementById('topoNext'), autoB = document.getElementById('topoAuto'),
+      resetB = document.getElementById('topoReset'), graphBox = document.getElementById('topoGraph'),
+      orderEl = document.getElementById('topoOrder'), stepEl = document.getElementById('topoStep'),
+      maxEl = document.getElementById('topoMax'), statusEl = document.getElementById('topoStatus');
+    const PRESETS = [
+      { name: 'tasks (6)', order: ['a', 'b', 'c', 'd', 'e', 'f'],
+        pos: { a: [60, 75], b: [60, 255], c: [205, 75], d: [205, 255], e: [350, 165], f: [470, 165] },
+        E: [['a', 'c'], ['a', 'd'], ['b', 'd'], ['c', 'e'], ['d', 'e'], ['e', 'f']] },
+      { name: 'getting dressed (7)', order: ['u', 'w', 's', 't', 'x', 'y', 'z'],
+        pos: { u: [60, 60], w: [60, 250], s: [200, 60], t: [200, 250], x: [340, 60], y: [340, 250], z: [470, 155] },
+        E: [['u', 's'], ['u', 't'], ['w', 't'], ['s', 'x'], ['t', 'x'], ['t', 'y'], ['x', 'z'], ['y', 'z']] },
+    ];
+    let G = PRESETS[0], steps = [], cur = 0, auto = null;
+    function build() {
+      const color = {}, f = {}, pi = {}; let time = 0;
+      G.order.forEach(v => color[v] = 'white');
+      const order = [], tree = [], stack = [], out = [];
+      const snap = o => out.push(Object.assign({ color: Object.assign({}, color), f: Object.assign({}, f), pi: Object.assign({}, pi), order: order.slice(), tree: tree.slice(), stack: stack.slice() }, o));
+      snap({ current: null, activeEdge: null, msg: `Run DFS. As each vertex <em>finishes</em>, prepend it to the output list. The order builds up below.` });
+      function visit(u) {
+        color[u] = 'gray'; stack.push(u);
+        snap({ current: u, activeEdge: null, msg: `<b>Discover ${u}</b> (gray). Explore its out-edges before finishing it.` });
+        G.E.filter(e => e[0] === u).forEach(e => {
+          const v = e[1];
+          if (color[v] === 'white') { pi[v] = u; tree.push(u + '>' + v); snap({ current: u, activeEdge: [u, v], msg: `Tree edge ${u}&rarr;${v}: recurse into ${v}.` }); visit(v); }
+          else snap({ current: u, activeEdge: [u, v], msg: `Edge ${u}&rarr;${v}: ${v} already ${color[v]} &mdash; do not recurse.` });
+        });
+        color[u] = 'black'; time++; f[u] = time; stack.pop(); order.unshift(u);
+        snap({ current: stack.length ? stack[stack.length - 1] : null, activeEdge: null, msg: `<b>Finish ${u}</b> ($f=${time}$) &rarr; prepend to order: [${order.join(', ')}].` });
+      }
+      G.order.forEach(v => { if (color[v] === 'white') visit(v); });
+      snap({ current: null, activeEdge: null, msg: `<b>Done.</b> Topological order: ${order.join(' → ')}. Every edge points left-to-right in this list.` });
+      return out;
+    }
+    function render() {
+      const s = steps[cur]; if (!s) return; const ids = Object.keys(G.pos);
+      const nodes = ids.map(id => ({ id, x: G.pos[id][0], y: G.pos[id][1], label: id,
+        dist: (s.f[id] != null ? s.f[id] : null),
+        state: s.current === id ? 'current' : (s.color[id] === 'black' ? 'settled' : (s.color[id] === 'gray' ? 'frontier' : 'idle')) }));
+      const edges = G.E.map(e => ({ u: e[0], v: e[1], w: '',
+        state: (s.activeEdge && s.activeEdge[0] === e[0] && s.activeEdge[1] === e[1]) ? 'active' : (s.tree.indexOf(e[0] + '>' + e[1]) >= 0 ? 'tree' : 'idle') }));
+      graphBox.innerHTML = drawDirectedGraph({ width: 520, height: 320, idPrefix: 'topo', nodes, edges });
+      let oh = '<span class="chip-label">topological order:</span>';
+      if (s.order.length) s.order.forEach((v, i) => oh += (i ? '<span class="chip-arrow">&rarr;</span>' : '') + `<span class="chip cool">${v}</span>`); else oh += '<span class="chip ghost">(empty)</span>';
+      orderEl.innerHTML = oh;
+      stepEl.textContent = cur; maxEl.textContent = steps.length - 1;
+      statusEl.innerHTML = s.msg; mj(statusEl);
+    }
+    function stopAuto() { if (auto) { clearInterval(auto); auto = null; autoB.textContent = 'Auto-play'; } }
+    function next() { if (cur < steps.length - 1) { cur++; render(); } else stopAuto(); }
+    function rebuild() { stopAuto(); steps = build(); cur = 0; render(); }
+    sel.innerHTML = PRESETS.map((x, i) => `<option value="${i}">${x.name}</option>`).join('');
+    sel.addEventListener('change', () => { G = PRESETS[+sel.value]; rebuild(); });
+    prevB.addEventListener('click', () => { if (cur > 0) { cur--; render(); } });
+    nextB.addEventListener('click', next);
+    autoB.addEventListener('click', () => { if (auto) { stopAuto(); return; } autoB.textContent = 'Pause'; auto = setInterval(next, 950); });
+    resetB.addEventListener('click', () => { stopAuto(); cur = 0; render(); });
+    rebuild();
+  })();
+
+  /* ======================================================================
+     28. SHORTEST PATHS IN A DAG (§24.2)
+     ====================================================================== */
+  (function initDAG() {
+    const host = document.getElementById('dagViz'); if (!host) return;
+    const sel = document.getElementById('dagPreset'), prevB = document.getElementById('dagPrev'),
+      nextB = document.getElementById('dagNext'), autoB = document.getElementById('dagAuto'),
+      resetB = document.getElementById('dagReset'), graphBox = document.getElementById('dagGraph'),
+      orderEl = document.getElementById('dagOrder'), stepEl = document.getElementById('dagStep'),
+      maxEl = document.getElementById('dagMax'), statusEl = document.getElementById('dagStatus');
+    const PRESETS = [
+      { name: 'CLRS DAG (6)', source: 'r',
+        pos: { r: [55, 80], s: [180, 80], t: [180, 255], x: [320, 80], y: [320, 255], z: [460, 165] },
+        E: [['r', 's', 5], ['r', 't', 3], ['s', 't', 2], ['s', 'x', 6], ['t', 'x', 7], ['t', 'y', 4], ['t', 'z', 2], ['x', 'y', -1], ['x', 'z', 1], ['y', 'z', -2]] },
+      { name: 'Layered (6)', source: 'a',
+        pos: { a: [55, 165], b: [185, 75], c: [185, 255], d: [330, 75], e: [330, 255], f: [460, 165] },
+        E: [['a', 'b', 3], ['a', 'c', 2], ['b', 'd', 1], ['c', 'd', 4], ['c', 'e', 2], ['b', 'e', 6], ['d', 'f', 2], ['e', 'f', -3]] },
+    ];
+    let G = PRESETS[0], steps = [], cur = 0, auto = null;
+    function topoOrder(ids, E) {
+      const color = {}, order = []; ids.forEach(v => color[v] = 'w');
+      function vis(u) { color[u] = 'g'; E.filter(e => e[0] === u).forEach(e => { if (color[e[1]] === 'w') vis(e[1]); }); color[u] = 'b'; order.unshift(u); }
+      ids.forEach(v => { if (color[v] === 'w') vis(v); });
+      return order;
+    }
+    function build() {
+      const ids = Object.keys(G.pos), order = topoOrder(ids, G.E), d = {}, pi = {};
+      ids.forEach(v => d[v] = Infinity); d[G.source] = 0;
+      const out = [], processed = [];
+      const snap = o => out.push(Object.assign({ d: Object.assign({}, d), pi: Object.assign({}, pi), order: order.slice(), processed: processed.slice() }, o));
+      snap({ current: null, activeEdge: null, msg: `Topological order: ${order.join(' → ')}. Initialize $d[${G.source}]=0$, all others $\\infty$. Process strictly left-to-right.` });
+      for (const u of order) {
+        processed.push(u);
+        snap({ current: u, activeEdge: null, msg: `<b>Process ${u}</b> &mdash; $d[${u}]=${fmtInf(d[u])}$ is now final (every path into ${u} came from an earlier vertex). Relax its out-edges.` });
+        G.E.filter(e => e[0] === u).forEach(e => {
+          const v = e[1], w = e[2], cand = d[u] + w, imp = d[u] < Infinity && cand < d[v];
+          if (imp) { d[v] = cand; pi[v] = u; }
+          snap({ current: u, activeEdge: [u, v], msg: imp
+            ? `Relax ${u}&rarr;${v} (w=${w}): ${fmtInf(d[u])} + ${w} = ${cand} &lt; old $d[${v}]$ &rarr; update to <b>${cand}</b>.`
+            : `Relax ${u}&rarr;${v} (w=${w}): no improvement to $d[${v}]=${fmtInf(d[v])}$.` });
+        });
+      }
+      snap({ current: null, activeEdge: null, msg: `Done in a single pass &mdash; $\\Theta(V+E)$. Final distances: ${ids.map(v => `$d[${v}]=${fmtInf(d[v])}$`).join(', ')}.` });
+      return out;
+    }
+    function render() {
+      const s = steps[cur]; if (!s) return; const ids = Object.keys(G.pos);
+      const nodes = ids.map(id => ({ id, x: G.pos[id][0], y: G.pos[id][1], label: id,
+        dist: (s.d[id] < Infinity ? s.d[id] : null),
+        state: s.current === id ? 'current' : (s.processed.indexOf(id) >= 0 ? 'settled' : (id === G.source ? 'source' : (s.d[id] < Infinity ? 'frontier' : 'idle'))) }));
+      const edges = G.E.map(e => ({ u: e[0], v: e[1], w: e[2],
+        state: (s.activeEdge && s.activeEdge[0] === e[0] && s.activeEdge[1] === e[1]) ? 'active' : (s.pi[e[1]] === e[0] ? 'tree' : 'idle') }));
+      graphBox.innerHTML = drawDirectedGraph({ width: 520, height: 330, idPrefix: 'dag', nodes, edges });
+      let oh = '<span class="chip-label">topological order:</span>';
+      s.order.forEach((v, i) => { const c = s.current === v ? 'hot' : (s.processed.indexOf(v) >= 0 ? 'cool' : ''); oh += (i ? '<span class="chip-arrow">&rarr;</span>' : '') + `<span class="chip ${c}">${v}</span>`; });
+      orderEl.innerHTML = oh;
+      stepEl.textContent = cur; maxEl.textContent = steps.length - 1;
+      statusEl.innerHTML = s.msg; mj(statusEl);
+    }
+    function stopAuto() { if (auto) { clearInterval(auto); auto = null; autoB.textContent = 'Auto-play'; } }
+    function next() { if (cur < steps.length - 1) { cur++; render(); } else stopAuto(); }
+    function rebuild() { stopAuto(); steps = build(); cur = 0; render(); }
+    sel.innerHTML = PRESETS.map((x, i) => `<option value="${i}">${x.name}</option>`).join('');
+    sel.addEventListener('change', () => { G = PRESETS[+sel.value]; rebuild(); });
+    prevB.addEventListener('click', () => { if (cur > 0) { cur--; render(); } });
+    nextB.addEventListener('click', next);
+    autoB.addEventListener('click', () => { if (auto) { stopAuto(); return; } autoB.textContent = 'Pause'; auto = setInterval(next, 1000); });
+    resetB.addEventListener('click', () => { stopAuto(); cur = 0; render(); });
+    rebuild();
+  })();
+
+  /* ======================================================================
+     29. DFA → REGEX (state elimination, §25.3)
+     ====================================================================== */
+  (function initDFA() {
+    const host = document.getElementById('dfaViz'); if (!host) return;
+    const prevB = document.getElementById('dfaPrev'), nextB = document.getElementById('dfaNext'),
+      resetB = document.getElementById('dfaReset'), tableBox = document.getElementById('dfaTableBox'),
+      kEl = document.getElementById('dfaK'), statusEl = document.getElementById('dfaStatus');
+    const STEPS = [
+      { k: 0, hl: null, R: { 11: 'ε | a', 12: 'b', 21: '∅', 22: 'ε | a | b' },
+        msg: `<b>Base case $R^{(0)}$.</b> Each cell is the set of single-symbol moves from $i$ to $j$, plus $\\varepsilon$ on the diagonal (you can always stay put on the empty string). No intermediate states are allowed yet.` },
+      { k: 1, hl: 1, R: { 11: 'a*', 12: 'a*b', 21: '∅', 22: 'ε | a | b' },
+        msg: `<b>Unlock state 1.</b> $R^{(1)}_{ij} = R^{(0)}_{ij} \\cup R^{(0)}_{i1}\\,(R^{(0)}_{11})^{*}\\,R^{(0)}_{1j}$. The self-loop $a$ at state 1 becomes the star $a^{*}$, so the path $1\\!\\to\\!2$ upgrades from $b$ to $a^{*}b$.` },
+      { k: 2, hl: 2, target: true, R: { 11: 'a*', 12: 'a*b(a|b)*', 21: '∅', 22: '(a|b)*' },
+        msg: `<b>Unlock state 2.</b> $R^{(2)}_{12} = a^{*}b \\cup a^{*}b\\,(\\varepsilon|a|b)^{*} = \\mathbf{a^{*}b(a\\mid b)^{*}}$. That start&rarr;accept entry is the regular expression for the whole language &mdash; &ldquo;contains at least one $b$.&rdquo; Same recurrence as Floyd&ndash;Warshall, with $(\\cup,\\cdot,{}^{*})$ in place of $(\\min,+)$.` },
+    ];
+    let cur = 0;
+    function render() {
+      const s = STEPS[cur];
+      let h = `<table class="dp-table"><caption>$R^{(${s.k})}_{ij}$ &mdash; regex for $i \\rightsquigarrow j$ using intermediates $\\le ${s.k}$</caption><thead><tr><th>$i\\,\\backslash\\,j$</th><th>1</th><th>2</th></tr></thead><tbody>`;
+      for (let i = 1; i <= 2; i++) {
+        h += `<tr><th>${i}${i === 1 ? ' (start)' : ' (accept)'}</th>`;
+        for (let j = 1; j <= 2; j++) {
+          let cls = '';
+          if (s.hl != null && (i === s.hl || j === s.hl)) cls = 'source';
+          if (s.target && i === 1 && j === 2) cls = 'target';
+          h += `<td class="${cls}">$${'' + s.R[i + '' + j].replace(/ε/g, '\\varepsilon').replace(/∅/g, '\\emptyset').replace(/\|/g, '\\mid ').replace(/\*/g, '^{*}')}$</td>`;
+        }
+        h += '</tr>';
+      }
+      h += '</tbody></table>';
+      tableBox.innerHTML = h;
+      kEl.textContent = s.k;
+      statusEl.innerHTML = s.msg; mj(statusEl); mj(tableBox);
+    }
+    prevB.addEventListener('click', () => { if (cur > 0) { cur--; render(); } });
+    nextB.addEventListener('click', () => { if (cur < STEPS.length - 1) { cur++; render(); } });
+    resetB.addEventListener('click', () => { cur = 0; render(); });
+    render();
   })();
 
 
